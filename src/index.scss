@@ -1,0 +1,80 @@
+*{
+  padding: 0;
+  margin:0;
+}
+
+
+.App{
+  & .Header{
+    margin-bottom: 30px;
+    & .AppBar{
+      background: white;
+      color:#6750A4;
+
+      & .ToolBar{
+        padding-left: 50px;
+        padding-right: 50px;
+        & .Logo{
+          width:50px;
+          height:50px;
+          margin-right: 10px;
+        }
+        & .SearchBarWrapper{
+          flex-grow: 1;
+          margin-left: 10px;
+          & .SearchBar{
+            & .SearchBarInput{
+              width: 100%;
+              max-width: 500px;
+            }
+          }
+        }
+        & .CartLogoButton{
+          & .CartLogo{
+            width:30px;
+            height:30px;
+          }
+        }
+      }
+
+    }
+
+  }
+  & .Aside{
+    margin-left: 50px;
+    width:100%;
+    max-width: 250px;
+
+    & .body{
+      padding: 10px 0px 100px 0px;
+      border-radius: 5px;
+      border:1px solid #C9C5CA ;
+      & .Categories{
+
+      }
+    }
+
+  }
+
+  & .Content{
+    margin-left: 25px;
+    margin-right: 50px;
+    min-height: 600px;
+    border-radius: 5px;
+    flex:1;
+    border:1px solid #C9C5CA ;
+  }
+
+  & .Footer{
+    margin-top:70px;
+    background-color:  #F4EFF4;
+    padding: 25px 0px;
+    & .TableCell{
+      border-bottom: none;
+      padding: 0;
+      padding-top: 5px;
+    }
+
+  }
+}
+
