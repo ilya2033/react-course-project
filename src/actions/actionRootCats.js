@@ -12,20 +12,20 @@ export const actionRootCats = () => async (dispatch, getState) => {
                         ? resolve({
                               data: [
                                   {
-                                      id: 1,
-                                      name: 'Categoty 1',
+                                      _id: 1,
+                                      name: 'Category 1',
                                   },
                                   {
-                                      id: 2,
-                                      name: 'Categoty 2',
+                                      _id: 2,
+                                      name: 'Category 2',
                                   },
                                   {
-                                      id: 3,
-                                      name: 'Categoty 3',
+                                      _id: 3,
+                                      name: 'Category 3',
                                   },
                                   {
-                                      id: 4,
-                                      name: 'Categoty 4',
+                                      _id: 4,
+                                      name: 'Category 4',
                                   },
                               ],
                           })
@@ -40,7 +40,7 @@ export const actionRootCats = () => async (dispatch, getState) => {
                     console.log(data);
                     if (data.errors) {
                         throw new Error(JSON.stringify(data.errors));
-                    } else return data.data;
+                    } else return Object.values(data.data);
                 })
         )
     );

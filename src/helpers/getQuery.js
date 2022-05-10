@@ -13,5 +13,5 @@ export const getQuery =
             .then((data) => {
                 if (data.errors) {
                     throw new Error(JSON.stringify(data.errors));
-                } else return Object.values(data.data);
+                } else return Object.values(data.data[0]);
             });

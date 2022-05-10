@@ -1,38 +1,43 @@
 import { Route, Router, Routes } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { Container, Box, Stack } from '@mui/material';
-import { Fragment } from 'react';
-import { CProtectedRoute } from '../common/ProtectedRoute';
-import { AdminLayoutPage } from '../admin/AdminLayoutPage';
-import { actionRootCats } from '../../actions/actionRootCats';
+
+import { Container, Box, Stack, Grid } from '@mui/material';
+
 import { Aside } from '../layout/Aside';
 import Content from '../layout/Content';
+import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 import { store } from '../../reducers';
 import { Header } from '../layout/Header';
 import { Footer } from '../layout/Footer';
+import { MainPage } from '../MainPage';
+import { actionPageStart } from '../../actions/actionPageStart';
 
 const Root = ({ user = {} }) => {
     const isSignIn = true;
-    store.dispatch(actionRootCats());
+    store.dispatch(actionPageStart());
 
     return (
         <Box className="Root">
             <Header />
-            <Stack direction="row">
-                <Aside />
-                <Content>
-                    {/* <Routes>
-                        <Route path="/" exact />
-                        <Route path="/good/:id" />
+            <Grid container columns={14} rows={1}>
+                <Grid xs={3} item>
+                    <Aside />
+                </Grid>
+                <Grid xs={11} item>
+                    <Content>
+                        <Routes>
+                            <Route path="/" exact element={<MainPage />} />
+                            {/* <Route path="/good/:id" />
                         <Route path="/category/:id" />
                         <Route path="/category/" />
                         <Route path="/good/" />
 
-                        <CProtectedRoute path="/admin" component={AdminLayoutPage} roles={['admin']} />
-                    </Routes> */}
-                </Content>
-            </Stack>
+                        <CProtectedRoute path="/admin" component={AdminLayoutPage} roles={['admin']} /> */}
+                        </Routes>
+                    </Content>
+                </Grid>
+            </Grid>
+
             <Footer />
         </Box>
     );
