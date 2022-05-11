@@ -1,5 +1,6 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import defaultGoodImage from '../../../images/default-good-image.png';
 import { actionCartAdd } from '../../../reducers';
 import { CBuyButton } from '../BuyButton';
@@ -7,10 +8,10 @@ import { CBuyButton } from '../BuyButton';
 const GoodCard = ({ good = {} }) => {
     return (
         <Card className="GoodCard">
-            <CardActionArea>
+            <CardActionArea component={Link} to={`/good/${good._id}`}>
                 <CardMedia
                     component="img"
-                    height="140"
+                    height="200"
                     image={`${good.images ? good.images[0]?.url : defaultGoodImage}`}
                 />
                 <CardContent>

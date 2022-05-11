@@ -3,6 +3,18 @@
   margin:0;
 }
 
+
+.carousel {
+  &   .thumb {
+
+    border: 1px solid rgba(0,0,0,0)!important;
+    cursor:pointer;
+    &:hover{
+      border:1px solid #C9C5CA!important;
+    }
+  }
+}
+
 .GoodCard{
 
   & .BuyButton{
@@ -10,7 +22,42 @@
   }
 }
 
+
+.DrawerCart{
+  width:350px;
+  & .header{
+    justify-content: space-between;
+    width: 100%;
+  }
+  & .header{
+    padding: 10px;
+  }
+
+
+  & .DrawerCartItem{
+    width:100%;
+    display: flex;
+
+
+    & .content{
+      flex:1;
+    }
+
+    & .buttons{
+      padding: 10px;
+      display: flex;
+      align-items: center;
+    }
+  }
+  & .list{
+
+  }
+}
+
+
+
 .App{
+
   & .Header{
     margin-bottom: 30px;
     & .AppBar{
@@ -35,8 +82,15 @@
             }
           }
         }
-        & .CartLogoButton{
+        & .CartIcon{
+          & .MuiBadge-badge{
+            right: 4px;
+            top: 35px;
+            padding: 0 4px;
+          }
+
           & .CartLogo{
+            color:#6750A4;
             width:30px;
             height:30px;
           }
@@ -74,6 +128,21 @@
       & .MainPageImage{
         width: 1005;
         border-radius: 10px;
+      }
+
+    }
+
+    & .CartPage{
+      & .OrderForm{
+        padding: 10px 15px;
+        text-align: left;
+      }
+    }
+
+    & .GoodPage{
+      padding:10px;
+      & .content{
+        text-align: left;
       }
 
     }
