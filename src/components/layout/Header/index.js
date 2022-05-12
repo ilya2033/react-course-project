@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ReactComponent as ShoppingLogo } from '../../../images/shopping-logo.svg';
 import { DrawerCart } from '../../common/DrawerCart/DrawerCart';
-import { SearchBar } from '../../common/SearchBar';
+import { CSearchBar, SearchBar } from '../../common/SearchBar';
+import CSearchResults from '../../common/SearchBar/SearchResults';
 import { CCartIcon } from './CartIcon';
 
 const Header = () => {
@@ -41,11 +42,11 @@ const Header = () => {
                         </Button>
                     </Stack>
                     <Box className="SearchBarWrapper">
-                        <SearchBar />
+                        <CSearchBar render={CSearchResults} renderParams={{ itemLink: '/good/' }} />
                     </Box>
 
-                    <IconButton color="inherit" className="CartLogoButton">
-                        <Box onClick={() => setIsCartDrawerOpen(true)}>
+                    <IconButton color="inherit" className="CartLogoButton" onClick={() => setIsCartDrawerOpen(true)}>
+                        <Box>
                             <CCartIcon />
                         </Box>
                     </IconButton>

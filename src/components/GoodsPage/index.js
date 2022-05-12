@@ -3,19 +3,14 @@ import { Box } from '@mui/system';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { GoodCard } from '../common/GoodCard';
+import { GoodList } from '../common/GoodList';
 
 const GoodsPage = ({ category = {} }) => {
     const { goods = [], name = '' } = category || {};
 
     return (
         <Box className="MainPage">
-            <Grid container spacing={2}>
-                {(goods || []).map((good) => (
-                    <Grid item xs={3}>
-                        <GoodCard good={good} />
-                    </Grid>
-                ))}
-            </Grid>
+            <GoodList goods={goods} />
         </Box>
     );
 };

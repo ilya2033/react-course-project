@@ -5,9 +5,12 @@ import { HiOutlineEmojiSad } from 'react-icons/hi';
 import SearchCategoryResultItem from './SearchCategoryResultItem';
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { Error } from 'components/Error';
+import { Error } from '../Error';
 
 export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
+    useEffect(() => {
+        console.log(items);
+    }, [items]);
     return (
         <Paper className="SearchResults">
             <Stack>
@@ -40,7 +43,7 @@ export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
                         []
                     )
                 ) : (
-                    <Error>Ничего не найдено</Error>
+                    <Error>Ничего не знайдено</Error>
                 )}
             </Stack>
         </Paper>

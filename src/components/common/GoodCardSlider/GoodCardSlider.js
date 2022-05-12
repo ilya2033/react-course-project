@@ -24,7 +24,9 @@ export const GoodCardSlider = ({ goods = [] } = {}) => {
         <Box className="GoodCardSlider">
             <Carousel className="Slider" showThumbs={false} showStatus={false} showIndicators={false}>
                 {(goodSets || []).map((goodSet, idx) => (
-                    <GoodCardSet goods={goodSet} num={num} key={idx} />
+                    <Box key={idx}>
+                        <GoodCardSet goods={goodSet} num={num} />
+                    </Box>
                 ))}
             </Carousel>
         </Box>

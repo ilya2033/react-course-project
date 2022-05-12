@@ -68,7 +68,7 @@ export const actionCatById = (_id) => async (dispatch, getState) => {
                                           ],
                                       },
                                       {
-                                          _id: 6,
+                                          _id: 5,
                                           name: 'Good 5',
                                           description: 'adaadasda asasd asd asd asd asd ',
                                           price: '999',
@@ -82,7 +82,7 @@ export const actionCatById = (_id) => async (dispatch, getState) => {
                                           ],
                                       },
                                       {
-                                          id: 6,
+                                          _id: 6,
                                           name: 'Good 6',
                                           description: 'adaadasda asasd asd asd asd asd ',
                                           price: '999',

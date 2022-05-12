@@ -7,7 +7,9 @@ const Categories = ({ categories = [] }) => {
         <Box className="Categories">
             <List>
                 {(categories || []).map((cat) => (
-                    <Category category={cat} key={cat._id} />
+                    <Box key={cat._id}>
+                        <Category category={cat} />
+                    </Box>
                 ))}
             </List>
         </Box>

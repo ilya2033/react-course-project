@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 import { Box, TextField, Button, Container, Stack, IconButton } from '@mui/material';
+import { actionGoodsFind } from '../../../actions/actionGoodsFind';
+import { actionPromiseClear } from '../../../reducers';
 
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -33,8 +35,16 @@ export const SearchBar = ({
                 inputValue.length && setIsChildrenOpen(true);
             }
         };
+        if (inputTimeout) {
+            clearTimeout(inputTimeout);
+            setInputTimeout(null);
+        }
+        setInputTimeout(
+            setTimeout(() => {
+                inputValue && onSearch(inputValue);
+            }, 700)
+        );
 
-        inputValue && onSearch(inputValue);
         setIsChildrenOpen(!!inputValue?.length);
         document.addEventListener('mousedown', checkClickOutsideHeaderSearchBar);
         return () => {
@@ -61,25 +71,26 @@ export const SearchBar = ({
                 />
 
                 {!!inputValue ? (
-                    <Link
+                    <Button
+                        component={Link}
                         className="Link"
                         to={`${searchLink}${inputValue}`}
                         onClick={() => {
                             setInputValue('');
                             onSearchButtonClick();
                         }}
+                        variant="text"
+                        color="inherit"
                     >
-                        <Button variant="text" color="inherit">
-                            Пошук
-                        </Button>
-                    </Link>
+                        Пошук
+                    </Button>
                 ) : (
                     <Button variant="text" color="inherit">
                         Пошук
                     </Button>
                 )}
             </Stack>
-            <Stack direction="row" justifyContent="center">
+            <Stack direction="row">
                 {isChildrenOpen && (
                     <R
                         onItemClick={() => {
@@ -94,7 +105,7 @@ export const SearchBar = ({
     );
 };
 
-// export const CSearchBar = connect(null, {
-//     onSearch: (text) => actionGoodsFind({ text, limit: 5 }),
-//     onSearchButtonClick: () => actionPromiseClear("goodsFind"),
-// })(SearchBar);
+export const CSearchBar = connect(null, {
+    onSearch: (text) => actionGoodsFind({ text, limit: 5 }),
+    onSearchButtonClick: () => actionPromiseClear('goodsFind'),
+})(SearchBar);

@@ -15,9 +15,7 @@ export const CartIcon = ({ cart }) => {
     return (
         <Box className="CartIcon">
             <Badge badgeContent={count} color="primary">
-                <IconButton size="medium">
-                    <MdOutlineShoppingCart className="CartLogo" />
-                </IconButton>
+                <MdOutlineShoppingCart className="CartLogo" />
             </Badge>
         </Box>
     );

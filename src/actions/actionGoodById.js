@@ -11,7 +11,7 @@ export const actionGoodById = (_id) => async (dispatch, getState) => {
                     Math.random() > 0.01
                         ? resolve({
                               data: {
-                                  id: 6,
+                                  _id: 6,
                                   name: 'Good 6',
                                   description: 'adaadasda asasd asd asd asd asd ',
                                   price: '999',

@@ -61,7 +61,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
                     <IconButton onClick={() => handleChange(countInput - 1)}>
                         <AiOutlineMinus />
                     </IconButton>
-                    <Typography>{countInput}</Typography>
+                    <Typography >{countInput}</Typography>
                     <IconButton onClick={() => handleChange(countInput + 1)}>
                         <AiOutlinePlus />
                     </IconButton>

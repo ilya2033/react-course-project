@@ -1,7 +1,13 @@
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
+import { Routes } from 'react-router-dom';
+import { CProtectedRoute } from '../../common/ProtectedRoute';
 
 const AdminLayoutPage = () => {
-    return <Box></Box>;
+    return (
+        <Box className="AdminLayoutPage">
+            <Routes></Routes>
+        </Box>
+    );
 };
 
 export { AdminLayoutPage };

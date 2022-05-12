@@ -44,6 +44,7 @@ export const CartPage = () => {
                 </Table>
 
                 <OrderForm />
+                
             </Stack>
         </Box>
     );

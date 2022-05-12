@@ -1,9 +1,7 @@
-import { backendURL } from "helpers";
-import { Link } from "react-router-dom";
-import defaultGoodImage from "images/defaultGoodImage.png";
-import { Stack, Typography } from "@mui/material";
-const SearchCategoryResultItem = ({ category, onClick, link = "" } = {}) => {
-    const { _id = null, name = "" } = category || {};
+import { Link } from 'react-router-dom';
+import { Stack, Typography } from '@mui/material';
+const SearchCategoryResultItem = ({ category, onClick, link = '' } = {}) => {
+    const { _id = null, name = '' } = category || {};
 
     return (
         <Link className="Link" to={`${link}${_id}/`}>
