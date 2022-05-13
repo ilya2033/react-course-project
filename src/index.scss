@@ -168,7 +168,18 @@
       padding: 10px;
       padding-bottom: 400px;
 
-
+      & .AdminGoodPage{
+        & .EntityEditor{
+          & .Dropzone{
+            background: #F1F2F4;
+            width: 400px;
+            padding: 70px 0;
+            border: 1px dashed #E9EAEC;
+            border-radius: 5px;
+            text-align: center;
+          }
+        }
+      }
       & .AdminGoodList{
         width:90%;
         display: flex;
