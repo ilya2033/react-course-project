@@ -1,9 +1,9 @@
 import { actionPromise } from '../reducers';
 
-export const actionGoodsFind =
-    ({ text = '', limit = 0, skip = 0, promiseName = 'goodsFind' }) =>
+export const actionGoodsAll =
+    ({ limit = 0, skip = 0, promiseName = 'goodsAll' } = {}) =>
     async (dispatch, getState) => {
-        await dispatch(
+        dispatch(
             actionPromise(
                 promiseName,
                 new Promise((resolve) => {
@@ -21,6 +21,7 @@ export const actionGoodsFind =
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                           ],
+                                          categories: [{ _id: 1, name: 'Category 1' }],
                                       },
                                       {
                                           _id: 2,
@@ -32,6 +33,7 @@ export const actionGoodsFind =
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                           ],
+                                          categories: [{ _id: 1, name: 'Category 1' }],
                                       },
                                       {
                                           _id: 3,
@@ -40,6 +42,7 @@ export const actionGoodsFind =
                                           price: '999',
                                           amount: 9999,
                                           images: null,
+                                          categories: [{ _id: 1, name: 'Category 1' }],
                                       },
                                       {
                                           _id: 4,
@@ -50,6 +53,10 @@ export const actionGoodsFind =
                                           images: [
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
+                                          ],
+                                          categories: [
+                                              { _id: 1, name: 'Category 1' },
+                                              { _id: 1, name: 'Category 2' },
                                           ],
                                       },
                                       {
@@ -62,6 +69,7 @@ export const actionGoodsFind =
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                           ],
+                                          categories: [{ _id: 1, name: 'Category 1' }],
                                       },
                                       {
                                           _id: 6,
@@ -73,6 +81,7 @@ export const actionGoodsFind =
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                               { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
                                           ],
+                                          categories: [{ _id: 1, name: 'Category 1' }],
                                       },
                                   ],
                               })

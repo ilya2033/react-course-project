@@ -2,13 +2,13 @@ import { Paper, List, ListItem, ListItemButton, ListItemText, Box } from '@mui/m
 import { useEffect } from 'react';
 import { Category } from './Category';
 
-const Categories = ({ categories = [] }) => {
+const Categories = ({ categories = [], url = '/category/' }) => {
     return (
         <Box className="Categories">
             <List>
                 {(categories || []).map((cat) => (
                     <Box key={cat._id}>
-                        <Category category={cat} />
+                        <Category category={cat} url={url} />
                     </Box>
                 ))}
             </List>

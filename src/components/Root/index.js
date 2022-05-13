@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AuthPage } from '../AuthPage';
 import { LayoutPage } from '../LayoutPage';
+import { CProtectedRoute } from '../common/ProtectedRoute';
 
 const Root = ({ user = {} }) => {
     const isSignIn = true;
@@ -16,7 +17,14 @@ const Root = ({ user = {} }) => {
     return (
         <Box className="Root">
             <Routes>
-                <Route path="/auth" element={<AuthPage />} />
+                <Route
+                    path="/auth"
+                    element={
+                        <CProtectedRoute roles={['anon']} fallback="/admin">
+                            <AuthPage />
+                        </CProtectedRoute>
+                    }
+                />
                 <Route path="/*" element={<LayoutPage />} />
             </Routes>
         </Box>

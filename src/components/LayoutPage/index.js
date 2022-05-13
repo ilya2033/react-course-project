@@ -61,7 +61,7 @@ export const LayoutPage = () => (
                         <Route path="/category/" element={<GoodsPageContainer />} />
                         <Route path="/good/:id" element={<GoodPageContainer />} />
                         <Route
-                            path="/admin"
+                            path="/admin/*"
                             element={
                                 <CProtectedRoute roles={['admin']} fallback="/auth">
                                     <AdminLayoutPage />

@@ -1,7 +1,7 @@
 import { SearchBar, CSearchBar } from './SearchBar';
 
-// import CSearchResults, { SearchResults } from './SearchResults';
+import { SearchResults, CSearchResults } from './SearchResults';
 // import SearchGoodResultItem from './SearchGoodResultItem';
 
 // export { SearchBar, SearchResults, CSearchResults, SearchGoodResultItem };
-export { SearchBar, CSearchBar };
+export { SearchBar, CSearchBar, SearchResults, CSearchResults };

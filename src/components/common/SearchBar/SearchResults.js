@@ -43,7 +43,7 @@ export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
                         []
                     )
                 ) : (
-                    <Error>Ничего не знайдено</Error>
+                    <Error>Нічого не знайдено</Error>
                 )}
             </Stack>
         </Paper>
@@ -52,4 +52,4 @@ export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
 
 const CSearchResults = connect((state) => ({ items: state.promise.goodsFind?.payload || [] }))(SearchResults);
 
-export default CSearchResults;
+export { CSearchResults };
