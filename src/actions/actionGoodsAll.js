@@ -18,8 +18,14 @@ export const actionGoodsAll =
                                           price: '999',
                                           amount: 9999,
                                           images: [
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
+                                              {
+                                                  _id: 1,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
+                                              {
+                                                  _id: 2,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
                                           ],
                                           categories: [{ _id: 1, name: 'Category 1' }],
                                       },
@@ -30,8 +36,14 @@ export const actionGoodsAll =
                                           price: '999',
                                           amount: 9999,
                                           images: [
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
+                                              {
+                                                  _id: 1,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
+                                              {
+                                                  _id: 2,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
                                           ],
                                           categories: [{ _id: 1, name: 'Category 1' }],
                                       },
@@ -51,8 +63,14 @@ export const actionGoodsAll =
                                           price: '999',
                                           amount: 9999,
                                           images: [
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
+                                              {
+                                                  _id: 1,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
+                                              {
+                                                  _id: 2,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
                                           ],
                                           categories: [
                                               { _id: 1, name: 'Category 1' },
@@ -66,8 +84,14 @@ export const actionGoodsAll =
                                           price: '999',
                                           amount: 9999,
                                           images: [
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
+                                              {
+                                                  _id: 1,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
+                                              {
+                                                  _id: 2,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
                                           ],
                                           categories: [{ _id: 1, name: 'Category 1' }],
                                       },
@@ -78,8 +102,14 @@ export const actionGoodsAll =
                                           price: '999',
                                           amount: 9999,
                                           images: [
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
-                                              { url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg' },
+                                              {
+                                                  _id: 1,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
+                                              {
+                                                  _id: 2,
+                                                  url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                              },
                                           ],
                                           categories: [{ _id: 1, name: 'Category 1' }],
                                       },

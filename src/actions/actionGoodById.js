@@ -19,9 +19,19 @@ export const actionGoodById =
                                       price: '999',
                                       images: [
                                           {
+                                              _id: 1,
                                               url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                           },
                                           {
+                                              _id: 2,
+                                              url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                          },
+                                          {
+                                              _id: 3,
+                                              url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
+                                          },
+                                          {
+                                              _id: 4,
                                               url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                           },
                                       ],

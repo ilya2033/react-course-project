@@ -26,9 +26,11 @@ export const actionCatById = (_id) => async (dispatch, getState) => {
                                           amount: 9999,
                                           images: [
                                               {
+                                                  _id: 1,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                               {
+                                                  _id: 2,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                           ],
@@ -41,9 +43,11 @@ export const actionCatById = (_id) => async (dispatch, getState) => {
                                           amount: 9999,
                                           images: [
                                               {
+                                                  _id: 1,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                               {
+                                                  _id: 2,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                           ],
@@ -64,9 +68,11 @@ export const actionCatById = (_id) => async (dispatch, getState) => {
                                           amount: 9999,
                                           images: [
                                               {
+                                                  _id: 1,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                               {
+                                                  _id: 2,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                           ],
@@ -79,9 +85,11 @@ export const actionCatById = (_id) => async (dispatch, getState) => {
                                           amount: 9999,
                                           images: [
                                               {
+                                                  _id: 1,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                               {
+                                                  _id: 2,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                           ],
@@ -94,9 +102,11 @@ export const actionCatById = (_id) => async (dispatch, getState) => {
                                           amount: 9999,
                                           images: [
                                               {
+                                                  _id: 1,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                               {
+                                                  _id: 2,
                                                   url: 'https://content2.rozetka.com.ua/goods/images/big/183546719.jpg',
                                               },
                                           ],

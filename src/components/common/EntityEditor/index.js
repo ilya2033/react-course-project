@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { arrayMoveImmutable } from 'array-move';
-import { DropZone } from './DropZone';
+import { DropZone } from '../DropZone';
 import { SortableList } from './SortableList';
 import { SortableItem } from './SortableItem';
 import { Box, Button, IconButton, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
@@ -10,12 +10,18 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
     const [state, setState] = useState(entity);
 
     useEffect(() => {
+        setState(entity);
+        console.log(entity.images);
+    }, [entity]);
+
+    useEffect(() => {
         if (uploadFiles?.status === 'FULFILLED') {
             setState({ ...state, images: [...(state.images || []), ...uploadFiles?.payload] });
         }
     }, [uploadFiles]);
 
     useEffect(() => {
+        console.log(entity.images);
         onImagesSave && onImagesSave(state.images?.filter((img) => img?._id && img?.url));
     }, [state.images]);
 
@@ -32,7 +38,7 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
                 <Typography>Drop images here!</Typography>
             </DropZone>
             <SortableList pressDelay={200} onSortEnd={onSortEnd} axis="xy" className="SortableContainer">
-                <ImageList sx={{ maxHeight: 800 }} cols={3} rowHeight={164} fullwidth>
+                <ImageList sx={{ maxHeight: 800 }} cols={3} fullwidth>
                     {state.images?.map(
                         (image, index) =>
                             !!image?._id &&
@@ -52,9 +58,8 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
                                         <Box
                                             component="img"
                                             className="DropZoneImage"
-                                            src={`/${image.url}`}
+                                            src={`${image.url}`}
                                             loading="lazy"
-                                            sx={{ width: 165, height: 165 }}
                                         />
                                     </ImageListItem>
                                 </SortableItem>

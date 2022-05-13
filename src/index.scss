@@ -169,14 +169,22 @@
       padding-bottom: 400px;
 
       & .AdminGoodPage{
+        & .GoodForm{
+          width:40%;
+          text-align: left;
+        }
         & .EntityEditor{
+          & .DropZoneImage{
+            width: 100%;
+          }
           & .Dropzone{
             background: #F1F2F4;
-            width: 400px;
+            width: 100%;
             padding: 70px 0;
             border: 1px dashed #E9EAEC;
             border-radius: 5px;
             text-align: center;
+
           }
         }
       }

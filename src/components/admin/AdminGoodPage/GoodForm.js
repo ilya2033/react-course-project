@@ -1,19 +1,32 @@
 import { connect } from 'react-redux';
 import React, { useState, useEffect } from 'react';
 import { actionPromise, actionPromiseClear } from '../../../reducers';
-
+import Select from 'react-select';
 import { actionGoodUpdate } from '../../../actions/actionGoodUpdate';
 import { EntityEditor } from '../../common/EntityEditor';
 import { actionUploadFiles } from '../../../actions/actionUploadFiles';
-import { Box, Button, InputLabel, Stack, TextareaAutosize, TextField, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Chip,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    OutlinedInput,
+    Stack,
+    TextareaAutosize,
+    TextField,
+    Typography,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Error } from '../../common/Error';
 
 const goodSchema = Yup.object().shape({
-    name: Yup.string().min(3, 'Too Short!').max(15, 'Too Long!').required('Required'),
-    description: Yup.string().min(3, 'Too Short!').max(15, 'Too Long!').required('Required'),
-    price: Yup.number().min(0, 'Должно быть больше нуля'),
+    name: Yup.string().required("Обов'язкове"),
+    description: Yup.string().required("Обов'язкове"),
+    price: Yup.number().min(0, 'більше або равно 0'),
+    amount: Yup.number().min(0, 'більше або равно 0'),
 });
 
 const CGoodEditor = connect(
@@ -43,6 +56,7 @@ export const GoodForm = ({
             name: '',
             description: '',
             price: 0,
+            amount: 0,
         },
         validationSchema: goodSchema,
         validateOnChange: true,
@@ -52,6 +66,7 @@ export const GoodForm = ({
             goodToSave.name = formik.values.name;
             goodToSave.description = formik.values.description;
             goodToSave.price = +formik.values.price;
+            goodToSave.amount = +formik.values.amount;
             goodToSave.categories = inputCategories;
             goodToSave.images = inputImages?.map(({ _id }) => ({ _id })) || [];
 
@@ -65,6 +80,7 @@ export const GoodForm = ({
         setInputImages(good?.images || []);
         formik.setFieldValue('name', good.name || '');
         formik.setFieldValue('description', good.description || '');
+        formik.setFieldValue('amount', good.amount || 0);
         formik.setFieldValue('price', good.price || 0);
     }, [good]);
 
@@ -82,8 +98,8 @@ export const GoodForm = ({
             <TextField
                 id="name"
                 name="name"
-                variant="standard"
-                label="Название"
+                variant="outlined"
+                label="Назва"
                 error={formik.touched.name && Boolean(formik.errors.name)}
                 value={formik.values.name}
                 onBlur={formik.handleBlur}
@@ -95,15 +111,15 @@ export const GoodForm = ({
             />
 
             <Box sx={{ mt: 3 }}>
-                <InputLabel>Картинки</InputLabel>
+                <InputLabel>Зображення</InputLabel>
                 <CGoodEditor onImagesSave={(images) => setInputImages(images)} />
             </Box>
 
             <TextField
-                variant="standard"
+                variant="outlined"
                 id="description"
                 name="description"
-                label="Описание"
+                label="Опис"
                 error={formik.touched.description && Boolean(formik.errors.description)}
                 value={formik.values.description}
                 onBlur={formik.handleBlur}
@@ -115,12 +131,11 @@ export const GoodForm = ({
             />
 
             <Box sx={{ mt: 3 }}>
-                <InputLabel>Цена</InputLabel>
                 <TextField
-                    variant="standard"
+                    variant="outlined"
                     id="price"
                     name="price"
-                    label="Цена"
+                    label="Ціна"
                     error={formik.touched.price && Boolean(formik.errors.price)}
                     value={formik.values.price}
                     onBlur={formik.handleBlur}
@@ -133,19 +148,35 @@ export const GoodForm = ({
             </Box>
 
             <Box sx={{ mt: 3 }}>
-                <InputLabel>Категории</InputLabel>
-                {/* <Select
+                <InputLabel>Категорії</InputLabel>
+                <Select
+                    placeholder="Обрати категорії"
                     value={inputCategories.map(({ _id, name }) => ({ value: _id, label: name }))}
                     closeMenuOnSelect={false}
                     onChange={(e) => setInputCategories(e.map(({ label, value }) => ({ _id: value, name: label })))}
                     options={catList?.map(({ _id, name }) => ({ value: _id, label: name }))}
                     isMulti={true}
-                /> */}
+                />
+                {/* <TextField
+                        classes={{ root: classes.root }}
+                        select
+                        name="userRoles"
+                        id="userRoles"
+                        variant="outlined"
+                        label="userRoles"
+                        SelectProps={{
+                            multiple: true,
+                            value: formState.userRoles,
+                            onChange: catList?.map(({ _id, name }) => ({ value: _id, label: name })),
+                        }}
+                    >
+                        {catList?.map(({ _id, name }) => ({ value: _id, label: name }))}
+                    </TextField> */}
             </Box>
 
             <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
-                <Button disabled={!formik.isValid} type="submit">
-                    Сохранить
+                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit" fullWidth>
+                    Зберегти
                 </Button>
             </Box>
         </Box>
