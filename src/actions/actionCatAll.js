@@ -45,14 +45,14 @@ export const actionCatAll =
                                           parent: 1,
                                           subcategories: [],
                                           goods: [],
-                                          name: 'Category 4',
+                                          name: 'Category 5',
                                       },
                                       {
                                           _id: 6,
                                           parent: 1,
                                           subcategories: [],
                                           goods: [],
-                                          name: 'Category 4',
+                                          name: 'Category 6',
                                       },
                                   ],
                               })

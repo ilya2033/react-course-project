@@ -3,11 +3,57 @@ import { useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useParams } from 'react-router-dom';
 import { actionGoodById } from '../../../actions/actionGoodById';
-import { actionPromiseClear, store } from '../../../reducers';
+import { actionCatById } from '../../../actions/actionCatById';
+import { actionPromiseClear, store, actionFeedCats } from '../../../reducers';
 import { actionFeedAdd, actionFeedClear, actionFeedGoods } from '../../../reducers/feedReducer';
 import { CProtectedRoute } from '../../common/ProtectedRoute';
 import { CAdminGoodPage } from '../AdminGoodPage';
 import { AdminGoodsPage } from '../AdminGoodsPage';
+import { AdminCategoriesPage } from '../AdminCategoriesPage';
+import { CAdminCategoryPage } from '../AdminCategoryPage';
+
+const AdminCategoryPageContainer = ({}) => {
+    const dispatch = useDispatch();
+    const params = useParams();
+    useEffect(() => {
+        if (params._id) {
+            dispatch(actionCatById(params._id, 'adminCatById'));
+        } else {
+            dispatch(actionPromiseClear('adminCatById'));
+        }
+    }, [params._id]);
+    return <CAdminCategoryPage />;
+};
+
+const AdminCategoriesPageContainer = ({ cats }) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(actionFeedCats(cats?.length || 0));
+        window.onscroll = (e) => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                const {
+                    feed,
+                    promise: { feedCatAll },
+                } = store.getState();
+                if (feedCatAll.status !== 'PENDING') {
+                    dispatch(actionFeedCats(feed.payload?.length || 0));
+                }
+            }
+        };
+        return () => {
+            dispatch(actionFeedClear());
+            dispatch(actionPromiseClear('feedCatAll'));
+
+            dispatch(actionPromiseClear('categoryUpsert'));
+            window.onscroll = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (cats.length) dispatch(actionFeedAdd(cats));
+    }, [cats]);
+    return <AdminCategoriesPage />;
+};
 
 const AdminGoodPageContainer = () => {
     const params = useParams();
@@ -56,6 +102,10 @@ const CAdminGoodsPageContainer = connect((state) => ({ goods: state.promise?.fee
     AdminGoodsPageContainer
 );
 
+const CAdminCategoriesPageContainer = connect((state) => ({ cats: state.promise?.feedCatAll?.payload || [] }))(
+    AdminCategoriesPageContainer
+);
+
 const AdminLayoutPage = () => {
     return (
         <Box className="AdminLayoutPage">
@@ -63,6 +113,9 @@ const AdminLayoutPage = () => {
                 <Route path="/goods/" element={<CAdminGoodsPageContainer />} />
                 <Route path="/good/" element={<AdminGoodPageContainer />} />
                 <Route path="/good/:_id" element={<AdminGoodPageContainer />} />
+                <Route path="/categories/" element={<CAdminCategoriesPageContainer />} />
+                <Route path="/category/" element={<AdminCategoryPageContainer />} />
+                <Route path="/category/:_id" element={<AdminCategoryPageContainer />} />
             </Routes>
         </Box>
     );

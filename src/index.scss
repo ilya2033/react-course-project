@@ -203,6 +203,24 @@
           }
         }
       }
+
+      & .AdminCategoryPage{
+        & .CategoryForm{
+          width:40%;
+          text-align: left;
+        }
+
+        & .AdminCategoryList{
+          width:90%;
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-left: 5%;
+
+
+        }
+      }
+
       & .searchBarWrapper{
         display: flex;
         justify-content: center;
