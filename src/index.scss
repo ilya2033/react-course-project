@@ -168,6 +168,10 @@
       padding: 10px;
       padding-bottom: 400px;
 
+      & .AdminOrderPage{
+        text-align: left;
+      }
+
       & .AdminGoodPage{
         & .GoodForm{
           width:40%;
@@ -248,6 +252,12 @@
                 width:100%;
                 max-height: 100px;
               }
+              &:hover{
+                background: #F1F2F4;
+              }
+            }
+            & .SearchOrderResultItem{
+              text-align: center;
               &:hover{
                 background: #F1F2F4;
               }

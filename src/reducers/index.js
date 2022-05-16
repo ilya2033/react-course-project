@@ -18,6 +18,8 @@ import {
     actionFeedGoodsFind,
     actionFeedClear,
     actionFeedAdd,
+    actionFeedOrdersFind,
+    actionFeedOrders,
     feedReducer,
 } from './feedReducer';
 import { createStoreHook } from 'react-redux';
@@ -32,6 +34,8 @@ export {
     actionFeedGoodsFind,
     actionFeedClear,
     actionFeedAdd,
+    actionFeedOrdersFind,
+    actionFeedOrders,
     feedReducer,
 };
 export const store = createStore(

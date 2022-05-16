@@ -19,7 +19,7 @@ const AdminCategoryList = ({ categories }) => {
             <Box className="searchBarWrapper">
                 <CSearchBar
                     render={CSearchResults}
-                    searchLink="/admin/category/search/"
+                    searchLink="/admin/categories/search/"
                     renderParams={{ itemLink: '/admin/category/' }}
                 />
             </Box>

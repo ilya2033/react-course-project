@@ -11,7 +11,7 @@ export const GoodPage = () => {
     const { _id = '', name = '', price = '', description = '', images = [] } = good || {};
     return (
         <Box className="GoodPage">
-            <Grid container spacing={4} className="images">
+            <Grid container spacing={4} className="images" >
                 <Grid item xs={12} md={4}>
                     <Carousel showIndicators={false} showStatus={false}>
                         {(good.images || [{ url: defaultGoodImage }]).map((image) => (
@@ -19,7 +19,7 @@ export const GoodPage = () => {
                         ))}
                     </Carousel>
                 </Grid>
-                <Grid item xs={12} md={8} className="content">
+                <Grid item xs={12} md={8} className="content" >
                     <Stack spacing={2}>
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography variant="body1" color="#1C1B1F">

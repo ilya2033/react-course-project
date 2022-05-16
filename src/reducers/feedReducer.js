@@ -4,6 +4,8 @@ import { actionGoodsFind } from '../actions/actionGoodsFind';
 import { actionCatsFind } from '../actions/actionCatsFind';
 import { actionGoodsAll } from '../actions/actionGoodsAll';
 import { gql } from '../helpers';
+import { actionOrdersAll } from '../actions/actionOrdersAll';
+import { actionOrdersFind } from '../actions/actionOrdersFind';
 
 function feedReducer(state = { payload: [] }, { type, payload = [] }) {
     if (type === 'FEED_ADD') {
@@ -45,6 +47,18 @@ const actionFeedCats =
         await dispatch(actionCatAll({ promiseName: 'feedCatAll', skip, limit: 50 }));
     };
 
+const actionFeedOrders =
+    (skip = 0) =>
+    async (dispatch, getState) => {
+        await dispatch(actionOrdersAll({ skip, limit: 50, promiseName: 'feedOrdersAll' }));
+    };
+
+const actionFeedOrdersFind =
+    ({ skip = 0, text = '' }) =>
+    async (dispatch, getState) => {
+        await dispatch(actionOrdersFind({ skip, limit: 50, promiseName: 'feedOrdersFind', text }));
+    };
+
 export {
     actionFeedCats,
     actionFeedCatsFind,
@@ -53,4 +67,6 @@ export {
     actionFeedAdd,
     actionFeedGoodsFind,
     feedReducer,
+    actionFeedOrders,
+    actionFeedOrdersFind,
 };

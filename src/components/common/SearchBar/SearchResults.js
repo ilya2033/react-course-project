@@ -6,11 +6,15 @@ import SearchCategoryResultItem from './SearchCategoryResultItem';
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Error } from '../Error';
+import SearchOrderResultItem from './SearchOrderResultItem';
 
 export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
     useEffect(() => {
         console.log(items);
     }, [items]);
+    useEffect(() => {
+        console.log(itemLink.match(/.+(order || orders).+/));
+    }, [itemLink]);
     return (
         <Paper className="SearchResults">
             <Stack>
@@ -27,13 +31,25 @@ export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
                                 <Divider sx={{ my: 1 }} />
                             </Box>
                         ))
-                    ) : itemLink.match(/.+(category || categories).+/) ? (
+                    ) : itemLink.match(/.+(category|categories).+/) ? (
                         items.map((cat) => (
                             <Box>
                                 <SearchCategoryResultItem
                                     link={itemLink}
                                     category={cat}
                                     key={cat._id}
+                                    onClick={() => onItemClick && onItemClick()}
+                                />
+                                <Divider sx={{ my: 1 }} />
+                            </Box>
+                        ))
+                    ) : itemLink.match(/.+(order|orders).+/) ? (
+                        items.map((order) => (
+                            <Box>
+                                <SearchOrderResultItem
+                                    link={itemLink}
+                                    order={order}
+                                    key={order._id}
                                     onClick={() => onItemClick && onItemClick()}
                                 />
                                 <Divider sx={{ my: 1 }} />

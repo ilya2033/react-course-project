@@ -16,8 +16,6 @@ const CSearchBar = connect(null, {
 const CSearchResults = connect((state) => ({ items: state.promise.adminGoodsFind?.payload || [] }))(SearchResults);
 
 const AdminGoodList = ({ goods }) => {
-    const [isSortReverse, setSortReverse] = useState(false);
-
     return (
         <Box className="AdminGoodList">
             <Box className="searchBarWrapper">

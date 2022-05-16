@@ -5,12 +5,15 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import { actionGoodById } from '../../../actions/actionGoodById';
 import { actionCatById } from '../../../actions/actionCatById';
 import { actionPromiseClear, store, actionFeedCats } from '../../../reducers';
-import { actionFeedAdd, actionFeedClear, actionFeedGoods } from '../../../reducers/feedReducer';
+import { actionFeedAdd, actionFeedClear, actionFeedGoods, actionFeedOrders } from '../../../reducers/feedReducer';
 import { CProtectedRoute } from '../../common/ProtectedRoute';
 import { CAdminGoodPage } from '../AdminGoodPage';
 import { AdminGoodsPage } from '../AdminGoodsPage';
 import { AdminCategoriesPage } from '../AdminCategoriesPage';
 import { CAdminCategoryPage } from '../AdminCategoryPage';
+import { AdminOrdersPage } from '../AdminOrdersPage';
+import { CAdminOrderPage } from '../AdminOrderPage';
+import { actionOrderById } from '../../../actions/actionOrderById';
 
 const AdminCategoryPageContainer = ({}) => {
     const dispatch = useDispatch();
@@ -98,8 +101,55 @@ const AdminGoodsPageContainer = ({ goods }) => {
     return <AdminGoodsPage />;
 };
 
+const AdminOrdersPageContainer = ({ orders }) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(actionFeedOrders());
+        window.onscroll = (e) => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                const {
+                    feed,
+                    promise: { feedOrdersAll },
+                } = store.getState();
+
+                if (feedOrdersAll.status !== 'PENDING') {
+                    dispatch(actionFeedOrders(feed.payload?.length || 0));
+                }
+            }
+        };
+        return () => {
+            dispatch(actionFeedClear());
+            dispatch(actionPromiseClear('feedOrdersAll'));
+            dispatch(actionPromiseClear('orderUpsert'));
+            window.onscroll = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (orders?.length) store.dispatch(actionFeedAdd(orders));
+    }, [orders]);
+    return <AdminOrdersPage />;
+};
+
+const AdminOrderPageContainer = () => {
+    const params = useParams();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (params._id) {
+            dispatch(actionOrderById({ _id: params._id, promiseName: 'adminOrderById' }));
+        } else {
+            dispatch(actionOrderById('adminOrderById'));
+        }
+    }, [params._id]);
+    return <CAdminOrderPage />;
+};
+
 const CAdminGoodsPageContainer = connect((state) => ({ goods: state.promise?.feedGoodsAll?.payload || [] }))(
     AdminGoodsPageContainer
+);
+
+const CAdminOrdersPageContainer = connect((state) => ({ orders: state.promise?.feedOrdersAll?.payload || [] }))(
+    AdminOrdersPageContainer
 );
 
 const CAdminCategoriesPageContainer = connect((state) => ({ cats: state.promise?.feedCatAll?.payload || [] }))(
@@ -116,6 +166,9 @@ const AdminLayoutPage = () => {
                 <Route path="/categories/" element={<CAdminCategoriesPageContainer />} />
                 <Route path="/category/" element={<AdminCategoryPageContainer />} />
                 <Route path="/category/:_id" element={<AdminCategoryPageContainer />} />
+                <Route path="/orders/" element={<CAdminOrdersPageContainer />} />
+                <Route path="/order/" element={<CAdminOrdersPageContainer />} />
+                <Route path="/order/:_id" element={<AdminOrderPageContainer />} />
             </Routes>
         </Box>
     );

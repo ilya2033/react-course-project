@@ -25,7 +25,7 @@ const AdminGoodItem = ({ good }) => (
                 : '-'}
         </TableCell>
         <TableCell className="edit">
-            <Button component={Link} className="Link" to={`/admin/good/${good._id}/`}>
+            <Button component={Link} className="Link" to={`/admin/good/${good._id}/`} variant="contained">
                 Редагувати
             </Button>
         </TableCell>

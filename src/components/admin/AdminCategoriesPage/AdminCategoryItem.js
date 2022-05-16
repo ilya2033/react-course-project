@@ -7,7 +7,7 @@ const AdminCategoryItem = ({ category }) => (
         <TableCell>{category.name ? category.name : '-'}</TableCell>
         <TableCell>{category.parent?.name ? category.parent.name : '-'}</TableCell>
         <TableCell className="edit">
-            <Button component={Link} className="Link" to={`/admin/category/${category._id}/`}>
+            <Button component={Link} className="Link" to={`/admin/category/${category._id}/`} variant="contained">
                 Редагувати
             </Button>
         </TableCell>
