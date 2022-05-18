@@ -1,27 +1,28 @@
 import { actionPromise } from '../reducers';
 
-export const actionCategoryUpsert = (good) => async (dispatch) => {
+export const actionCategoryUpsert = (category) => async (dispatch) => {
+    const formData = new FormData();
+    category._id && formData.append('_id', category._id);
+    formData.append('name', category.name);
+    formData.append('goods', JSON.stringify(category.goods));
+    category.parent && formData.append('parent', JSON.stringify(category.parent));
+    formData.append('subcategories', JSON.stringify(category.subcategories));
     dispatch(
         actionPromise(
             'categoryUpsert',
-            new Promise((resolve) => {
-                setTimeout(
-                    Math.random() > 0.01
-                        ? resolve({
-                              data: {
-                                  _id: 6,
-                                  parent: 1,
-                                  subcategories: [],
-                                  goods: [],
-                                  name: 'Category 4',
-                              },
-                          })
-                        : resolve({
-                              errors: [{ message: 'Error adsasdadas' }],
-                          }),
-                    400
-                );
+            fetch(`/category/`, {
+                method: 'POST',
+                headers: {
+                    ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
+                },
+                body: formData,
             })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.errors) {
+                        throw new Error(JSON.stringify(data.errors));
+                    } else return data.data;
+                })
         )
     );
 };

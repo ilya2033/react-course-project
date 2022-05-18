@@ -21,11 +21,11 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
     }, [uploadFiles]);
 
     useEffect(() => {
-        console.log(entity.images);
         onImagesSave && onImagesSave(state.images?.filter((img) => img?._id && img?.url));
-    }, [state.images]);
+    }, [state]);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
+        console.log(arrayMoveImmutable(state.images, oldIndex, newIndex));
         setState({ ...state, images: arrayMoveImmutable(state.images, oldIndex, newIndex) });
     };
     const onItemRemove = (toRemoveId) => {

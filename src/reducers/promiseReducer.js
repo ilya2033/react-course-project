@@ -18,9 +18,11 @@ export const actionRejected = (name, error) => ({ type: 'PROMISE', name, status:
 export const actionPromiseClear = (name) => ({ type: 'PROMISE_CLEAR', name });
 export const actionPromise = (name, promise) => async (dispatch) => {
     dispatch(actionPending(name));
+
     try {
         let payload = await promise;
         dispatch(actionFulfilled(name, payload));
+
         return payload;
     } catch (error) {
         dispatch(actionRejected(name, JSON.parse(error.message)));

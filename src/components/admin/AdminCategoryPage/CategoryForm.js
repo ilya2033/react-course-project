@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { actionCategoryUpdate } from '../../../actions/actionCategoryUpdate';
 import { actionPromise, actionPromiseClear, store } from '../../../reducers';
-import { Box, Button, InputLabel, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, InputLabel, Snackbar, Stack, TextField, Typography } from '@mui/material';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -24,11 +24,12 @@ const CategoryForm = ({
     goodList = [],
     category = {},
 } = {}) => {
-    const [inputSubCategories, setInputSubCategories] = useState([]);
+    const [inputSubcategories, setInputSubcategories] = useState([]);
     const [inputGoods, setInputGoods] = useState([]);
     const [inputParent, setInputParent] = useState({});
     const [subCatList, setSubCatList] = useState([]);
     const [parentList, setParentList] = useState([]);
+    const [snackbar, setSnackbar] = useState({ isOpen: false, message: '', type: 'success' });
 
     const formik = useFormik({
         initialValues: {
@@ -43,29 +44,43 @@ const CategoryForm = ({
             inputGoods && (categoryToSave.goods = inputGoods);
             inputParent && (categoryToSave.parent = inputParent);
 
-            categoryToSave.subCategories = inputSubCategories;
+            categoryToSave.subcategories = inputSubcategories;
             onSaveClick && onSaveClick();
             onSave(categoryToSave);
         },
     });
 
     useEffect(() => {
+        formik.setFieldValue('name', category.name || '');
         setInputParent(category?.parent || null);
         setInputGoods(category?.goods || []);
-        setInputSubCategories(category?.subCategories || []);
-    }, []);
+        setInputSubcategories(category?.subcategories || []);
+    }, [category]);
+
+    useEffect(() => {
+        console.log(promiseStatus);
+        if (promiseStatus === 'FULFILLED') {
+            formik.setSubmitting(false);
+            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', severity: 'succes' });
+        }
+        if (promiseStatus === 'REJECTED') {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr, '');
+            formik.setSubmitting(false);
+            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, severity: 'error' });
+        }
+    }, [promiseStatus]);
 
     useEffect(() => {
         let parentList = initialCatList.filter(
             ({ _id }) =>
                 !category?.subCatergories?.find((subCat) => _id === subCat._id) &&
                 _id !== category?._id &&
-                !inputSubCategories?.find((subCat) => _id === subCat._id)
+                !inputSubcategories?.find((subCat) => _id === subCat._id)
         );
         parentList = [...[{ _id: null, name: 'null' }], ...parentList];
 
         setParentList(parentList);
-    }, [inputSubCategories]);
+    }, [inputSubcategories]);
 
     useEffect(() => {
         let subCatList = initialCatList.filter(
@@ -115,14 +130,14 @@ const CategoryForm = ({
             <Box sx={{ mt: 3 }}>
                 <InputLabel className="form-label">Підкатегорії</InputLabel>
                 <Select
-                    value={inputSubCategories?.map(({ _id, name }) => ({ value: _id, label: name }))}
+                    value={inputSubcategories?.map(({ _id, name }) => ({ value: _id, label: name }))}
                     closeMenuOnSelect={false}
-                    onChange={(e) => setInputSubCategories(e.map(({ value, label }) => ({ _id: value, name: label })))}
+                    onChange={(e) => setInputSubcategories(e.map(({ value, label }) => ({ _id: value, name: label })))}
                     options={subCatList?.map(({ _id, name }) => ({ value: _id, label: name }))}
                     isMulti={true}
                 />
             </Box>
-            {goodsField && (
+            {
                 <Box sx={{ mt: 3 }}>
                     <InputLabel className="form-label">Товари</InputLabel>
                     <Select
@@ -133,8 +148,21 @@ const CategoryForm = ({
                         isMulti={true}
                     />
                 </Box>
-            )}
-
+            }
+            <Snackbar
+                severity={snackbar.type}
+                message={snackbar.message}
+                autoHideDuration={3000}
+                open={snackbar.isOpen}
+                onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
+                sx={{
+                    width: 400,
+                }}
+            >
+                <Alert severity={snackbar.type} sx={{ width: '100%' }} open={snackbar.isOpen}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
             <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
                 <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit" fullWidth>
                     Зберегти

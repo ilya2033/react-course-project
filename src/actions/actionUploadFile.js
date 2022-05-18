@@ -5,10 +5,16 @@ export const actionUploadFile = (file) => {
     fd.append('photo', file);
     return actionPromise(
         'uploadFile',
-        fetch('/upload', {
+        fetch('/upload/', {
             method: 'POST',
             headers: localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {},
             body: fd,
-        }).then((res) => res.json())
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.errors) {
+                    throw new Error(JSON.stringify(data.errors));
+                } else return data.data;
+            })
     );
 };

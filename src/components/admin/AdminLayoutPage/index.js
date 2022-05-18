@@ -20,7 +20,7 @@ const AdminCategoryPageContainer = ({}) => {
     const params = useParams();
     useEffect(() => {
         if (params._id) {
-            dispatch(actionCatById(params._id, 'adminCatById'));
+            dispatch(actionCatById({ _id: params._id, promiseName: 'adminCatById' }));
         } else {
             dispatch(actionPromiseClear('adminCatById'));
         }

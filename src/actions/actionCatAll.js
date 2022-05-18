@@ -7,66 +7,19 @@ export const actionCatAll =
         dispatch(
             actionPromise(
                 promiseName,
-                new Promise((resolve) => {
-                    setTimeout(
-                        Math.random() > 0.01
-                            ? resolve({
-                                  data: [
-                                      {
-                                          _id: 1,
-                                          parent: null,
-                                          subcategories: [5, 6],
-                                          goods: [1, 2],
-                                          name: 'Category 1',
-                                      },
-                                      {
-                                          _id: 2,
-                                          parent: null,
-                                          subcategories: [],
-                                          goods: [],
-                                          name: 'Category 2',
-                                      },
-                                      {
-                                          _id: 3,
-                                          parent: null,
-                                          subcategories: [],
-                                          goods: [],
-                                          name: 'Category 3',
-                                      },
-                                      {
-                                          _id: 4,
-                                          parent: null,
-                                          subcategories: [],
-                                          goods: [],
-                                          name: 'Category 4',
-                                      },
-                                      {
-                                          _id: 5,
-                                          parent: 1,
-                                          subcategories: [],
-                                          goods: [],
-                                          name: 'Category 5',
-                                      },
-                                      {
-                                          _id: 6,
-                                          parent: 1,
-                                          subcategories: [],
-                                          goods: [],
-                                          name: 'Category 6',
-                                      },
-                                  ],
-                              })
-                            : resolve({
-                                  errors: [{ message: 'Error adsasdadas' }],
-                              }),
-                        400
-                    );
-                }).then((data) => {
-                    console.log(data);
-                    if (data.errors) {
-                        throw new Error(JSON.stringify(data.errors));
-                    } else return data.data;
+                fetch('/categories/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
+                    },
                 })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.errors) {
+                            throw new Error(JSON.stringify(data.errors));
+                        } else return data.data;
+                    })
             )
         );
     };

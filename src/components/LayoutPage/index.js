@@ -28,7 +28,8 @@ const GoodsPageContainer = () => {
 const GoodPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    dispatch(actionGoodById(params._id));
+
+    dispatch(actionGoodById({ _id: params._id }));
     return <GoodPage />;
 };
 
@@ -59,7 +60,7 @@ export const LayoutPage = () => (
                         <Route path="/search/:searchData/" element={<GoodsListContainer />} exact />
                         <Route path="/category/:_id" element={<GoodsPageContainer />} />
                         <Route path="/category/" element={<GoodsPageContainer />} />
-                        <Route path="/good/:id" element={<GoodPageContainer />} />
+                        <Route path="/good/:_id" element={<GoodPageContainer />} />
                         <Route
                             path="/admin/*"
                             element={

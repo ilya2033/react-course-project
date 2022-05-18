@@ -6,6 +6,7 @@ import { actionGoodUpdate } from '../../../actions/actionGoodUpdate';
 import { EntityEditor } from '../../common/EntityEditor';
 import { actionUploadFiles } from '../../../actions/actionUploadFiles';
 import {
+    Alert,
     Box,
     Button,
     Chip,
@@ -13,6 +14,7 @@ import {
     InputLabel,
     MenuItem,
     OutlinedInput,
+    Snackbar,
     Stack,
     TextareaAutosize,
     TextField,
@@ -50,6 +52,7 @@ export const GoodForm = ({
 } = {}) => {
     const [inputCategories, setInputCategories] = useState([]);
     const [inputImages, setInputImages] = useState([]);
+    const [snackbar, setSnackbar] = useState({ isOpen: false, message: '', type: 'success' });
 
     const formik = useFormik({
         initialValues: {
@@ -69,11 +72,23 @@ export const GoodForm = ({
             goodToSave.amount = +formik.values.amount;
             goodToSave.categories = inputCategories;
             goodToSave.images = inputImages?.map(({ _id }) => ({ _id })) || [];
-
             onSaveClick && onSaveClick();
             onSave(goodToSave);
         },
     });
+
+    useEffect(() => {
+        console.log(promiseStatus);
+        if (promiseStatus === 'FULFILLED') {
+            formik.setSubmitting(false);
+            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', severity: 'succes' });
+        }
+        if (promiseStatus === 'REJECTED') {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr, '');
+            formik.setSubmitting(false);
+            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, severity: 'error' });
+        }
+    }, [promiseStatus]);
 
     useEffect(() => {
         setInputCategories(good?.categories || []);
@@ -82,7 +97,7 @@ export const GoodForm = ({
         formik.setFieldValue('description', good.description || '');
         formik.setFieldValue('amount', good.amount || 0);
         formik.setFieldValue('price', good.price || 0);
-    }, [good]);
+    }, [good.categories, good.name, good.description, good.amount, good.price]);
 
     useEffect(() => {
         return () => {
@@ -91,10 +106,6 @@ export const GoodForm = ({
     }, []);
     return (
         <Box className="GoodForm" component="form" onSubmit={formik.handleSubmit}>
-            {(serverErrors || []).map((error) => (
-                <Error>{error?.message}</Error>
-            ))}
-
             <TextField
                 id="name"
                 name="name"
@@ -151,6 +162,24 @@ export const GoodForm = ({
             </Box>
 
             <Box sx={{ mt: 3 }}>
+                <TextField
+                    variant="outlined"
+                    id="amount"
+                    name="amount"
+                    label="Кількість"
+                    size="small"
+                    error={formik.touched.amount && Boolean(formik.errors.amount)}
+                    value={formik.values.amount}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    helperText={formik.touched.amount && formik.errors.amount}
+                    multiline
+                    fullWidth
+                    sx={{ mt: 2 }}
+                />
+            </Box>
+
+            <Box sx={{ mt: 3 }}>
                 <InputLabel>Категорії</InputLabel>
                 <Select
                     placeholder="Обрати категорії"
@@ -160,21 +189,6 @@ export const GoodForm = ({
                     options={catList?.map(({ _id, name }) => ({ value: _id, label: name }))}
                     isMulti={true}
                 />
-                {/* <TextField
-                        classes={{ root: classes.root }}
-                        select
-                        name="userRoles"
-                        id="userRoles"
-                        variant="outlined"
-                        label="userRoles"
-                        SelectProps={{
-                            multiple: true,
-                            value: formState.userRoles,
-                            onChange: catList?.map(({ _id, name }) => ({ value: _id, label: name })),
-                        }}
-                    >
-                        {catList?.map(({ _id, name }) => ({ value: _id, label: name }))}
-                    </TextField> */}
             </Box>
 
             <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
@@ -182,6 +196,20 @@ export const GoodForm = ({
                     Зберегти
                 </Button>
             </Box>
+            <Snackbar
+                severity={snackbar.type}
+                message={snackbar.message}
+                autoHideDuration={3000}
+                open={snackbar.isOpen}
+                onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
+                sx={{
+                    width: 400,
+                }}
+            >
+                <Alert severity={snackbar.type} sx={{ width: '100%' }} open={snackbar.isOpen}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
@@ -191,6 +219,7 @@ export const CGoodForm = connect(
         catList: state.promise.catAll?.payload || [],
         promiseStatus: state.promise.goodUpsert?.status || null,
         good: state.promise?.adminGoodById?.payload || {},
+        serverErrors: state.promise?.adminGoodById?.errors || [],
     }),
     {
         onSave: (good) => actionGoodUpdate(good),
