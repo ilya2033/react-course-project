@@ -272,7 +272,7 @@
     & .MainPage{
       padding: 10px;
       & .MainPageImage{
-        width: 1005;
+        width: 100%;
         border-radius: 10px;
       }
 
@@ -291,6 +291,23 @@
         text-align: left;
       }
 
+    }
+
+    & .GoodsPage{
+      padding:10px;
+      & .SubCategories{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: flex;
+        & .SubCategory{
+          width: 250px;
+          padding: 15px 7px;
+          margin-right: 15px;
+          margin-bottom: 15px;
+          cursor: pointer;
+        }
+
+      }
     }
   }
 

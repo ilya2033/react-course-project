@@ -78,15 +78,14 @@ export const GoodForm = ({
     });
 
     useEffect(() => {
-        console.log(promiseStatus);
         if (promiseStatus === 'FULFILLED') {
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', severity: 'succes' });
+            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', type: 'success' });
         }
         if (promiseStatus === 'REJECTED') {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr, '');
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, severity: 'error' });
+            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, type: 'error' });
         }
     }, [promiseStatus]);
 
@@ -219,7 +218,7 @@ export const CGoodForm = connect(
         catList: state.promise.catAll?.payload || [],
         promiseStatus: state.promise.goodUpsert?.status || null,
         good: state.promise?.adminGoodById?.payload || {},
-        serverErrors: state.promise?.adminGoodById?.errors || [],
+        serverErrors: state.promise?.goodUpsert?.errors || [],
     }),
     {
         onSave: (good) => actionGoodUpdate(good),

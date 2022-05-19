@@ -42,7 +42,11 @@ export const DrawerCart = ({ isOpen = false, onClose = null } = {}) => {
 
                     <Divider />
                     {Object.entries(cart).map(([_id, order]) => (
-                        <DrawerCartItem order={order} onDeleteClick={(good) => dispatch(actionCartDelete(good))} />
+                        <DrawerCartItem
+                            order={order}
+                            onDeleteClick={(good) => dispatch(actionCartDelete(good))}
+                            key={_id}
+                        />
                     ))}
 
                     {!!Object.keys(cart).length && (

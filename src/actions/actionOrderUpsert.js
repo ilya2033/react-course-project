@@ -1,39 +1,31 @@
 import { actionPromise } from '../reducers';
 
 export const actionOrderUpsert = (order) => async (dispatch) => {
+    const formData = new FormData();
+    order._id && formData.append('_id', order._id);
+    formData.append('orderGoods', JSON.stringify(order.orderGoods));
+    formData.append('email', order.email);
+    formData.append('phoneNumber', order.phoneNumber);
+    formData.append('adress', order.padress);
+    formData.append('delivery', order.delivery);
+    formData.append('name', order.name);
+    formData.append('surname', order.surname);
     dispatch(
         actionPromise(
             'orderUpsert',
-            new Promise((resolve) => {
-                setTimeout(
-                    Math.random() > 0.01
-                        ? resolve({
-                              data: {
-                                  _id: 4,
-                                  email: 'example@gmail.com',
-                                  phoneNumber: '0667213260',
-                                  orderGoods: [
-                                      {
-                                          _id: 1,
-                                          price: 999,
-                                          count: 1,
-                                          good: {
-                                              _id: 1,
-                                              name: 'Good 1',
-                                              price: '999',
-                                          },
-                                      },
-                                  ],
-                                  price: 999,
-                                  status: 3,
-                              },
-                          })
-                        : resolve({
-                              errors: [{ message: 'Error adsasdadas' }],
-                          }),
-                    400
-                );
+            fetch(`/order/`, {
+                method: 'POST',
+                headers: {
+                    ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
+                },
+                body: formData,
             })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.errors) {
+                        throw new Error(JSON.stringify(data.errors));
+                    } else return data.data;
+                })
         )
     );
 };

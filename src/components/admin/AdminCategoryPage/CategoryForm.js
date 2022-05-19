@@ -61,12 +61,12 @@ const CategoryForm = ({
         console.log(promiseStatus);
         if (promiseStatus === 'FULFILLED') {
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', severity: 'succes' });
+            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', type: 'success' });
         }
         if (promiseStatus === 'REJECTED') {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr, '');
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, severity: 'error' });
+            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, type: 'error' });
         }
     }, [promiseStatus]);
 

@@ -7,7 +7,7 @@ export const actionCatAll =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch('/categories/', {
+                fetch(`/categories/?limit=${limit}&skip=${skip}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

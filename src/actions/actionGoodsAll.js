@@ -7,7 +7,7 @@ export const actionGoodsAll =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch('/goods/', {
+                fetch(`/goods/?limit=${limit}&skip=${skip}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

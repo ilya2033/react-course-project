@@ -1,6 +1,10 @@
-import { Box, Grid, TextField, MenuItem, Button } from '@mui/material';
+import { Box, Grid, TextField, MenuItem, Button, Alert, Snackbar } from '@mui/material';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { connect } from 'react-redux';
+import { actionPromiseClear } from '../../../reducers';
+import { actionOrderUpdate } from '../../../actions/actionOrderUpdate';
+import { useEffect, useState } from 'react';
 
 const deliveryOptions = [
     { label: 'Нова пошта', value: 'nova-poshta' },
@@ -23,7 +27,7 @@ const orderSchema = Yup.object().shape({
         ),
 });
 
-export const OrderForm = ({ onSubmit = null }) => {
+export const OrderForm = ({ onSubmit = null, promiseStatus = null, serverErrors = [] } = {}) => {
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -39,6 +43,20 @@ export const OrderForm = ({ onSubmit = null }) => {
             onSubmit(formik.values);
         },
     });
+    const [snackbar, setSnackbar] = useState({ isOpen: false, message: '', type: 'success' });
+
+    useEffect(() => {
+        if (promiseStatus === 'FULFILLED') {
+            formik.setSubmitting(false);
+            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', type: 'success' });
+        }
+        if (promiseStatus === 'REJECTED') {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
+            console.log(serverErrors);
+            formik.setSubmitting(false);
+            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, type: 'error' });
+        }
+    }, [promiseStatus]);
 
     return (
         <Box className="OrderForm" component="form" onSubmit={formik.handleSubmit}>
@@ -140,8 +158,22 @@ export const OrderForm = ({ onSubmit = null }) => {
                         ))}
                     </TextField>
                 </Grid>
+                <Snackbar
+                    severity={snackbar.type}
+                    message={snackbar.message}
+                    autoHideDuration={3000}
+                    open={snackbar.isOpen}
+                    onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
+                    sx={{
+                        width: 400,
+                    }}
+                >
+                    <Alert severity={snackbar.type} sx={{ width: '100%' }} open={snackbar.isOpen}>
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
                 <Grid item xs={12} display="flex" justifyContent="flex-end">
-                    <Button variant="contained" type="submit" disabled={formik.isSubmitting || !formik.isValid}>
+                    <Button variant="contained" type="submit" disabled={!formik.isValid || formik.isSubmitting}>
                         Підтвердити
                     </Button>
                 </Grid>
@@ -149,3 +181,13 @@ export const OrderForm = ({ onSubmit = null }) => {
         </Box>
     );
 };
+
+export const COrderForm = connect(
+    (state) => ({
+        promiseStatus: state.promise.orderUpsert?.status || null,
+        serverErrors: state.promise?.orderUpsert?.error || [],
+    }),
+    {
+        onClose: () => actionPromiseClear('orderUpsert'),
+    }
+)(OrderForm);

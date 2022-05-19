@@ -3,9 +3,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { actionNewOrder } from '../../actions/actionNewOrder';
+import { actionOrderUpdate } from '../../actions/actionOrderUpdate';
 import { actionCartDelete } from '../../reducers';
 import { CartItem } from './CartItem';
-import { OrderForm } from './OrderForm';
+import { COrderForm, OrderForm } from './OrderForm';
 
 export const CartPage = () => {
     const cart = useSelector((state) => state.cart || {});
@@ -18,6 +19,7 @@ export const CartPage = () => {
             navigate('/');
         }
     }, []);
+    console.log(cart);
 
     return (
         <Box className="CartPage">
@@ -26,7 +28,11 @@ export const CartPage = () => {
                 <Table className="table">
                     <TableBody>
                         {Object.entries(cart).map(([_id, order]) => (
-                            <CartItem order={order} onDeleteClick={(good) => dispatch(actionCartDelete(good))} />
+                            <CartItem
+                                order={order}
+                                onDeleteClick={(good) => dispatch(actionCartDelete(good))}
+                                key={_id}
+                            />
                         ))}
 
                         <TableRow>
@@ -43,8 +49,14 @@ export const CartPage = () => {
                     </TableBody>
                 </Table>
 
-                <OrderForm />
-                
+                <COrderForm
+                    onSubmit={(order) => {
+                        const orderToSubmit = order;
+                        orderToSubmit.orderGoods = Object.values(cart);
+                        console.log(orderToSubmit);
+                        dispatch(actionOrderUpdate(orderToSubmit));
+                    }}
+                />
             </Stack>
         </Box>
     );

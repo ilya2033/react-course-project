@@ -20,7 +20,8 @@ import { MainPage } from '../MainPage';
 const GoodsPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    dispatch(actionCatById(params._id));
+    console.log(params);
+    dispatch(actionCatById({ _id: params._id }));
 
     return <CGoodsPage />;
 };
