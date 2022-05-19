@@ -6,14 +6,17 @@ import { Router } from 'react-router-dom';
 import { Root } from './components/Root';
 import { Provider } from 'react-redux';
 import { store } from './reducers';
+import { UIContextProvider } from './components/UIContext';
 
 function App() {
     return (
         <Provider store={store}>
             <BrowserRouter>
-                <Box className="App">
-                    <Root />
-                </Box>
+                <UIContextProvider>
+                    <Box className="App">
+                        <Root />
+                    </Box>
+                </UIContextProvider>
             </BrowserRouter>
         </Provider>
     );

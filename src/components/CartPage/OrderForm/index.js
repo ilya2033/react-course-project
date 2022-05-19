@@ -1,10 +1,11 @@
 import { Box, Grid, TextField, MenuItem, Button, Alert, Snackbar } from '@mui/material';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { connect } from 'react-redux';
-import { actionPromiseClear } from '../../../reducers';
+import { connect, useDispatch } from 'react-redux';
+import { actionCartClear, actionPromiseClear } from '../../../reducers';
 import { actionOrderUpdate } from '../../../actions/actionOrderUpdate';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { UIContext } from '../../UIContext';
 
 const deliveryOptions = [
     { label: 'Нова пошта', value: 'nova-poshta' },
@@ -28,6 +29,7 @@ const orderSchema = Yup.object().shape({
 });
 
 export const OrderForm = ({ onSubmit = null, promiseStatus = null, serverErrors = [] } = {}) => {
+    const { setAlert } = useContext(UIContext);
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -43,18 +45,27 @@ export const OrderForm = ({ onSubmit = null, promiseStatus = null, serverErrors 
             onSubmit(formik.values);
         },
     });
-    const [snackbar, setSnackbar] = useState({ isOpen: false, message: '', type: 'success' });
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (promiseStatus === 'FULFILLED') {
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', type: 'success' });
+            setAlert({
+                show: true,
+                severity: 'success',
+                message: 'Готово',
+            });
+            dispatch(actionPromiseClear('orderUpsert'));
+            dispatch(actionCartClear());
         }
         if (promiseStatus === 'REJECTED') {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
-            console.log(serverErrors);
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: errorMessage,
+            });
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, type: 'error' });
         }
     }, [promiseStatus]);
 
@@ -158,20 +169,7 @@ export const OrderForm = ({ onSubmit = null, promiseStatus = null, serverErrors 
                         ))}
                     </TextField>
                 </Grid>
-                <Snackbar
-                    severity={snackbar.type}
-                    message={snackbar.message}
-                    autoHideDuration={3000}
-                    open={snackbar.isOpen}
-                    onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-                    sx={{
-                        width: 400,
-                    }}
-                >
-                    <Alert severity={snackbar.type} sx={{ width: '100%' }} open={snackbar.isOpen}>
-                        {snackbar.message}
-                    </Alert>
-                </Snackbar>
+
                 <Grid item xs={12} display="flex" justifyContent="flex-end">
                     <Button variant="contained" type="submit" disabled={!formik.isValid || formik.isSubmitting}>
                         Підтвердити

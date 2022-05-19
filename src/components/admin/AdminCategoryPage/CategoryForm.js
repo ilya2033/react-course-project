@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Select from 'react-select';
 import { actionCategoryUpdate } from '../../../actions/actionCategoryUpdate';
 import { actionPromise, actionPromiseClear, store } from '../../../reducers';
 import { Alert, Box, Button, InputLabel, Snackbar, Stack, TextField, Typography } from '@mui/material';
-
+import { UIContext } from '../../UIContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Error } from '../../common/Error';
@@ -29,7 +29,7 @@ const CategoryForm = ({
     const [inputParent, setInputParent] = useState({});
     const [subCatList, setSubCatList] = useState([]);
     const [parentList, setParentList] = useState([]);
-    const [snackbar, setSnackbar] = useState({ isOpen: false, message: '', type: 'success' });
+    const { setAlert } = useContext(UIContext);
 
     const formik = useFormik({
         initialValues: {
@@ -58,15 +58,22 @@ const CategoryForm = ({
     }, [category]);
 
     useEffect(() => {
-        console.log(promiseStatus);
         if (promiseStatus === 'FULFILLED') {
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', type: 'success' });
+            setAlert({
+                show: true,
+                severity: 'success',
+                message: 'Готово',
+            });
         }
         if (promiseStatus === 'REJECTED') {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, type: 'error' });
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: errorMessage,
+            });
         }
     }, [promiseStatus]);
 
@@ -149,20 +156,6 @@ const CategoryForm = ({
                     />
                 </Box>
             }
-            <Snackbar
-                severity={snackbar.type}
-                message={snackbar.message}
-                autoHideDuration={3000}
-                open={snackbar.isOpen}
-                onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-                sx={{
-                    width: 400,
-                }}
-            >
-                <Alert severity={snackbar.type} sx={{ width: '100%' }} open={snackbar.isOpen}>
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
             <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
                 <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit" fullWidth>
                     Зберегти

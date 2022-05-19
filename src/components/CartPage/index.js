@@ -19,7 +19,10 @@ export const CartPage = () => {
             navigate('/');
         }
     }, []);
-    console.log(cart);
+
+    useEffect(() => {
+        !Object.keys(cart).length && navigate('/');
+    }, [cart]);
 
     return (
         <Box className="CartPage">

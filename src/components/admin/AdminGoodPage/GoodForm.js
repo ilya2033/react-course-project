@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { actionPromise, actionPromiseClear } from '../../../reducers';
 import Select from 'react-select';
 import { actionGoodUpdate } from '../../../actions/actionGoodUpdate';
 import { EntityEditor } from '../../common/EntityEditor';
 import { actionUploadFiles } from '../../../actions/actionUploadFiles';
+import { UIContext } from '../../UIContext';
 import {
     Alert,
     Box,
@@ -52,8 +53,7 @@ export const GoodForm = ({
 } = {}) => {
     const [inputCategories, setInputCategories] = useState([]);
     const [inputImages, setInputImages] = useState([]);
-    const [snackbar, setSnackbar] = useState({ isOpen: false, message: '', type: 'success' });
-
+    const { setAlert } = useContext(UIContext);
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -80,12 +80,20 @@ export const GoodForm = ({
     useEffect(() => {
         if (promiseStatus === 'FULFILLED') {
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: 'Готово', type: 'success' });
+            setAlert({
+                show: true,
+                severity: 'success',
+                message: 'Готово',
+            });
         }
         if (promiseStatus === 'REJECTED') {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
             formik.setSubmitting(false);
-            setSnackbar({ ...snackbar, isOpen: true, message: errorMessage, type: 'error' });
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: errorMessage,
+            });
         }
     }, [promiseStatus]);
 
@@ -195,20 +203,6 @@ export const GoodForm = ({
                     Зберегти
                 </Button>
             </Box>
-            <Snackbar
-                severity={snackbar.type}
-                message={snackbar.message}
-                autoHideDuration={3000}
-                open={snackbar.isOpen}
-                onClose={() => setSnackbar({ ...snackbar, isOpen: false })}
-                sx={{
-                    width: 400,
-                }}
-            >
-                <Alert severity={snackbar.type} sx={{ width: '100%' }} open={snackbar.isOpen}>
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
         </Box>
     );
 };
