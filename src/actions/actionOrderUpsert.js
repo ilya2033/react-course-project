@@ -3,13 +3,15 @@ import { actionPromise } from '../reducers';
 export const actionOrderUpsert = (order) => async (dispatch) => {
     const formData = new FormData();
     order._id && formData.append('_id', order._id);
-    formData.append('orderGoods', JSON.stringify(order.orderGoods));
+    formData.append('orderGoods', JSON.stringify(order.orderGoods || []));
     formData.append('email', order.email);
     formData.append('phoneNumber', order.phoneNumber);
     formData.append('address', order.address);
     formData.append('delivery', order.delivery);
     formData.append('name', order.name);
     formData.append('surname', order.surname);
+    formData.append('status', order.status);
+
     dispatch(
         actionPromise(
             'orderUpsert',

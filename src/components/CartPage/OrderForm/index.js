@@ -157,6 +157,7 @@ export const OrderForm = ({ onSubmit = null, promiseStatus = null, serverErrors 
                         extAlign="left"
                         select
                         value={formik.values.delivery}
+                        error={formik.touched.delivery && Boolean(formik.errors.delivery)}
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
                         helperText={formik.touched.delivery && formik.errors.delivery}

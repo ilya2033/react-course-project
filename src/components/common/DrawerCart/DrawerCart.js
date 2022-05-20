@@ -1,4 +1,3 @@
-import { actionNewOrder } from '../../../actions/actionNewOrder';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { actionCartDelete } from '../../../reducers';
 import { IoMdClose } from 'react-icons/io';
@@ -53,7 +52,6 @@ export const DrawerCart = ({ isOpen = false, onClose = null } = {}) => {
                         <Button
                             variant="text"
                             onClick={() => {
-                                dispatch(actionNewOrder([...Object.values(cart)]));
                                 onClose();
                                 navigate('/cart');
                             }}

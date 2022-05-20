@@ -18,7 +18,7 @@ const AdminOrderItem = ({ order }) => (
                 : '-'}
         </TableCell>
         <TableCell>{order.price ? order.price : '-'}</TableCell>
-        <TableCell>{'' + order?.status?.length ? statusNumber[order.status] : '-'}</TableCell>
+        <TableCell>{'' + order?.status?.length ? statusNumber[+order.status] : '-'}</TableCell>
         <TableCell className="edit">
             <Button component={Link} className="Link" to={`/admin/order/${order._id}/`} variant="contained">
                 Редагувати

@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { actionPromise, actionPromiseClear } from '../../../reducers';
 import Select from 'react-select';
 import { actionOrderUpdate } from '../../../actions/actionOrderUpdate';
 import { EntityEditor } from '../../common/EntityEditor';
 import { actionUploadFiles } from '../../../actions/actionUploadFiles';
+import { UIContext } from '../../UIContext';
 import {
     Box,
     Button,
@@ -24,33 +25,37 @@ import * as Yup from 'yup';
 import { Error } from '../../common/Error';
 import { statusNumber, statusOptions } from '../../../helpers';
 
+const deliveryOptions = [
+    { label: 'Нова пошта', value: 'nova-poshta' },
+    { label: 'Justin', value: 'justin' },
+];
+
 const orderSchema = Yup.object().shape({
     email: Yup.string().required("Обов'язкове"),
     phoneNumber: Yup.string().required("Обов'язкове"),
+    name: Yup.string(),
+    address: Yup.string().required("Обов'язкове"),
+    surname: Yup.string(),
+    delivery: Yup.string()
+        .required("обов'язкове")
+        .oneOf(
+            deliveryOptions.map((option) => option.value),
+            'не знайдено'
+        ),
 });
 
-export const OrderForm = ({
-    serverErrors,
-    onSaveClick,
-    onSave,
-    onClose,
-    promiseStatus,
-    catList = [],
-    order = {},
-} = {}) => {
-    const [inputCategories, setInputCategories] = useState([]);
+export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, promiseStatus, order = {} } = {}) => {
     const [inputStatus, setInputStatus] = useState(null);
-
-    useEffect(() => {
-        console.log(inputStatus);
-    }, [inputStatus]);
+    const { setAlert } = useContext(UIContext);
 
     const formik = useFormik({
         initialValues: {
             email: '',
+            name: '',
+            surname: '',
             phoneNumber: '',
-            price: 0,
-            amount: 0,
+            delivery: '',
+            address: '',
         },
         validationSchema: orderSchema,
         validateOnChange: true,
@@ -58,11 +63,12 @@ export const OrderForm = ({
             let orderToSave = {};
             order?._id && (orderToSave._id = order._id);
             orderToSave.name = formik.values.name;
-            orderToSave.description = formik.values.description;
-            // orderToSave.price = +formik.values.price;
-            // orderToSave.amount = +formik.values.amount;
-            // orderToSave.categories = inputCategories;
-            // orderToSave.images = inputImages?.map(({ _id }) => ({ _id })) || [];
+            orderToSave.email = formik.values.email;
+            orderToSave.status = inputStatus;
+            orderToSave.surname = formik.values.surname;
+            orderToSave.phoneNumber = formik.values.phoneNumber;
+            orderToSave.address = formik.values.address;
+            orderToSave.deivery = formik.values.deivery;
 
             onSaveClick && onSaveClick();
             onSave(orderToSave);
@@ -73,8 +79,32 @@ export const OrderForm = ({
         // setInputCategories(order?.categories || []);
         setInputStatus(order?.status || null);
         formik.setFieldValue('email', order.email || '');
+        formik.setFieldValue('name', order.name || '');
+        formik.setFieldValue('address', order.address || '');
+        formik.setFieldValue('surname', order.surname || '');
         formik.setFieldValue('phoneNumber', order.phoneNumber || '');
+        formik.setFieldValue('delivery', order.delivery || '');
     }, [order]);
+
+    useEffect(() => {
+        if (promiseStatus === 'FULFILLED') {
+            formik.setSubmitting(false);
+            setAlert({
+                show: true,
+                severity: 'success',
+                message: 'Готово',
+            });
+        }
+        if (promiseStatus === 'REJECTED') {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
+            formik.setSubmitting(false);
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: errorMessage,
+            });
+        }
+    }, [promiseStatus]);
 
     useEffect(() => {
         return () => {
@@ -99,6 +129,20 @@ export const OrderForm = ({
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
                         helperText={formik.touched.email && formik.errors.email}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                    <TextField
+                        id="name"
+                        name="name"
+                        variant="outlined"
+                        label="Ім'я"
+                        size="small"
+                        error={formik.touched.name && Boolean(formik.errors.name)}
+                        value={formik.values.name}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        helperText={formik.touched.name && formik.errors.name}
                         fullWidth
                         sx={{ mt: 2 }}
                     />
@@ -142,6 +186,56 @@ export const OrderForm = ({
                         fullWidth
                         sx={{ mt: 2 }}
                     />
+                    <TextField
+                        id="surname"
+                        name="surname"
+                        variant="outlined"
+                        label="Прізвище"
+                        size="small"
+                        error={formik.touched.surname && Boolean(formik.errors.surname)}
+                        value={formik.values.surname}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        helperText={formik.touched.surname && formik.errors.surname}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                    <TextField
+                        id="address"
+                        name="address"
+                        variant="outlined"
+                        label="Адреса"
+                        size="small"
+                        error={formik.touched.address && Boolean(formik.errors.address)}
+                        value={formik.values.address}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        helperText={formik.touched.address && formik.errors.address}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    />
+                    <TextField
+                        id="delivery"
+                        name="delivery"
+                        variant="outlined"
+                        label="Тип доставкі"
+                        size="small"
+                        extAlign="left"
+                        select
+                        error={formik.touched.delivery && Boolean(formik.errors.delivery)}
+                        value={formik.values.delivery}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        helperText={formik.touched.delivery && formik.errors.delivery}
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    >
+                        {deliveryOptions.map((option) => (
+                            <MenuItem key={option.value} value={option.value} t>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                 </Grid>
             </Grid>
         </Box>
@@ -150,8 +244,8 @@ export const OrderForm = ({
 
 export const COrderForm = connect(
     (state) => ({
-        catList: state.promise.catAll?.payload || [],
         promiseStatus: state.promise.orderUpsert?.status || null,
+        serverErrors: state.promise.orderUpsert?.error || null,
         order: state.promise?.adminOrderById?.payload || {},
     }),
     {

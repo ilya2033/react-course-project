@@ -26,13 +26,13 @@ const actionFeedClear = () => ({ type: 'FEED_CLEAR' });
 const actionFeedGoods =
     (skip = 0) =>
     async (dispatch, getState) => {
-        await dispatch(actionGoodsAll({ skip, limit: 50, promiseName: 'feedGoodsAll' }));
+        await dispatch(actionGoodsAll({ skip, limit: 20, promiseName: 'feedGoodsAll' }));
     };
 
 const actionFeedGoodsFind =
     ({ skip = 0, text = '' }) =>
     async (dispatch, getState) => {
-        await dispatch(actionGoodsFind({ skip, limit: 50, promiseName: 'feedGoodsFind', text }));
+        await dispatch(actionGoodsFind({ skip, limit: 20, promiseName: 'feedGoodsFind', text }));
     };
 
 const actionFeedCatsFind =
@@ -44,19 +44,19 @@ const actionFeedCatsFind =
 const actionFeedCats =
     (skip = 0) =>
     async (dispatch, getState) => {
-        await dispatch(actionCatAll({ promiseName: 'feedCatAll', skip, limit: 50 }));
+        await dispatch(actionCatAll({ promiseName: 'feedCatAll', skip, limit: 20 }));
     };
 
 const actionFeedOrders =
     (skip = 0) =>
     async (dispatch, getState) => {
-        await dispatch(actionOrdersAll({ skip, limit: 50, promiseName: 'feedOrdersAll' }));
+        await dispatch(actionOrdersAll({ skip, limit: 20, promiseName: 'feedOrdersAll' }));
     };
 
 const actionFeedOrdersFind =
     ({ skip = 0, text = '' }) =>
     async (dispatch, getState) => {
-        await dispatch(actionOrdersFind({ skip, limit: 50, promiseName: 'feedOrdersFind', text }));
+        await dispatch(actionOrdersFind({ skip, limit: 20, promiseName: 'feedOrdersFind', text }));
     };
 
 export {

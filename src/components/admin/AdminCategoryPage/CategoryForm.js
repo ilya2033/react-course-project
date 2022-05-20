@@ -14,12 +14,11 @@ const categorySchema = Yup.object().shape({
 });
 
 const CategoryForm = ({
-    serverErrors,
+    serverErrors = [],
     onSaveClick,
     onSave,
     onClose,
     promiseStatus,
-    goodsField = false,
     catList: initialCatList = [],
     goodList = [],
     category = {},
@@ -173,6 +172,7 @@ export const CCategoryForm = connect(
     (state) => ({
         catList: state.promise.catAll?.payload || [],
         promiseStatus: state.promise.categoryUpsert?.status || null,
+        serverErrors: state.promise.categoryUpsert?.error || null,
         goodList: state.promise.goodsAll?.payload || [],
     }),
     {

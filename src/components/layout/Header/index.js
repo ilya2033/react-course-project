@@ -8,6 +8,7 @@ import { DrawerCart } from '../../common/DrawerCart/DrawerCart';
 import { CSearchBar, SearchBar } from '../../common/SearchBar';
 import { CSearchResults } from '../../common/SearchBar/SearchResults';
 import { CCartIcon } from './CartIcon';
+import { LogoutIcon } from './LogoutIcon';
 
 const Header = () => {
     const rootCats = useSelector((state) => state?.promise?.rootCats?.payload || []);
@@ -44,7 +45,7 @@ const Header = () => {
                     <Box className="SearchBarWrapper">
                         <CSearchBar render={CSearchResults} renderParams={{ itemLink: '/good/' }} />
                     </Box>
-
+                    <LogoutIcon />
                     <IconButton color="inherit" className="CartLogoButton" onClick={() => setIsCartDrawerOpen(true)}>
                         <Box>
                             <CCartIcon />

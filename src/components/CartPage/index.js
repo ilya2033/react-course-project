@@ -2,8 +2,8 @@ import { Box, Button, Stack, Table, TableBody, TableCell, TableRow, Typography }
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { actionNewOrder } from '../../actions/actionNewOrder';
 import { actionOrderUpdate } from '../../actions/actionOrderUpdate';
+import { actionOrderUpsert } from '../../actions/actionOrderUpsert';
 import { actionCartDelete } from '../../reducers';
 import { CartItem } from './CartItem';
 import { COrderForm, OrderForm } from './OrderForm';
@@ -57,7 +57,7 @@ export const CartPage = () => {
                         const orderToSubmit = order;
                         orderToSubmit.orderGoods = Object.values(cart);
                         console.log(orderToSubmit);
-                        dispatch(actionOrderUpdate(orderToSubmit));
+                        dispatch(actionOrderUpsert(orderToSubmit));
                     }}
                 />
             </Stack>

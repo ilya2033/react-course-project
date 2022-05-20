@@ -1,19 +1,28 @@
 import { actionLogin } from '../../actions/actionLogin';
 
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useState, useEffect, useContext } from 'react';
+import { connect, useSelector } from 'react-redux';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { Box, Button, IconButton, TextField, Stack } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { UIContext } from '../UIContext';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const signInSchema = Yup.object().shape({
     username: Yup.string().required("Обов'язкове"),
     password: Yup.string().required("Обов'язкове"),
 });
 
-export const AuthForm = ({ onSubmit }) => {
+export const AuthForm = ({ onSubmit = null, promiseStatus, serverErrors = [] } = {}) => {
     const [showPassword, setShowPassword] = useState(false);
+    const { setAlert } = useContext(UIContext);
+    const navigate = useNavigate();
+    const token = useSelector((state) => state.auth?.token || null);
+
+    if (token) {
+        navigate('/admin');
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -23,9 +32,30 @@ export const AuthForm = ({ onSubmit }) => {
         validationSchema: signInSchema,
         validateOnChange: true,
         onSubmit: () => {
+            console.log(formik.values.username, formik.values.password);
             onSubmit(formik.values.username, formik.values.password);
         },
     });
+
+    useEffect(() => {
+        if (promiseStatus === 'FULFILLED') {
+            formik.setSubmitting(false);
+            setAlert({
+                show: true,
+                severity: 'success',
+                message: 'Готово',
+            });
+        }
+        if (promiseStatus === 'REJECTED') {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
+            formik.setSubmitting(false);
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: errorMessage,
+            });
+        }
+    }, [promiseStatus]);
 
     return (
         <Box
@@ -34,6 +64,7 @@ export const AuthForm = ({ onSubmit }) => {
             flexDirection="column"
             onSubmit={formik.handleSubmit}
             justifyContent="center"
+            component="form"
         >
             <TextField
                 id="username"
@@ -84,4 +115,12 @@ export const AuthForm = ({ onSubmit }) => {
     );
 };
 
-export const CAuthForm = connect(null, { onAuth: (login, password) => actionLogin(login, password) })(AuthForm);
+export const CAuthForm = connect(
+    (state) => ({
+        promiseStatus: state.promise?.login?.status || null,
+        serverErrors: state.promise?.login?.error || [],
+    }),
+    {
+        onSubmit: (login, password) => actionLogin(login, password),
+    }
+)(AuthForm);

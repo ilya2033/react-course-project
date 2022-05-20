@@ -1,7 +1,7 @@
 import { Box, Container } from '@mui/material';
 import { useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { actionGoodById } from '../../../actions/actionGoodById';
 import { actionCatById } from '../../../actions/actionCatById';
 import { actionPromiseClear, store, actionFeedCats } from '../../../reducers';
@@ -134,6 +134,7 @@ const AdminOrdersPageContainer = ({ orders }) => {
 const AdminOrderPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
+    dispatch(actionPromiseClear('adminOrderById'));
     useEffect(() => {
         if (params._id) {
             dispatch(actionOrderById({ _id: params._id, promiseName: 'adminOrderById' }));
@@ -160,6 +161,7 @@ const AdminLayoutPage = () => {
     return (
         <Box className="AdminLayoutPage">
             <Routes>
+                <Route path="/" element={<Navigate to={'/admin/goods/'} />} exact />
                 <Route path="/goods/" element={<CAdminGoodsPageContainer />} />
                 <Route path="/good/" element={<AdminGoodPageContainer />} />
                 <Route path="/good/:_id" element={<AdminGoodPageContainer />} />
@@ -167,7 +169,7 @@ const AdminLayoutPage = () => {
                 <Route path="/category/" element={<AdminCategoryPageContainer />} />
                 <Route path="/category/:_id" element={<AdminCategoryPageContainer />} />
                 <Route path="/orders/" element={<CAdminOrdersPageContainer />} />
-                <Route path="/order/" element={<CAdminOrdersPageContainer />} />
+                <Route path="/order/" element={<AdminOrderPageContainer />} />
                 <Route path="/order/:_id" element={<AdminOrderPageContainer />} />
             </Routes>
         </Box>

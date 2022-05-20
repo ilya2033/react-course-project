@@ -43,7 +43,7 @@ const CGoodEditor = connect(
 )(EntityEditor);
 
 export const GoodForm = ({
-    serverErrors,
+    serverErrors = [],
     onSaveClick,
     onSave,
     onClose,
