@@ -56,7 +56,6 @@ export const CartPage = () => {
                     onSubmit={(order) => {
                         const orderToSubmit = order;
                         orderToSubmit.orderGoods = Object.values(cart);
-                        console.log(orderToSubmit);
                         dispatch(actionOrderUpsert(orderToSubmit));
                     }}
                 />

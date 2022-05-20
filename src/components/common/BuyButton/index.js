@@ -15,9 +15,13 @@ export const BuyButton = ({ onClick, onDeleteClick, good, cart }) => {
                 <Button onClick={() => onDeleteClick(good)} variant="outlined">
                     Вже у кошику
                 </Button>
-            ) : (
+            ) : good.amount > 0 ? (
                 <Button onClick={() => onClick(good)} variant="contained" className="button">
                     Купити
+                </Button>
+            ) : (
+                <Button disabled variant="contained" className="button">
+                    Немає в наявності
                 </Button>
             )}
         </Box>

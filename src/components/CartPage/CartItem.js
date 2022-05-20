@@ -19,10 +19,8 @@ const {
 } = require('@mui/material');
 
 export const CartItem = ({ order, onDeleteClick }) => {
-    const {
-        good: { _id, images = [], name = '', price = 0 },
-        count = 1,
-    } = order || {};
+    const { good, count = 1 } = order || {};
+    const { _id, images = [], name = '', price = 0, amount = 1 } = good;
 
     const dispatch = useDispatch();
     const [countInput, setCountInput] = useState(count || 1);
@@ -32,11 +30,11 @@ export const CartItem = ({ order, onDeleteClick }) => {
     }, [count]);
 
     useEffect(() => {
-        dispatch(actionCartChange({ _id, name, images, price }, +countInput));
+        dispatch(actionCartChange(good, +countInput));
     }, [countInput]);
 
     const handleChange = (count) => {
-        if (count >= 0 && count <= 99) {
+        if (count >= 0 && count <= 99 && count <= amount) {
             setCountInput(+count);
         }
     };
@@ -61,7 +59,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
                     <IconButton onClick={() => handleChange(countInput - 1)}>
                         <AiOutlineMinus />
                     </IconButton>
-                    <Typography >{countInput}</Typography>
+                    <Typography>{countInput}</Typography>
                     <IconButton onClick={() => handleChange(countInput + 1)}>
                         <AiOutlinePlus />
                     </IconButton>

@@ -8,7 +8,6 @@
   text-decoration: none;
 }
 
-
 .AuthPage{
 
   display: flex;
@@ -31,12 +30,14 @@
       border:1px solid #C9C5CA!important;
     }
   }
+
 }
 
 .GoodCard{
 
   & .BuyButton{
     margin-left: auto;
+    white-space: nowrap;
   }
 }
 
