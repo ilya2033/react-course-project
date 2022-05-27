@@ -17,7 +17,7 @@ const SearchGoodResultItem = ({ good, onClick, link = '' } = {}) => {
             <Grid item xs={3}>
                 <Box component="img" src={images ? images[0]?.url : defaultGoodImage} />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
                 <Box sx={{ p: 1 }}>
                     <Typography variant="body1" sx={{ flexGrow: 1 }}>
                         {name.length > 30 ? `${name.substring(0, 30)}...` : name}
@@ -27,7 +27,7 @@ const SearchGoodResultItem = ({ good, onClick, link = '' } = {}) => {
                     </Typography>
                 </Box>
             </Grid>
-            <Grid item xs={1} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                 <Typography variant="body1">{price}</Typography>
             </Grid>
         </Grid>

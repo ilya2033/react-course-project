@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography, Divider } from '@mui/material';
 import { Box } from '@mui/system';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -11,6 +11,10 @@ const GoodsPage = ({ category = {} }) => {
 
     return (
         <Box className="GoodsPage">
+            <Typography variant="h5" textAlign="center">
+                {name}
+            </Typography>
+            <Divider className="Divider" />
             <Stack>
                 {!!subcategories.length ? (
                     <Box>

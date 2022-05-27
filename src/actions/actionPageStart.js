@@ -6,12 +6,4 @@ export const actionPageStart = () => async (dispatch, getState) => {
     dispatch(actionRootCats());
     dispatch(actionCatAll());
     dispatch(actionGoodsPopular());
-
-    // const {
-    //     auth: { token },
-    // } = getState();
-
-    // if (token) {
-    //     dispatch(actionAboutMe());
-    // }
 };

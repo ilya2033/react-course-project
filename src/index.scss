@@ -267,7 +267,7 @@
               }
             }
             & .SearchOrderResultItem{
-              text-align: center;
+              text-align:left;
               &:hover{
                 background: #F1F2F4;
               }
@@ -305,6 +305,10 @@
 
     & .GoodsPage{
       padding:10px;
+      & .Divider{
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
       & .SubCategories{
         padding-top: 10px;
         padding-bottom: 10px;

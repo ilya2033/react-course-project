@@ -1,7 +1,7 @@
 import { Box, Container } from '@mui/material';
 import { useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams, useSearchParams } from 'react-router-dom';
 import { actionGoodById } from '../../../actions/actionGoodById';
 import { actionCatById } from '../../../actions/actionCatById';
 import { actionPromiseClear, store, actionFeedCats } from '../../../reducers';
@@ -14,10 +14,13 @@ import { CAdminCategoryPage } from '../AdminCategoryPage';
 import { AdminOrdersPage } from '../AdminOrdersPage';
 import { CAdminOrderPage } from '../AdminOrderPage';
 import { actionOrderById } from '../../../actions/actionOrderById';
+import { actionCatAll } from '../../../actions/actionCatAll';
+import { actionGoodsAll } from '../../../actions/actionGoodsAll';
 
 const AdminCategoryPageContainer = ({}) => {
     const dispatch = useDispatch();
     const params = useParams();
+    dispatch(actionGoodsAll());
     useEffect(() => {
         if (params._id) {
             dispatch(actionCatById({ _id: params._id, promiseName: 'adminCatById' }));
@@ -30,8 +33,18 @@ const AdminCategoryPageContainer = ({}) => {
 
 const AdminCategoriesPageContainer = ({ cats }) => {
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
+    const orderBy = searchParams.get('orderBy') || '_id';
+
     useEffect(() => {
-        dispatch(actionFeedCats(cats?.length || 0));
+        dispatch(actionFeedClear());
+        dispatch(actionPromiseClear('feedCatAll'));
+        dispatch(actionPromiseClear('categoryUpsert'));
+        dispatch(actionFeedCats({ skip: 0, orderBy }));
+    }, [orderBy]);
+
+    useEffect(() => {
+        dispatch(actionFeedCats({ skip: cats?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -46,7 +59,6 @@ const AdminCategoriesPageContainer = ({ cats }) => {
         return () => {
             dispatch(actionFeedClear());
             dispatch(actionPromiseClear('feedCatAll'));
-
             dispatch(actionPromiseClear('categoryUpsert'));
             window.onscroll = null;
         };
@@ -55,17 +67,19 @@ const AdminCategoriesPageContainer = ({ cats }) => {
     useEffect(() => {
         if (cats.length) dispatch(actionFeedAdd(cats));
     }, [cats]);
-    return <AdminCategoriesPage />;
+
+    return <AdminCategoriesPage orderBy={orderBy} />;
 };
 
 const AdminGoodPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
+    dispatch(actionCatAll());
     useEffect(() => {
         if (params._id) {
             dispatch(actionGoodById({ _id: params._id, promiseName: 'adminGoodById' }));
         } else {
-            dispatch(actionGoodById('adminGoodById'));
+            dispatch(actionPromiseClear('adminGoodById'));
         }
     }, [params._id]);
     return <CAdminGoodPage />;
@@ -73,8 +87,11 @@ const AdminGoodPageContainer = () => {
 
 const AdminGoodsPageContainer = ({ goods }) => {
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
+    const orderBy = searchParams.get('orderBy') || '_id';
+
     useEffect(() => {
-        dispatch(actionFeedGoods());
+        dispatch(actionFeedGoods({ skip: goods?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -83,7 +100,7 @@ const AdminGoodsPageContainer = ({ goods }) => {
                 } = store.getState();
 
                 if (feedGoodsAll.status !== 'PENDING') {
-                    dispatch(actionFeedGoods(feed.payload?.length || 0));
+                    dispatch(actionFeedGoods({ skip: feed.payload?.length || 0, orderBy }));
                 }
             }
         };
@@ -102,9 +119,12 @@ const AdminGoodsPageContainer = ({ goods }) => {
 };
 
 const AdminOrdersPageContainer = ({ orders }) => {
+    const [searchParams] = useSearchParams();
+    const orderBy = searchParams.get('orderBy') || '_id';
+
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(actionFeedOrders());
+        dispatch(actionFeedOrders({ skip: orders?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -113,7 +133,7 @@ const AdminOrdersPageContainer = ({ orders }) => {
                 } = store.getState();
 
                 if (feedOrdersAll.status !== 'PENDING') {
-                    dispatch(actionFeedOrders(feed.payload?.length || 0));
+                    dispatch(actionFeedOrders({ skip: feed.payload?.length || 0, orderBy }));
                 }
             }
         };

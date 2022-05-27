@@ -11,7 +11,7 @@ function feedReducer(state = { payload: [] }, { type, payload = [] }) {
     if (type === 'FEED_ADD') {
         return {
             ...state,
-            payload: [...state['payload'], ...payload],
+            payload: [...new Map([...state['payload'], ...payload].map((item) => [item['_id'], item])).values()],
         };
     }
 
@@ -24,9 +24,9 @@ function feedReducer(state = { payload: [] }, { type, payload = [] }) {
 const actionFeedAdd = (payload) => ({ type: 'FEED_ADD', payload });
 const actionFeedClear = () => ({ type: 'FEED_CLEAR' });
 const actionFeedGoods =
-    (skip = 0) =>
+    ({ skip = 0, orderBy = '_id' }) =>
     async (dispatch, getState) => {
-        await dispatch(actionGoodsAll({ skip, limit: 20, promiseName: 'feedGoodsAll' }));
+        await dispatch(actionGoodsAll({ skip, limit: 20, promiseName: 'feedGoodsAll', orderBy }));
     };
 
 const actionFeedGoodsFind =
@@ -38,19 +38,19 @@ const actionFeedGoodsFind =
 const actionFeedCatsFind =
     ({ skip = 0, text = '' }) =>
     async (dispatch, getState) => {
-        await dispatch(actionCatsFind({ skip, promiseName: 'feedCatsFind', text, limit: 50 }));
+        await dispatch(actionCatsFind({ skip, promiseName: 'feedCatsFind', text, limit: 7 }));
     };
 
 const actionFeedCats =
-    (skip = 0) =>
+    ({ skip = 0, orderBy = '_id' }) =>
     async (dispatch, getState) => {
-        await dispatch(actionCatAll({ promiseName: 'feedCatAll', skip, limit: 20 }));
+        await dispatch(actionCatAll({ promiseName: 'feedCatAll', skip, limit: 20, orderBy }));
     };
 
 const actionFeedOrders =
-    (skip = 0) =>
+    ({ skip = 0, orderBy = '_id' }) =>
     async (dispatch, getState) => {
-        await dispatch(actionOrdersAll({ skip, limit: 20, promiseName: 'feedOrdersAll' }));
+        await dispatch(actionOrdersAll({ skip, limit: 20, promiseName: 'feedOrdersAll', orderBy }));
     };
 
 const actionFeedOrdersFind =

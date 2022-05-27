@@ -36,11 +36,6 @@ const Header = () => {
                                 Товари
                             </Typography>
                         </Button>
-                        <Button variant="text" color="inherit">
-                            <Typography variant="body1" component="div">
-                                Зворотній зв'язок
-                            </Typography>
-                        </Button>
                     </Stack>
                     <Box className="SearchBarWrapper">
                         <CSearchBar render={CSearchResults} renderParams={{ itemLink: '/good/' }} />

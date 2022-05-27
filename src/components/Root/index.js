@@ -9,8 +9,7 @@ import { AuthPage } from '../AuthPage';
 import { LayoutPage } from '../LayoutPage';
 import { CProtectedRoute } from '../common/ProtectedRoute';
 
-const Root = ({ user = {} }) => {
-    const isSignIn = true;
+const Root = () => {
     const dispatch = useDispatch();
     dispatch(actionPageStart());
 

@@ -1,45 +1,24 @@
 import { actionPromise } from '../reducers';
 
 export const actionCatsFind =
-    ({ text = '', limit = 0, skip = 0, promiseName = 'catsFind' }) =>
+    ({ text = '', limit = 7, skip = 0, promiseName = 'catsFind', orderBy = '' }) =>
     async (dispatch, getState) => {
-        await dispatch(
+        dispatch(
             actionPromise(
                 promiseName,
-                new Promise((resolve) => {
-                    setTimeout(
-                        Math.random() > 0.01
-                            ? resolve({
-                                  data: [
-                                      {
-                                          _id: 1,
-                                          name: 'Category 1',
-                                      },
-                                      {
-                                          _id: 2,
-                                          name: 'Category 2',
-                                      },
-                                      {
-                                          _id: 3,
-                                          name: 'Category 3',
-                                      },
-                                      {
-                                          _id: 4,
-                                          name: 'Category 4',
-                                      },
-                                  ],
-                              })
-                            : resolve({
-                                  errors: [{ message: 'Error adsasdadas' }],
-                              }),
-                        400
-                    );
-                }).then((data) => {
-                    console.log(data);
-                    if (data.errors) {
-                        throw new Error(JSON.stringify(data.errors));
-                    } else return data.data;
+                fetch(`/categories/?limit=${limit}&skip=${skip}&text=${text}${orderBy && `&orderBy=` + orderBy}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
+                    },
                 })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.errors) {
+                            throw new Error(JSON.stringify(data.errors));
+                        } else return data.data;
+                    })
             )
         );
     };

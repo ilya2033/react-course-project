@@ -2,12 +2,12 @@ import { getQuery } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionGoodsAll =
-    ({ limit = 0, skip = 0, promiseName = 'goodsAll' } = {}) =>
+    ({ limit = 20, skip = 0, promiseName = 'goodsAll', orderBy = '' } = {}) =>
     async (dispatch, getState) => {
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`/goods/?limit=${limit}&skip=${skip}`, {
+                fetch(`/goods/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

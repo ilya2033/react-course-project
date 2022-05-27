@@ -2,12 +2,12 @@ import { actionPromise } from '../reducers';
 import { gql } from '../helpers';
 
 export const actionCatAll =
-    ({ limit = 0, skip = 0, promiseName = 'catAll' } = {}) =>
+    ({ limit = 20, skip = 0, promiseName = 'catAll', orderBy = '' } = {}) =>
     async (dispatch, getState) => {
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`/categories/?limit=${limit}&skip=${skip}`, {
+                fetch(`/categories/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

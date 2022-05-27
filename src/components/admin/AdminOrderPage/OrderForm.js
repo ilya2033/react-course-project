@@ -68,8 +68,8 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
             orderToSave.surname = formik.values.surname;
             orderToSave.phoneNumber = formik.values.phoneNumber;
             orderToSave.address = formik.values.address;
-            orderToSave.deivery = formik.values.deivery;
-
+            orderToSave.delivery = formik.values.delivery;
+            orderToSave.orderGoods = order.orderGoods;
             onSaveClick && onSaveClick();
             onSave(orderToSave);
         },
@@ -220,7 +220,7 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
                         variant="outlined"
                         label="Тип доставкі"
                         size="small"
-                        extAlign="left"
+                        textAlign="left"
                         select
                         error={formik.touched.delivery && Boolean(formik.errors.delivery)}
                         value={formik.values.delivery}
