@@ -305,6 +305,12 @@
 
     & .GoodsPage{
       padding:10px;
+      & .sortOptionsWrapper{
+        display: flex;
+        justify-content: right;
+        padding-right: 15px;
+
+      }
       & .Divider{
         margin-top: 10px;
         margin-bottom: 10px;

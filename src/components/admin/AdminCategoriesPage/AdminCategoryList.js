@@ -18,7 +18,6 @@ const CSearchResults = connect((state) => ({ items: state.promise.adminCatsFind?
 const AdminCategoryList = ({ categories, orderBy = '_id' } = {}) => {
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(orderBy);
 
     return (
         <Box className="AdminCategoryList">

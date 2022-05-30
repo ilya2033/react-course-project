@@ -6,6 +6,7 @@ import { actionOrdersFind } from '../../../actions/actionOrdersFind';
 import { actionPromiseClear } from '../../../reducers';
 import { Box, Table, TableBody, TableHead } from '@mui/material';
 import { AdminOrderItem } from './AdminOrderItem';
+import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 
 const CSearchBar = connect(null, {
     onSearch: (text) => actionOrdersFind({ promiseName: 'adminOrdersFind', text, limit: 5 }),
@@ -14,7 +15,10 @@ const CSearchBar = connect(null, {
 
 const CSearchResults = connect((state) => ({ items: state.promise.adminOrdersFind?.payload || [] }))(SearchResults);
 
-const AdminOrderList = ({ orders }) => {
+const AdminOrderList = ({ orders, orderBy = '_id' }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     return (
         <Box className="AdminOrderList">
             <Box className="searchBarWrapper">
@@ -26,7 +30,17 @@ const AdminOrderList = ({ orders }) => {
             </Box>
             <Table>
                 <TableHead>
-                    <AdminOrderListHeader />
+                    <AdminOrderListHeader
+                        sort={orderBy}
+                        onSortChange={(orderBy) => {
+                            navigate({
+                                pathname: location.pathname,
+                                search: createSearchParams({
+                                    orderBy,
+                                }).toString(),
+                            });
+                        }}
+                    />
                 </TableHead>
                 <TableBody>
                     {(orders || []).map((order) => (

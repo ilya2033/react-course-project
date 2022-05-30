@@ -2,10 +2,10 @@ import { mock, query } from '../helpers';
 
 import { actionPromise } from '../reducers';
 
-export const actionCatById = ({ _id, promiseName = 'catById' }) =>
+export const actionCatById = ({ _id, promiseName = 'catById', orderBy = '', limit = 20, skip = 0 }) =>
     actionPromise(
         promiseName,
-        fetch(`/categories/${_id}/`, {
+        fetch(`/categories/${_id}/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

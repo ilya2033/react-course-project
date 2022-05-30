@@ -52,7 +52,7 @@ const AdminCategoriesPageContainer = ({ cats }) => {
                     promise: { feedCatAll },
                 } = store.getState();
                 if (feedCatAll.status !== 'PENDING') {
-                    dispatch(actionFeedCats(feed.payload?.length || 0));
+                    dispatch(actionFeedCats(feed.payload?.length || 0, orderBy));
                 }
             }
         };
@@ -91,6 +91,13 @@ const AdminGoodsPageContainer = ({ goods }) => {
     const orderBy = searchParams.get('orderBy') || '_id';
 
     useEffect(() => {
+        dispatch(actionFeedClear());
+        dispatch(actionPromiseClear('feedGoodsAll'));
+        dispatch(actionPromiseClear('goodUpsert'));
+        dispatch(actionFeedGoods({ skip: 0, orderBy }));
+    }, [orderBy]);
+
+    useEffect(() => {
         dispatch(actionFeedGoods({ skip: goods?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -115,14 +122,21 @@ const AdminGoodsPageContainer = ({ goods }) => {
     useEffect(() => {
         if (goods?.length) store.dispatch(actionFeedAdd(goods));
     }, [goods]);
-    return <AdminGoodsPage />;
+    return <AdminGoodsPage orderBy={orderBy} />;
 };
 
 const AdminOrdersPageContainer = ({ orders }) => {
+    const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get('orderBy') || '_id';
 
-    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(actionFeedClear());
+        dispatch(actionPromiseClear('feedOrdersAll'));
+        dispatch(actionPromiseClear('orderUpsert'));
+        dispatch(actionFeedOrders({ skip: 0, orderBy }));
+    }, [orderBy]);
+
     useEffect(() => {
         dispatch(actionFeedOrders({ skip: orders?.length || 0, orderBy }));
         window.onscroll = (e) => {
@@ -148,7 +162,7 @@ const AdminOrdersPageContainer = ({ orders }) => {
     useEffect(() => {
         if (orders?.length) store.dispatch(actionFeedAdd(orders));
     }, [orders]);
-    return <AdminOrdersPage />;
+    return <AdminOrdersPage orderBy={orderBy} />;
 };
 
 const AdminOrderPageContainer = () => {

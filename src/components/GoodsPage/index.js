@@ -1,21 +1,31 @@
 import { Grid, Stack, Typography, Divider } from '@mui/material';
 import { Box } from '@mui/system';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { GoodCard } from '../common/GoodCard';
 import { GoodList } from '../common/GoodList';
 import { SubCategories } from './SubCategories';
+import { SortOptions } from '../common/SortOptions';
+import { actionCatById } from '../../actions/actionCatById';
 
 const GoodsPage = ({ category = {} }) => {
     const { goods = [], name = '', subcategories = [] } = category || {};
-
+    const dispatch = useDispatch();
     return (
         <Box className="GoodsPage">
-            <Typography variant="h5" textAlign="center">
-                {name}
-            </Typography>
+            <Box>
+                <Typography variant="h5" textAlign="center">
+                    {name}
+                </Typography>
+            </Box>
+
             <Divider className="Divider" />
             <Stack>
+                <Box className="sortOptionsWrapper">
+                    <SortOptions
+                        onClick={(option) => dispatch(actionCatById({ _id: category._id, orderBy: option.value }))}
+                    />
+                </Box>
                 {!!subcategories.length ? (
                     <Box>
                         <Typography variant="h6" color="#79747E" textAlign="left">
