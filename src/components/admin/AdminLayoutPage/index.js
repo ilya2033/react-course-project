@@ -129,16 +129,17 @@ const AdminOrdersPageContainer = ({ orders }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get('orderBy') || '_id';
+    const status = searchParams.get('status') || 0;
 
     useEffect(() => {
         dispatch(actionFeedClear());
         dispatch(actionPromiseClear('feedOrdersAll'));
         dispatch(actionPromiseClear('orderUpsert'));
-        dispatch(actionFeedOrders({ skip: 0, orderBy }));
-    }, [orderBy]);
+        dispatch(actionFeedOrders({ skip: 0, orderBy, status }));
+    }, [orderBy, status]);
 
     useEffect(() => {
-        dispatch(actionFeedOrders({ skip: orders?.length || 0, orderBy }));
+        dispatch(actionFeedOrders({ skip: orders?.length || 0, orderBy, status }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -147,7 +148,7 @@ const AdminOrdersPageContainer = ({ orders }) => {
                 } = store.getState();
 
                 if (feedOrdersAll.status !== 'PENDING') {
-                    dispatch(actionFeedOrders({ skip: feed.payload?.length || 0, orderBy }));
+                    dispatch(actionFeedOrders({ skip: feed.payload?.length || 0, orderBy, status }));
                 }
             }
         };

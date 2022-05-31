@@ -48,9 +48,9 @@ const actionFeedCats =
     };
 
 const actionFeedOrders =
-    ({ skip = 0, orderBy = '_id' }) =>
+    ({ skip = 0, orderBy = '_id', status = 0 }) =>
     async (dispatch, getState) => {
-        await dispatch(actionOrdersAll({ skip, limit: 20, promiseName: 'feedOrdersAll', orderBy }));
+        await dispatch(actionOrdersAll({ skip, limit: 20, promiseName: 'feedOrdersAll', orderBy, status }));
     };
 
 const actionFeedOrdersFind =
