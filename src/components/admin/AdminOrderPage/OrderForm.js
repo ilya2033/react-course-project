@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import React, { useState, useEffect, useContext } from 'react';
 import { actionPromise, actionPromiseClear } from '../../../reducers';
 import Select from 'react-select';
@@ -20,10 +20,11 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useFormik } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Error } from '../../common/Error';
 import { statusNumber, statusOptions } from '../../../helpers';
+import { OrderGoodsEditor } from './OrderGoodsEditor';
 
 const deliveryOptions = [
     { label: 'Нова пошта', value: 'nova-poshta' },
@@ -47,6 +48,8 @@ const orderSchema = Yup.object().shape({
 export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, promiseStatus, order = {} } = {}) => {
     const [inputStatus, setInputStatus] = useState(null);
     const { setAlert } = useContext(UIContext);
+    const goodList = useSelector((state) => state.promise?.goodsAll?.payload || []);
+    const [inputOrderGoods, setInputOrderGoods] = useState([]);
 
     const formik = useFormik({
         initialValues: {
@@ -69,15 +72,15 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
             orderToSave.phoneNumber = formik.values.phoneNumber;
             orderToSave.address = formik.values.address;
             orderToSave.delivery = formik.values.delivery;
-            orderToSave.orderGoods = order.orderGoods;
+            orderToSave.orderGoods = inputOrderGoods;
             onSaveClick && onSaveClick();
             onSave(orderToSave);
         },
     });
 
     useEffect(() => {
-        // setInputCategories(order?.categories || []);
         setInputStatus(order?.status || null);
+        setInputOrderGoods(order.orderGoods || []);
         formik.setFieldValue('email', order.email || '');
         formik.setFieldValue('name', order.name || '');
         formik.setFieldValue('address', order.address || '');
@@ -85,6 +88,10 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
         formik.setFieldValue('phoneNumber', order.phoneNumber || '');
         formik.setFieldValue('delivery', order.delivery || '');
     }, [order]);
+
+    useEffect(() => {
+        formik.validateForm();
+    }, [formik.values]);
 
     useEffect(() => {
         if (promiseStatus === 'FULFILLED') {
@@ -159,10 +166,21 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
                         />
                     </Box>
 
+                    <Box sx={{ mt: 3 }}>
+                        <InputLabel className="form-label">Товари</InputLabel>
+                        <OrderGoodsEditor
+                            orderGoods={inputOrderGoods}
+                            goodList={goodList}
+                            onChange={(orderGoods) => {
+                                setInputOrderGoods([...orderGoods]);
+                            }}
+                        />
+                    </Box>
+
                     <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
                         <Button
                             variant="contained"
-                            disabled={!formik.isValid || formik.isSubmitting}
+                            disabled={Boolean(!formik.isValid || formik.isSubmitting)}
                             type="submit"
                             fullWidth
                         >
@@ -220,7 +238,6 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
                         variant="outlined"
                         label="Тип доставкі"
                         size="small"
-                        textAlign="left"
                         select
                         error={formik.touched.delivery && Boolean(formik.errors.delivery)}
                         value={formik.values.delivery}

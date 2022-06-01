@@ -170,6 +170,7 @@ const AdminOrderPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
     dispatch(actionPromiseClear('adminOrderById'));
+    dispatch(actionGoodsAll());
     useEffect(() => {
         if (params._id) {
             dispatch(actionOrderById({ _id: params._id, promiseName: 'adminOrderById' }));
