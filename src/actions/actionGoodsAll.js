@@ -11,6 +11,7 @@ export const actionGoodsAll =
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        accept: 'application/json',
                         ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                     },
                 })

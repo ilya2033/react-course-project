@@ -11,6 +11,7 @@ export const actionCatAll =
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        accept: 'application/json',
                         ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                     },
                 })

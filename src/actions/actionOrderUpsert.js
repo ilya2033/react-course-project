@@ -19,6 +19,7 @@ export const actionOrderUpsert = (order) => async (dispatch) => {
             fetch(`${backendURL}/order/`, {
                 method: 'POST',
                 headers: {
+                    accept: 'application/json',
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                 },
                 body: formData,

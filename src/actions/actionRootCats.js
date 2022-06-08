@@ -9,6 +9,7 @@ export const actionRootCats = () => async (dispatch, getState) => {
             fetch(`${backendURL}/categories/?isRoot=1`, {
                 method: 'GET',
                 headers: {
+                    accept: 'application/json',
                     'Content-Type': 'application/json',
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                 },

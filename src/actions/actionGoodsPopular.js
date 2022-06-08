@@ -9,6 +9,7 @@ export const actionGoodsPopular = () => async (dispatch, getState) => {
             fetch(`${backendURL}/goods/?limit=20&skip=0&popular=1`, {
                 method: 'GET',
                 headers: {
+                    accept: 'application/json',
                     'Content-Type': 'application/json',
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                 },

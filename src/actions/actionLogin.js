@@ -14,13 +14,13 @@ export const actionLogin = (login, password) => async (dispatch, getState) => {
             fetch(`${backendURL}/auth/token/`, {
                 method: 'POST',
                 headers: {
+                    accept: 'application/json',
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                 },
                 body: formData,
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log(data);
                     if (data.errors) {
                         throw new Error(JSON.stringify(data.errors));
                     } else return data.access;

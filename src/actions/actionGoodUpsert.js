@@ -17,6 +17,7 @@ export const actionGoodUpsert = (good) => async (dispatch) => {
             fetch(`${backendURL}/good/`, {
                 method: 'POST',
                 headers: {
+                    accept: 'application/json',
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                 },
                 body: formData,

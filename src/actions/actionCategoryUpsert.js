@@ -14,6 +14,7 @@ export const actionCategoryUpsert = (category) => async (dispatch) => {
             fetch(`${backendURL}/category/`, {
                 method: 'POST',
                 headers: {
+                    accept: 'application/json',
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
                 },
                 body: formData,
