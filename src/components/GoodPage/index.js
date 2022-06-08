@@ -16,7 +16,7 @@ export const GoodPage = () => {
                 <Grid item xs={12} md={4}>
                     <Carousel showIndicators={false} showStatus={false} showArrows={true}>
                         {(good.images || [{ url: defaultGoodImage }]).map((image) => (
-                            <img src={image?.url ? `${backendURL}${image?.url}` : defaultGoodImage} />
+                            <img src={image?.url ? `${image?.url}` : defaultGoodImage} />
                         ))}
                     </Carousel>
                 </Grid>

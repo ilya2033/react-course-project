@@ -45,7 +45,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
             <TableCell>
                 <Box
                     component="img"
-                    src={images && images[0]?.url ? `${backendURL}${images ? images[0]?.url : ''}` : defaultGoodImage}
+                    src={images && images[0]?.url ? `${images ? images[0]?.url : ''}` : defaultGoodImage}
                     sx={{ width: 50 }}
                 />
             </TableCell>
