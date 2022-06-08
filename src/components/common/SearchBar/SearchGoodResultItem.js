@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import defaultGoodImage from '../../../images/default-good-image.png';
 
 import { Grid, Box, Stack, Typography } from '@mui/material';
+import { backendURL } from '../../../helpers';
 const SearchGoodResultItem = ({ good, onClick, link = '' } = {}) => {
     const { _id = 0, images = [], name = '', description = '', price = '' } = good || {};
 
@@ -15,7 +16,7 @@ const SearchGoodResultItem = ({ good, onClick, link = '' } = {}) => {
             spacing={1}
         >
             <Grid item xs={3}>
-                <Box component="img" src={images ? images[0]?.url : defaultGoodImage} />
+                <Box component="img" src={images ? `${backendURL}${images[0]?.url}` : defaultGoodImage} />
             </Grid>
             <Grid item xs={6}>
                 <Box sx={{ p: 1 }}>

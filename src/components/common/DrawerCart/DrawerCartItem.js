@@ -35,7 +35,7 @@ const DrawerCartItem = ({ order, onDeleteClick }) => {
             <CardMedia
                 component="img"
                 sx={{ width: 90 }}
-                src={images && images[0]?.url ? `${images ? images[0]?.url : ''}` : defaultGoodImage}
+                src={images && images[0]?.url ? `${backendURL}${images ? images[0]?.url : ''}` : defaultGoodImage}
             />
             <Box sx={{ display: 'flex', width: '100%' }}>
                 <CardContent className="content">
@@ -57,55 +57,3 @@ const DrawerCartItem = ({ order, onDeleteClick }) => {
 };
 
 export { DrawerCartItem };
-
-{
-    /* <TableRow className="DrawerCartItem">
-<TableCell>
-    <Box
-        component="img"
-        src={images && images[0]?.url ? `/${images ? images[0]?.url : ''}` : defaultGoodImage}
-        sx={{ width: 50 }}
-    />
-</TableCell>
-<TableCell>
-    <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="h5">{name}</Typography>
-        <Typography variant="body1">{price}</Typography>
-    </Box>
-</TableCell>
-<TableCell>
-    <Stack justifyContent="center" direction="row" alignItems="center">
-        <IconButton onClick={() => handleChange(countInput - 1)}>
-            <AiOutlineMinus />
-        </IconButton>
-        <Input
-            value={countInput}
-            onChange={(e) => handleChange(+e.target.value)}
-            size="small"
-            sx={{
-                width: 70,
-                resize: {
-                    fontSize: 10,
-                },
-                px: 3,
-            }}
-        />
-        <IconButton onClick={() => handleChange(countInput + 1)}>
-            <AiOutlinePlus />
-        </IconButton>
-    </Stack>
-</TableCell>
-<TableCell>
-    <Stack justifyContent="center">
-        <Typography variant="body1" textAlign="center">
-            x{count}
-        </Typography>
-    </Stack>
-</TableCell>
-<TableCell>
-    <IconButton onClick={() => onDeleteClick({ _id, images, name, price })}>
-        <IoCloseOutline />
-    </IconButton>
-</TableCell>
-</TableRow> */
-}

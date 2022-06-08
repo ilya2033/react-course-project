@@ -5,6 +5,7 @@ import defaultGoodImage from '../../images/default-good-image.png';
 import { Divider, Grid, Paper, Stack, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Carousel } from 'react-responsive-carousel';
+import { backendURL } from '../../helpers';
 
 export const GoodPage = () => {
     const good = useSelector((state) => state.promise?.goodById?.payload || {});
@@ -15,7 +16,7 @@ export const GoodPage = () => {
                 <Grid item xs={12} md={4}>
                     <Carousel showIndicators={false} showStatus={false} showArrows={true}>
                         {(good.images || [{ url: defaultGoodImage }]).map((image) => (
-                            <img src={image?.url ? `${image?.url}` : defaultGoodImage} />
+                            <img src={image?.url ? `${backendURL}${image?.url}` : defaultGoodImage} />
                         ))}
                     </Carousel>
                 </Grid>

@@ -5,6 +5,7 @@ import { SortableList } from './SortableList';
 import { SortableItem } from './SortableItem';
 import { Box, Button, IconButton, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import { MdClose } from 'react-icons/md';
+import { backendURL } from '../../../helpers';
 
 export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uploadFiles, onImagesSave }) => {
     const [state, setState] = useState(entity);
@@ -58,7 +59,7 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
                                         <Box
                                             component="img"
                                             className="DropZoneImage"
-                                            src={`${image.url}`}
+                                            src={`${backendURL}${image.url}`}
                                             loading="lazy"
                                         />
                                     </ImageListItem>
