@@ -1,3 +1,4 @@
+import { backendURL } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionOrderUpsert = (order) => async (dispatch) => {
@@ -15,7 +16,7 @@ export const actionOrderUpsert = (order) => async (dispatch) => {
     dispatch(
         actionPromise(
             'orderUpsert',
-            fetch(`/order/`, {
+            fetch(`${backendURL}/order/`, {
                 method: 'POST',
                 headers: {
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),

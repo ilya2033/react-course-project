@@ -1,4 +1,4 @@
-import { mock, query } from '../helpers';
+import { backendURL, mock, query } from '../helpers';
 
 import { actionPromise } from '../reducers';
 
@@ -6,7 +6,7 @@ export const actionGoodsPopular = () => async (dispatch, getState) => {
     dispatch(
         actionPromise(
             'goodsPopular',
-            fetch(`/goods/?limit=20&skip=0&popular=1`, {
+            fetch(`${backendURL}/goods/?limit=20&skip=0&popular=1`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

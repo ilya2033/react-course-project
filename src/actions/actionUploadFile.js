@@ -1,3 +1,4 @@
+import { backendURL } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionUploadFile = (file) => {
@@ -5,7 +6,7 @@ export const actionUploadFile = (file) => {
     fd.append('photo', file);
     return actionPromise(
         'uploadFile',
-        fetch('/upload/', {
+        fetch(`${backendURL}/upload/`, {
             method: 'POST',
             headers: localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {},
             body: fd,

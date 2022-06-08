@@ -1,5 +1,5 @@
 import { actionPromise } from '../reducers';
-import { gql } from '../helpers';
+import { backendURL, gql } from '../helpers';
 import { actionAuthLogin } from '../reducers';
 
 export const actionLogin = (login, password) => async (dispatch, getState) => {
@@ -11,7 +11,7 @@ export const actionLogin = (login, password) => async (dispatch, getState) => {
     const token = await dispatch(
         actionPromise(
             'login',
-            fetch(`/auth/token/`, {
+            fetch(`${backendURL}/auth/token/`, {
                 method: 'POST',
                 headers: {
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),

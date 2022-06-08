@@ -1,5 +1,5 @@
 import { actionPromise } from '../reducers';
-import { gql } from '../helpers';
+import { backendURL, gql } from '../helpers';
 
 export const actionCatAll =
     ({ limit = 20, skip = 0, promiseName = 'catAll', orderBy = '' } = {}) =>
@@ -7,7 +7,7 @@ export const actionCatAll =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`/categories/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
+                fetch(`${backendURL}/categories/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

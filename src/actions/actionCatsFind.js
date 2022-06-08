@@ -1,3 +1,4 @@
+import { backendURL } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionCatsFind =
@@ -6,13 +7,18 @@ export const actionCatsFind =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`/categories/?limit=${limit}&skip=${skip}&text=${text}${orderBy && `&orderBy=` + orderBy}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                    },
-                })
+                fetch(
+                    `${backendURL}/categories/?limit=${limit}&skip=${skip}&text=${text}${
+                        orderBy && `&orderBy=` + orderBy
+                    }`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
+                        },
+                    }
+                )
                     .then((res) => res.json())
                     .then((data) => {
                         if (data.errors) {

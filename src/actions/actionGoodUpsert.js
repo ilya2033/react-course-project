@@ -1,3 +1,4 @@
+import { backendURL } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionGoodUpsert = (good) => async (dispatch) => {
@@ -13,7 +14,7 @@ export const actionGoodUpsert = (good) => async (dispatch) => {
     dispatch(
         actionPromise(
             'goodUpsert',
-            fetch(`/good/`, {
+            fetch(`${backendURL}/good/`, {
                 method: 'POST',
                 headers: {
                     ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),

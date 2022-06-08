@@ -1,4 +1,4 @@
-import { getQuery } from '../helpers';
+import { backendURL, getQuery } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionGoodsAll =
@@ -7,7 +7,7 @@ export const actionGoodsAll =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`/goods/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
+                fetch(`${backendURL}/goods/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

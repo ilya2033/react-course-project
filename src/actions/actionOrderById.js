@@ -1,11 +1,11 @@
-import { mock, query } from '../helpers';
+import { backendURL, mock, query } from '../helpers';
 
 import { actionPromise } from '../reducers';
 
 export const actionOrderById = ({ _id, promiseName = 'orderById' }) =>
     actionPromise(
         promiseName,
-        fetch(`/orders/${_id}/`, {
+        fetch(`${backendURL}/orders/${_id}/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

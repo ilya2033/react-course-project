@@ -1,4 +1,4 @@
-import { mock, query } from '../helpers';
+import { backendURL, mock, query } from '../helpers';
 
 import { actionPromise } from '../reducers';
 
@@ -6,7 +6,7 @@ export const actionRootCats = () => async (dispatch, getState) => {
     dispatch(
         actionPromise(
             'rootCats',
-            fetch(`/categories/?isRoot=1`, {
+            fetch(`${backendURL}/categories/?isRoot=1`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,3 +1,4 @@
+import { backendURL } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionGoodsFind =
@@ -6,13 +7,16 @@ export const actionGoodsFind =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`/goods/?limit=${limit}&skip=${skip}&text=${text}${orderBy && `&orderBy=` + orderBy}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                    },
-                })
+                fetch(
+                    `${backendURL}/goods/?limit=${limit}&skip=${skip}&text=${text}${orderBy && `&orderBy=` + orderBy}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
+                        },
+                    }
+                )
                     .then((res) => res.json())
                     .then((data) => {
                         if (data.errors) {
