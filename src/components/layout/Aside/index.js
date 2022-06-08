@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { statusOptions } from '../../../helpers';
+import { CProtectedRoute } from '../../common/ProtectedRoute';
 import { AdminCategories } from './AdminCategories';
 
 import { CCategories } from './CCategories';
@@ -10,8 +11,17 @@ const Aside = ({ children }) => (
     <Box className="Aside">
         <Box className="body">
             <Routes>
-                <Route path="/admin/*" element={<AdminCategories />} />
+                <Route
+                    path="/admin/*"
+                    exact
+                    element={
+                        <CProtectedRoute roles={['admin']} fallback="/auth">
+                            <AdminCategories />
+                        </CProtectedRoute>
+                    }
+                />
                 <Route path="/*" element={<CCategories />} />
+                <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
 
             {children}
@@ -23,7 +33,9 @@ const Aside = ({ children }) => (
                 exact
                 element={
                     <Box className="body" mt={4}>
-                        <StatusOptions options={statusOptions}></StatusOptions>
+                        <CProtectedRoute roles={['admin']} fallback="/auth">
+                            <StatusOptions options={statusOptions} />
+                        </CProtectedRoute>
                     </Box>
                 }
             />

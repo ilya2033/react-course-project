@@ -76,6 +76,10 @@
 
 
 .App{
+  & .Error404{
+    height: 99vh;
+  }
+
 
   & .Header{
     margin-bottom: 30px;
@@ -96,8 +100,11 @@
         & .SearchBarWrapper{
           flex-grow: 1;
           margin-left: 10px;
+
           & .SearchBar{
             position: relative;
+            justify-content: center;
+            padding-left: 20%;
             & .SearchBarInput{
               width: 100%;
               max-width: 500px;
@@ -167,12 +174,13 @@
   }
 
   & .Content{
-    margin-left: 25px;
+    margin-left: 50px;
     margin-right: 50px;
     min-height: 600px;
     border-radius: 5px;
     flex:1;
     border:1px solid #C9C5CA ;
+
 
     & .AdminLayoutPage{
       padding: 10px;

@@ -207,6 +207,7 @@ const AdminLayoutPage = () => {
                 <Route path="/orders/" element={<CAdminOrdersPageContainer />} />
                 <Route path="/order/" element={<AdminOrderPageContainer />} />
                 <Route path="/order/:_id" element={<AdminOrderPageContainer />} />
+                <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
         </Box>
     );

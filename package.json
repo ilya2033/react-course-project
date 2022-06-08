@@ -1,7 +1,7 @@
 {
   "name": "diploma",
   "version": "0.1.0",
-  "proxy":"http://localhost:8000",
+  "proxy":"https://diploma-back-django.herokuapp.com/",
   "private": true,
   "dependencies": {
     "@dnd-kit/core": "^5.0.3",

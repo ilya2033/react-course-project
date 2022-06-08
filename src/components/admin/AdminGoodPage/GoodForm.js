@@ -212,7 +212,7 @@ export const CGoodForm = connect(
         catList: state.promise.catAll?.payload || [],
         promiseStatus: state.promise.goodUpsert?.status || null,
         good: state.promise?.adminGoodById?.payload || {},
-        serverErrors: state.promise?.goodUpsert?.errors || [],
+        serverErrors: state.promise?.goodUpsert?.error || [],
     }),
     {
         onSave: (good) => actionGoodUpdate(good),

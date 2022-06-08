@@ -23,7 +23,9 @@ const GoodsPage = ({ category = {} }) => {
             <Stack>
                 <Box className="sortOptionsWrapper">
                     <SortOptions
-                        onClick={(option) => dispatch(actionCatById({ _id: category._id, orderBy: option.value }))}
+                        onClick={(option) =>
+                            category._id && dispatch(actionCatById({ _id: category._id, orderBy: option.value }))
+                        }
                     />
                 </Box>
                 {!!subcategories.length ? (

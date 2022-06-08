@@ -16,7 +16,7 @@ const GoodCard = ({ good = {} }) => {
                 />
                 <CardContent>
                     <Typography gutterBottom variant="body1" component="div" color="#1C1B1F" textAlign="left">
-                        Назва: {good.name?.length > 20 ? `${good.name.slice(0, 20)}...` : good.name}
+                        Назва: {good.name?.length > 10 ? `${good.name.slice(0, 10)}...` : good.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" textAlign="left">
                         Ціна: {good.price}

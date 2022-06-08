@@ -72,9 +72,7 @@ export const SearchBar = ({
 
                 {!!inputValue ? (
                     <Button
-                        component={Link}
                         className="Link"
-                        to={`${searchLink}${inputValue}`}
                         onClick={() => {
                             setInputValue('');
                             onSearchButtonClick();

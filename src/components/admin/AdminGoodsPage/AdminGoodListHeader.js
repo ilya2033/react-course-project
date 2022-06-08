@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AdminGoodListHeader = ({ onSortChange, sort }) => {
     const navigate = useNavigate();
-    console.log(sort);
+
     return (
         <TableRow className="AdminGoodListHeader">
             <TableCell scope="col">
