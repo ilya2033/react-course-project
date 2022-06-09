@@ -9,12 +9,6 @@ import { Error } from '../Error';
 import SearchOrderResultItem from './SearchOrderResultItem';
 
 export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
-    useEffect(() => {
-        console.log(items);
-    }, [items]);
-    useEffect(() => {
-        console.log(itemLink.match(/.+(order || orders).+/));
-    }, [itemLink]);
     return (
         <Paper className="SearchResults">
             <Stack>

@@ -32,7 +32,6 @@ export const AuthForm = ({ onSubmit = null, promiseStatus, serverErrors = [] } =
         validationSchema: signInSchema,
         validateOnChange: true,
         onSubmit: () => {
-            console.log(formik.values.username, formik.values.password);
             onSubmit(formik.values.username, formik.values.password);
         },
     });

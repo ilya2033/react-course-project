@@ -12,7 +12,6 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
 
     useEffect(() => {
         setState(entity);
-        console.log(entity.images);
     }, [entity]);
 
     useEffect(() => {
@@ -26,7 +25,6 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
     }, [state]);
 
     const onSortEnd = ({ oldIndex, newIndex }) => {
-        console.log(arrayMoveImmutable(state.images, oldIndex, newIndex));
         setState({ ...state, images: arrayMoveImmutable(state.images, oldIndex, newIndex) });
     };
     const onItemRemove = (toRemoveId) => {

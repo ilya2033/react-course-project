@@ -12,13 +12,11 @@ export const SortOptions = ({ onClick, options = sortOptions || [] } = {}) => {
 
     const handleSelect = (option) => {
         option && setSelectedOption(option);
-        console.log(option);
         setAnchorEl(null);
     };
 
     useEffect(() => {
         if (selectedOption) {
-            console.log(selectedOption);
             onClick(selectedOption);
         }
     }, [selectedOption]);

@@ -22,7 +22,6 @@ const GoodsPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
     if (params._id) {
-        console.log(params._id);
         dispatch(actionCatById({ _id: params._id }));
     }
 

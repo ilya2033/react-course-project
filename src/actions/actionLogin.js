@@ -4,7 +4,6 @@ import { actionAuthLogin } from '../reducers';
 
 export const actionLogin = (login, password) => async (dispatch, getState) => {
     const formData = new FormData();
-    console.log(login, password);
     formData.append('username', login);
     formData.append('password', password);
 

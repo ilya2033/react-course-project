@@ -4,7 +4,6 @@ import { backendURL, gql } from '../helpers';
 export const actionOrdersAll =
     ({ limit = 0, skip = 0, promiseName = 'adminOrdersAll', orderBy = '', status = 0 } = {}) =>
     async (dispatch, getState) => {
-        console.log(status);
         dispatch(
             actionPromise(
                 promiseName,

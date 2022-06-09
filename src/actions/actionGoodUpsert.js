@@ -3,7 +3,6 @@ import { actionPromise } from '../reducers';
 
 export const actionGoodUpsert = (good) => async (dispatch) => {
     const formData = new FormData();
-    console.log(JSON.stringify(good.images));
     good._id && formData.append('_id', good._id);
     formData.append('name', good.name);
     formData.append('description', good.description);
