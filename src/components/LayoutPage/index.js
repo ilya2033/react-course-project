@@ -55,10 +55,12 @@ export const LayoutPage = () => {
         <Box className="LayoutPage">
             <Header />
             <Grid container columns={14} rows={1}>
-                <Grid xs={location.pathname.match(/(\/categor)|(\/good)|(\/order)*/) ? 3 : 0} item>
-                    <Aside />
-                </Grid>
-                <Grid xs={location.pathname.match(/(\/categor)|(\/good)|(\/order)*/) ? 11 : 14} item>
+                {!!location.pathname.match(/(\/categor)|(\/good)|(\/order)+/) && (
+                    <Grid xs={3} item>
+                        <Aside />
+                    </Grid>
+                )}
+                <Grid xs={location.pathname.match(/(\/categor)|(\/good)|(\/order)+/) ? 11 : 14} item>
                     <Content>
                         <Routes>
                             <Route path="/" exact element={<MainPage />} />
