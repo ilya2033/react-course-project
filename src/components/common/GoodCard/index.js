@@ -19,7 +19,7 @@ const GoodCard = ({ good = {} }) => {
                         Назва: {good.name?.length > 10 ? `${good.name.slice(0, 10)}...` : good.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" textAlign="left">
-                        Ціна: {good.price}
+                        Ціна: {good.price} ₴
                     </Typography>
                 </CardContent>
             </CardActionArea>

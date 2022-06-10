@@ -43,7 +43,7 @@ const DrawerCartItem = ({ order, onDeleteClick }) => {
                         {name}
                     </Typography>
                     <Typography variant="subtitle1" color="text.secondary" component="div">
-                        {price}
+                        {price ₴
                     </Typography>
                 </CardContent>
                 <Box className="buttons">

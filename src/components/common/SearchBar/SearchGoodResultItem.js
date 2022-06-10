@@ -29,7 +29,7 @@ const SearchGoodResultItem = ({ good, onClick, link = '' } = {}) => {
                 </Box>
             </Grid>
             <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                <Typography variant="body1">{price}</Typography>
+                <Typography variant="body1">{price} ₴</Typography>
             </Grid>
         </Grid>
     );

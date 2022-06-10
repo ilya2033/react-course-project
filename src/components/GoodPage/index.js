@@ -24,7 +24,7 @@ export const GoodPage = () => {
                     <Stack spacing={2}>
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography variant="body1" color="#1C1B1F">
-                                <b>Ціна:</b> {price}
+                                <b>Ціна:</b> {price} ₴
                             </Typography>
                             <CBuyButton good={good} />
                         </Stack>

@@ -52,7 +52,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
             <TableCell>
                 <Box sx={{ flexGrow: 1 }}>
                     <Typography variant="h5">{name}</Typography>
-                    <Typography variant="body1">{price}</Typography>
+                    <Typography variant="body1">{price} ₴</Typography>
                 </Box>
             </TableCell>
             <TableCell>
@@ -69,7 +69,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
             <TableCell>
                 <Stack justifyContent="center">
                     <Typography variant="body1" textAlign="center">
-                        {price * count}
+                        {price * count} ₴
                     </Typography>
                 </Stack>
             </TableCell>
