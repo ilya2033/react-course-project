@@ -51,7 +51,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
             </TableCell>
             <TableCell>
                 <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="h5">{name}</Typography>
+                    <Typography variant="h5">{name.length > 20 ? `${name.slice(0, 20)}...` : name}</Typography>
                     <Typography variant="body1">{price} ₴</Typography>
                 </Box>
             </TableCell>
