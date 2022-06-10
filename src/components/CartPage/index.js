@@ -45,7 +45,7 @@ export const CartPage = () => {
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography textAlign="center">{sum}</Typography>
+                                <Typography textAlign="center">{sum} ₴</Typography>
                             </TableCell>
                             <TableCell></TableCell>
                         </TableRow>
