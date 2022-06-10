@@ -40,7 +40,7 @@ const DrawerCartItem = ({ order, onDeleteClick }) => {
             <Box sx={{ display: 'flex', width: '100%' }}>
                 <CardContent className="content">
                     <Typography component="div" variant="h5">
-                        {name.length > 20 ? `${name.slice(0, 20)}...` : name}
+                        {name.length > 20 ? `${name.slice(0, 15)}...` : name}
                     </Typography>
                     <Typography variant="subtitle1" color="text.secondary" component="div">
                         {price} ₴
