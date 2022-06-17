@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import React, { useState, useEffect, useContext } from 'react';
 import { actionPromise, actionPromiseClear } from '../../../reducers';
 import Select from 'react-select';
@@ -24,6 +24,9 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Error } from '../../common/Error';
+import { ConfirmModal } from '../../common/ConfirmModal';
+import { actionGoodDelete } from '../../../actions/actionGoodDelete';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const goodSchema = Yup.object().shape({
     name: Yup.string().required("Обов'язкове"),
@@ -47,13 +50,18 @@ export const GoodForm = ({
     onSaveClick,
     onSave,
     onClose,
+    onDelete,
     promiseStatus,
+    deletePromiseStatus,
     catList = [],
     good = {},
 } = {}) => {
     const [inputCategories, setInputCategories] = useState([]);
     const [inputImages, setInputImages] = useState([]);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const { setAlert } = useContext(UIContext);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -96,6 +104,22 @@ export const GoodForm = ({
             });
         }
     }, [promiseStatus]);
+
+    useEffect(() => {
+        if (deletePromiseStatus === 'FULFILLED') {
+            navigate('/admin/goods/');
+        }
+        if (deletePromiseStatus === 'REJECTED') {
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: 'Помилка',
+            });
+        }
+        return () => {
+            dispatch(actionPromiseClear('goodDelete'));
+        };
+    }, [deletePromiseStatus]);
 
     useEffect(() => {
         setInputCategories(good?.categories || []);
@@ -198,11 +222,27 @@ export const GoodForm = ({
                 />
             </Box>
 
-            <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
-                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit" fullWidth>
+            <Stack direction="row" sx={{ mt: 3 }} justifyContent="flex-end" spacing={1}>
+                {!!good._id && (
+                    <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} color="error">
+                        Видалити
+                    </Button>
+                )}
+                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit">
                     Зберегти
                 </Button>
-            </Box>
+            </Stack>
+            {!!good._id && (
+                <ConfirmModal
+                    open={isDeleteModalOpen}
+                    text="Видалити товар?"
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    onNO={() => setIsDeleteModalOpen(false)}
+                    onYES={() => {
+                        onDelete(good._id);
+                    }}
+                />
+            )}
         </Box>
     );
 };
@@ -211,11 +251,13 @@ export const CGoodForm = connect(
     (state) => ({
         catList: state.promise.catAll?.payload || [],
         promiseStatus: state.promise.goodUpsert?.status || null,
+        deletePromiseStatus: state.promise.goodDelete?.status || null,
         good: state.promise?.adminGoodById?.payload || {},
         serverErrors: state.promise?.goodUpsert?.error || [],
     }),
     {
         onSave: (good) => actionGoodUpdate(good),
         onClose: () => actionPromiseClear('goodUpsert'),
+        onDelete: (_id) => actionGoodDelete({ _id }),
     }
 )(GoodForm);

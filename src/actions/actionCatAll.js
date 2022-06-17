@@ -9,6 +9,7 @@ export const actionCatAll =
                 promiseName,
                 fetch(`${backendURL}/categories/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
                     method: 'GET',
+                    mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json',
                         accept: 'application/json',

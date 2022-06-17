@@ -15,6 +15,10 @@ const AdminGoodItem = ({ good }) => (
                 <Box
                     component="img"
                     src={good.images?.length ? `${good.images ? good.images[0]?.url : ''}` : defaultGoodImage}
+                    onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src = defaultGoodImage;
+                    }}
                 />
             }
         </TableCell>

@@ -16,7 +16,14 @@ const SearchGoodResultItem = ({ good, onClick, link = '' } = {}) => {
             spacing={1}
         >
             <Grid item xs={3}>
-                <Box component="img" src={images ? `${images[0]?.url}` : defaultGoodImage} />
+                <Box
+                    component="img"
+                    src={images ? `${images[0]?.url}` : defaultGoodImage}
+                    onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src = defaultGoodImage;
+                    }}
+                />
             </Grid>
             <Grid item xs={6}>
                 <Box sx={{ p: 1 }}>

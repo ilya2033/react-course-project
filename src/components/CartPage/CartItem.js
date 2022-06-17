@@ -47,6 +47,10 @@ export const CartItem = ({ order, onDeleteClick }) => {
                     component="img"
                     src={images && images[0]?.url ? `${images ? images[0]?.url : ''}` : defaultGoodImage}
                     sx={{ width: 50 }}
+                    onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src = defaultGoodImage;
+                    }}
                 />
             </TableCell>
             <TableCell>

@@ -3,5 +3,5 @@ import { mock } from './mock';
 import { delay } from './delay';
 import { statusNumber, statusOptions } from './orderStatus';
 
-export const backendURL = 'http://188.72.209.29/api';
+export const backendURL = '';
 export { jwtDecode, mock, delay, statusNumber, statusOptions };
