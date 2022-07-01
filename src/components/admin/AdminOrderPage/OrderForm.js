@@ -1,4 +1,4 @@
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import React, { useState, useEffect, useContext } from 'react';
 import { actionPromise, actionPromiseClear } from '../../../reducers';
 import Select from 'react-select';
@@ -25,6 +25,9 @@ import * as Yup from 'yup';
 import { Error } from '../../common/Error';
 import { statusNumber, statusOptions } from '../../../helpers';
 import { OrderGoodsEditor } from './OrderGoodsEditor';
+import { useNavigate } from 'react-router-dom';
+import { actionOrderDelete } from '../../../actions/actionOrderDelete';
+import { ConfirmModal } from '../../common/ConfirmModal';
 
 const deliveryOptions = [
     { label: 'Нова пошта', value: 'nova-poshta' },
@@ -45,11 +48,23 @@ const orderSchema = Yup.object().shape({
         ),
 });
 
-export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, promiseStatus, order = {} } = {}) => {
+export const OrderForm = ({
+    serverErrors = [],
+    onSaveClick,
+    onSave,
+    onClose,
+    onDelete,
+    promiseStatus,
+    deletePromiseStatus,
+    order = {},
+} = {}) => {
     const [inputStatus, setInputStatus] = useState(null);
     const { setAlert } = useContext(UIContext);
     const goodList = useSelector((state) => state.promise?.goodsAll?.payload || []);
     const [inputOrderGoods, setInputOrderGoods] = useState([]);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -114,15 +129,29 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
     }, [promiseStatus]);
 
     useEffect(() => {
+        if (deletePromiseStatus === 'FULFILLED') {
+            navigate('/admin/orders/');
+        }
+        if (deletePromiseStatus === 'REJECTED') {
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: 'Помилка',
+            });
+        }
+        return () => {
+            dispatch(actionPromiseClear('orderDelete'));
+        };
+    }, [deletePromiseStatus]);
+
+    useEffect(() => {
         return () => {
             onClose && onClose();
         };
     }, []);
+
     return (
         <Box className="OrderForm" component="form" onSubmit={formik.handleSubmit}>
-            {(serverErrors || []).map((error) => (
-                <Error>{error?.message}</Error>
-            ))}
             <Grid container spacing={5}>
                 <Grid item xs={6}>
                     <TextField
@@ -176,17 +205,16 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
                             }}
                         />
                     </Box>
-
-                    <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
-                        <Button
-                            variant="contained"
-                            disabled={Boolean(!formik.isValid || formik.isSubmitting)}
-                            type="submit"
-                            fullWidth
-                        >
+                    <Stack direction="row" sx={{ mt: 3 }} justifyContent="flex-end" spacing={1}>
+                        {!!order._id && (
+                            <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} color="error">
+                                Видалити
+                            </Button>
+                        )}
+                        <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit">
                             Зберегти
                         </Button>
-                    </Box>
+                    </Stack>
                 </Grid>
                 <Grid item xs={6}>
                     <TextField
@@ -255,6 +283,18 @@ export const OrderForm = ({ serverErrors = [], onSaveClick, onSave, onClose, pro
                     </TextField>
                 </Grid>
             </Grid>
+
+            {!!order._id && (
+                <ConfirmModal
+                    open={isDeleteModalOpen}
+                    text="Видалити замовлення?"
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    onNO={() => setIsDeleteModalOpen(false)}
+                    onYES={() => {
+                        onDelete(order._id);
+                    }}
+                />
+            )}
         </Box>
     );
 };
@@ -264,9 +304,11 @@ export const COrderForm = connect(
         promiseStatus: state.promise.orderUpsert?.status || null,
         serverErrors: state.promise.orderUpsert?.error || null,
         order: state.promise?.adminOrderById?.payload || {},
+        deletePromiseStatus: state.promise.orderDelete?.status || null,
     }),
     {
         onSave: (order) => actionOrderUpdate(order),
         onClose: () => actionPromiseClear('orderUpsert'),
+        onDelete: (_id) => actionOrderDelete({ _id }),
     }
 )(OrderForm);

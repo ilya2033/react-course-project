@@ -16,6 +16,7 @@ import { CAdminOrderPage } from '../AdminOrderPage';
 import { actionOrderById } from '../../../actions/actionOrderById';
 import { actionCatAll } from '../../../actions/actionCatAll';
 import { actionGoodsAll } from '../../../actions/actionGoodsAll';
+import { CAdminCategoryTree } from '../AdminCategoryTree';
 
 const AdminCategoryPageContainer = ({}) => {
     const dispatch = useDispatch();
@@ -197,7 +198,8 @@ const AdminLayoutPage = () => {
     return (
         <Box className="AdminLayoutPage">
             <Routes>
-                <Route path="/" element={<Navigate to={'/admin/goods/'} />} exact />
+                <Route path="/" element={<Navigate to={'/admin/goods/'} />} />
+                <Route path="/tree/" element={<CAdminCategoryTree />} />
                 <Route path="/goods/" element={<CAdminGoodsPageContainer />} />
                 <Route path="/good/" element={<AdminGoodPageContainer />} />
                 <Route path="/good/:_id" element={<AdminGoodPageContainer />} />

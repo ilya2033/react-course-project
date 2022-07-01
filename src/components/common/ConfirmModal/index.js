@@ -8,7 +8,7 @@ export const ConfirmModal = ({ open, text, onYES, onNO, onClose }) => {
                 <Typography textAlign="center" variant="h5">
                     {text}
                 </Typography>
-                <Stack direction="row" justifyContent="space-between">
+                <Stack direction="row" justifyContent="space-between" mt={4}>
                     <Button variant="contained" onClick={() => onNO && onNO()} color="error">
                         Ні
                     </Button>

@@ -1,23 +1,23 @@
-import { backendURL, getQuery, mock, query } from '../helpers';
+import { backendURL, getQuery, gql, mock, query } from '../helpers';
 
 import { actionPromise } from '../reducers';
 
 export const actionGoodById = ({ _id, promiseName = 'goodById' } = {}) =>
     actionPromise(
         promiseName,
-        fetch(`${backendURL}/goods/${_id}/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-
-                ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.errors) {
-                    throw new Error(JSON.stringify(data.errors));
-                } else return data.data;
-            })
+        gql(
+            `query GoodById($q:String){
+            GoodFindOne(query: $q){
+                _id name amount description price 
+                categories{
+                    _id name
+                }
+                images{
+                    _id
+                    url
+                }
+            }
+        }`,
+            { q: JSON.stringify([{ _id }]) }
+        )
     );

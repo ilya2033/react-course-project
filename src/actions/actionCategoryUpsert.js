@@ -4,10 +4,10 @@ import { actionPromise } from '../reducers';
 export const actionCategoryUpsert = (category) => async (dispatch) => {
     const formData = new FormData();
     category._id && formData.append('_id', category._id);
-    formData.append('name', category.name);
-    formData.append('goods', JSON.stringify(category.goods));
-    category.parent && formData.append('parent', JSON.stringify(category.parent));
-    formData.append('subcategories', JSON.stringify(category.subcategories));
+    category.name && formData.append('name', category.name);
+    category.goods && formData.append('goods', JSON.stringify(category.goods));
+    category.parent !== undefined && formData.append('parent', JSON.stringify(category.parent));
+    category.subcategories && formData.append('subcategories', JSON.stringify(category.subcategories));
     dispatch(
         actionPromise(
             'categoryUpsert',

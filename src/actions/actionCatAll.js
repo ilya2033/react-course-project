@@ -7,21 +7,29 @@ export const actionCatAll =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`${backendURL}/categories/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
-                    method: 'GET',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        accept: 'application/json',
-                        ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                    },
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.errors) {
-                            throw new Error(JSON.stringify(data.errors));
-                        } else return data.data;
-                    })
+                gql(
+                    `query CatAll($query:String){
+                        CategoryFind(query: $query){
+                            _id name
+                            parent{
+                                _id, name
+                            }
+                            subcategories{
+                                _id name
+                            }
+                        }
+                    }`,
+                    {
+                        query: JSON.stringify([
+                            {},
+                            {
+                                // sort: { name: 1 },
+                                limit: [!!limit ? limit : 100],
+                                skip: [skip],
+                            },
+                        ]),
+                    }
+                )
             )
         );
     };

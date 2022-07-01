@@ -14,7 +14,7 @@ const signInSchema = Yup.object().shape({
     password: Yup.string().required("Обов'язкове"),
 });
 
-export const AuthForm = ({ onSubmit = null, promiseStatus, serverErrors = [] } = {}) => {
+export const AuthForm = ({ onSubmit = null, promiseStatus, promisePayload, serverErrors = [] } = {}) => {
     const [showPassword, setShowPassword] = useState(false);
     const { setAlert } = useContext(UIContext);
     const navigate = useNavigate();
@@ -39,11 +39,19 @@ export const AuthForm = ({ onSubmit = null, promiseStatus, serverErrors = [] } =
     useEffect(() => {
         if (promiseStatus === 'FULFILLED') {
             formik.setSubmitting(false);
-            setAlert({
-                show: true,
-                severity: 'success',
-                message: 'Готово',
-            });
+            if (promisePayload) {
+                setAlert({
+                    show: true,
+                    severity: 'success',
+                    message: 'Готово',
+                });
+            } else {
+                setAlert({
+                    show: true,
+                    severity: 'error',
+                    message: 'Не вірні дані',
+                });
+            }
         }
         if (promiseStatus === 'REJECTED') {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
@@ -117,6 +125,7 @@ export const AuthForm = ({ onSubmit = null, promiseStatus, serverErrors = [] } =
 export const CAuthForm = connect(
     (state) => ({
         promiseStatus: state.promise?.login?.status || null,
+        promisePayload: state.promise?.login?.payload || null,
         serverErrors: state.promise?.login?.error || [],
     }),
     {

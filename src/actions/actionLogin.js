@@ -2,30 +2,23 @@ import { actionPromise } from '../reducers';
 import { backendURL, gql } from '../helpers';
 import { actionAuthLogin } from '../reducers';
 
-export const actionLogin = (login, password) => async (dispatch, getState) => {
-    const formData = new FormData();
-    formData.append('username', login);
-    formData.append('password', password);
-
+export const actionLogin = (username, password) => async (dispatch, getState) => {
     const token = await dispatch(
         actionPromise(
             'login',
-            fetch(`${backendURL}/auth/token/`, {
-                method: 'POST',
-                headers: {
-                    accept: 'application/json',
-                    ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                },
-                body: formData,
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.errors) {
-                        throw new Error(JSON.stringify(data.errors));
-                    } else return data.access;
-                })
+            gql(
+                `mutation Login($username:String!,$password:String!){
+                    tokenAuth(username:$username,password:$password){
+                        token
+                    }
+                }`,
+                { username, password }
+            )
         )
     );
-
-    dispatch(actionAuthLogin(token));
+    if (typeof token === 'string') {
+        dispatch(actionAuthLogin(token));
+    } else {
+        dispatch(actionAuthLogin(token.token));
+    }
 };

@@ -1,4 +1,4 @@
-import { backendURL, mock, query } from '../helpers';
+import { backendURL, mock, query, gql } from '../helpers';
 
 import { actionPromise } from '../reducers';
 
@@ -6,20 +6,20 @@ export const actionRootCats = () => async (dispatch, getState) => {
     dispatch(
         actionPromise(
             'rootCats',
-            fetch(`${backendURL}/categories/?isRoot=1`, {
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                },
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.errors) {
-                        throw new Error(JSON.stringify(data.errors));
-                    } else return data.data;
-                })
+            gql(
+                `query rootCats($query:String) {
+                CategoryFind(query: $query){
+                    _id name
+                }
+            }`,
+                {
+                    query: JSON.stringify([
+                        {
+                            parent: null,
+                        },
+                    ]),
+                }
+            )
         )
     );
 };

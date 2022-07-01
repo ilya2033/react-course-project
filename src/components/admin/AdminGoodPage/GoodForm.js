@@ -58,8 +58,8 @@ export const GoodForm = ({
 } = {}) => {
     const [inputCategories, setInputCategories] = useState([]);
     const [inputImages, setInputImages] = useState([]);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const { setAlert } = useContext(UIContext);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const formik = useFormik({

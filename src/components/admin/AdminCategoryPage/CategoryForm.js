@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import React, { useState, useEffect, useContext } from 'react';
 import Select from 'react-select';
 import { actionCategoryUpdate } from '../../../actions/actionCategoryUpdate';
@@ -8,6 +8,9 @@ import { UIContext } from '../../UIContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Error } from '../../common/Error';
+import { ConfirmModal } from '../../common/ConfirmModal';
+import { useNavigate } from 'react-router-dom';
+import { actionCategoryDelete } from '../../../actions/actionCategoryDelete';
 
 const categorySchema = Yup.object().shape({
     name: Yup.string().required("Обов'язкове"),
@@ -18,7 +21,9 @@ const CategoryForm = ({
     onSaveClick,
     onSave,
     onClose,
+    onDelete,
     promiseStatus,
+    deletePromiseStatus,
     catList: initialCatList = [],
     goodList = [],
     category = {},
@@ -29,7 +34,9 @@ const CategoryForm = ({
     const [subCatList, setSubCatList] = useState([]);
     const [parentList, setParentList] = useState([]);
     const { setAlert } = useContext(UIContext);
-
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
             name: category?.name || '',
@@ -77,6 +84,22 @@ const CategoryForm = ({
     }, [promiseStatus]);
 
     useEffect(() => {
+        if (deletePromiseStatus === 'FULFILLED') {
+            navigate('/admin/categories/');
+        }
+        if (deletePromiseStatus === 'REJECTED') {
+            setAlert({
+                show: true,
+                severity: 'error',
+                message: 'Помилка',
+            });
+        }
+        return () => {
+            dispatch(actionPromiseClear('categoryDelete'));
+        };
+    }, [deletePromiseStatus]);
+
+    useEffect(() => {
         let parentList = initialCatList.filter(
             ({ _id }) =>
                 !category?.subCatergories?.find((subCat) => _id === subCat._id) &&
@@ -103,10 +126,6 @@ const CategoryForm = ({
 
     return (
         <Box className="CategoryForm" component="form" onSubmit={formik.handleSubmit}>
-            {(serverErrors || []).map((error) => (
-                <Error>{error?.message}</Error>
-            ))}
-
             <Box>
                 <TextField
                     id="name"
@@ -143,30 +162,41 @@ const CategoryForm = ({
                     isMulti={true}
                 />
             </Box>
-            {
-                <Box sx={{ mt: 3 }}>
-                    <InputLabel className="form-label">Товари</InputLabel>
-                    <Select
-                        value={inputGoods?.map(({ _id, name }) => ({ value: _id, label: name }))}
-                        closeMenuOnSelect={false}
-                        onChange={(e) => setInputGoods(e.map(({ value, label }) => ({ _id: value, name: label })))}
-                        options={goodList?.map(({ _id, name }) => ({ value: _id, label: name }))}
-                        isMulti={true}
-                    />
-                </Box>
-            }
-            <Box direction="row" sx={{ mt: 3 }} justifyContent="flex-end">
-                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit" fullWidth>
+
+            <Box sx={{ mt: 3 }}>
+                <InputLabel className="form-label">Товари</InputLabel>
+                <Select
+                    value={inputGoods?.map(({ _id, name }) => ({ value: _id, label: name }))}
+                    closeMenuOnSelect={false}
+                    onChange={(e) => setInputGoods(e.map(({ value, label }) => ({ _id: value, name: label })))}
+                    options={goodList?.map(({ _id, name }) => ({ value: _id, label: name }))}
+                    isMulti={true}
+                />
+            </Box>
+            <Stack direction="row" sx={{ mt: 3 }} justifyContent="flex-end" spacing={1}>
+                {!!category._id && (
+                    <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} color="error">
+                        Видалити
+                    </Button>
+                )}
+                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit">
                     Зберегти
                 </Button>
-            </Box>
+            </Stack>
+            {!!category._id && (
+                <ConfirmModal
+                    open={isDeleteModalOpen}
+                    text="Видалити категорію?"
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    onNO={() => setIsDeleteModalOpen(false)}
+                    onYES={() => {
+                        onDelete(category._id);
+                    }}
+                />
+            )}
         </Box>
     );
 };
-
-// const CRegisterForm = connect((state) => ({ serverErrors: state.promise?.register?.error || [] }), {
-//     onRegister: (login, password) => actionRegister(login, password),
-// })(RegisterForm);
 
 export const CCategoryForm = connect(
     (state) => ({
@@ -174,9 +204,11 @@ export const CCategoryForm = connect(
         promiseStatus: state.promise.categoryUpsert?.status || null,
         serverErrors: state.promise.categoryUpsert?.error || null,
         goodList: state.promise.goodsAll?.payload || [],
+        deletePromiseStatus: state.promise.categoryDelete?.status || null,
     }),
     {
         onSave: (cat) => actionCategoryUpdate(cat),
         onClose: () => actionPromiseClear('categoryUpsert'),
+        onDelete: (_id) => actionCategoryDelete({ _id }),
     }
 )(CategoryForm);

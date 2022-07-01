@@ -13,6 +13,10 @@ const adminCategories = [
         _id: 'orders/',
         name: 'Замовлення',
     },
+    {
+        _id: 'tree/',
+        name: 'Дерево категорій',
+    },
 ];
 
 export const AdminCategories = () => <Categories categories={adminCategories} url="/admin/" />;

@@ -1,4 +1,4 @@
-import { backendURL, getQuery } from '../helpers';
+import { backendURL, getQuery, gql } from '../helpers';
 import { actionPromise } from '../reducers';
 
 export const actionGoodsAll =
@@ -7,20 +7,28 @@ export const actionGoodsAll =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(`${backendURL}/goods/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        accept: 'application/json',
-                        ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                    },
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.errors) {
-                            throw new Error(JSON.stringify(data.errors));
-                        } else return data.data;
-                    })
+                gql(
+                    `query GoodsAll($query:String){
+                        GoodFind(query: $query){
+                            _id name price images{
+                                _id url
+                            }
+                            categories{
+                                _id name
+                            }
+                            amount
+                        }
+                    }`,
+                    {
+                        query: JSON.stringify([
+                            {},
+                            {
+                                limit: !!limit ? limit : 100,
+                                skip: skip,
+                            },
+                        ]),
+                    }
+                )
             )
         );
     };

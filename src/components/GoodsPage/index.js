@@ -7,9 +7,13 @@ import { GoodList } from '../common/GoodList';
 import { SubCategories } from './SubCategories';
 import { SortOptions } from '../common/SortOptions';
 import { actionCatById } from '../../actions/actionCatById';
+import { useEffect } from 'react';
 
 const GoodsPage = ({ category = {} }) => {
     const { goods = [], name = '', subcategories = [] } = category || {};
+    useEffect(() => {
+        console.log(category);
+    }, [category]);
     const dispatch = useDispatch();
     return (
         <Box className="GoodsPage">
