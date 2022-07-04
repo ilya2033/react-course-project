@@ -7,25 +7,30 @@ export const actionOrdersAll =
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(
-                    `${backendURL}/orders/?limit=${limit}&skip=${skip}${orderBy && `&orderBy=` + orderBy}${
-                        status ? `&status=` + status : ''
+                gql(
+                    `query OrdersAll($query:String){
+                        OrderFind(query: $query){
+                            _id status price 
+                            owner{
+                                _id username
+                            }
+                            orderGoods{
+                                _id count good{
+                                    _id name price 
+                                }
+                            }
+                        }
                     }`,
                     {
-                        method: 'GET',
-                        headers: {
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                        },
+                        query: JSON.stringify([
+                            {},
+                            {
+                                limit: !!limit ? limit : 100,
+                                skip: skip,
+                            },
+                        ]),
                     }
                 )
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.errors) {
-                            throw new Error(JSON.stringify(data.errors));
-                        } else return data.data;
-                    })
             )
         );
     };

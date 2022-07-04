@@ -1,13 +1,13 @@
-import { actionLogin } from '../../actions/actionLogin';
+import { actionLogin } from "../../actions/actionLogin";
 
-import { useState, useEffect, useContext } from 'react';
-import { connect, useSelector } from 'react-redux';
-import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
-import { Box, Button, IconButton, TextField, Stack } from '@mui/material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { UIContext } from '../UIContext';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useContext } from "react";
+import { connect, useSelector } from "react-redux";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { Box, Button, IconButton, TextField, Stack } from "@mui/material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { UIContext } from "../UIContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const signInSchema = Yup.object().shape({
     username: Yup.string().required("Обов'язкове"),
@@ -18,16 +18,16 @@ export const AuthForm = ({ onSubmit = null, promiseStatus, promisePayload, serve
     const [showPassword, setShowPassword] = useState(false);
     const { setAlert } = useContext(UIContext);
     const navigate = useNavigate();
-    const token = useSelector((state) => state.auth?.token || null);
+    const isAdmin = useSelector((state) => state.auth?.payload?.sub?.acl || []).includes("admin");
 
-    if (token) {
-        navigate('/admin');
+    if (isAdmin) {
+        navigate("/admin");
     }
 
     const formik = useFormik({
         initialValues: {
-            username: '',
-            password: '',
+            username: "",
+            password: "",
         },
         validationSchema: signInSchema,
         validateOnChange: true,
@@ -37,28 +37,28 @@ export const AuthForm = ({ onSubmit = null, promiseStatus, promisePayload, serve
     });
 
     useEffect(() => {
-        if (promiseStatus === 'FULFILLED') {
+        if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
             if (promisePayload) {
                 setAlert({
                     show: true,
-                    severity: 'success',
-                    message: 'Готово',
+                    severity: "success",
+                    message: "Готово",
                 });
             } else {
                 setAlert({
                     show: true,
-                    severity: 'error',
-                    message: 'Не вірні дані',
+                    severity: "error",
+                    message: "Не вірні дані",
                 });
             }
         }
-        if (promiseStatus === 'REJECTED') {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
+        if (promiseStatus === "REJECTED") {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             setAlert({
                 show: true,
-                severity: 'error',
+                severity: "error",
                 message: errorMessage,
             });
         }
@@ -92,7 +92,7 @@ export const AuthForm = ({ onSubmit = null, promiseStatus, promisePayload, serve
                 name="password"
                 variant="outlined"
                 label="Password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 error={formik.touched.password && Boolean(formik.errors.password)}
                 value={formik.values.password}
                 onBlur={formik.handleBlur}

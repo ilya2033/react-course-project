@@ -15,9 +15,10 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: 100vw;
   overflow: auto;
   background-color: rgba(0,0,0,0.1);
+
 
 
   & .modalContent {
@@ -122,6 +123,12 @@
       & .ToolBar{
         padding-left: 50px;
         padding-right: 50px;
+
+        & .AvatarButton{
+          height: 46px;
+          width: 46px;
+        }
+
         & .Logo{
           width:50px;
           height:50px;
@@ -211,6 +218,17 @@
     flex:1;
     border:1px solid #C9C5CA ;
 
+    & .DashboardPage{
+      padding: 20px;
+      & .DashboardOrder{
+        padding:20px;
+        & .DashboardOrderGood{
+          & img{
+           width:100%;
+          }
+        }
+      }
+    }
 
     & .AdminLayoutPage{
       padding: 10px;

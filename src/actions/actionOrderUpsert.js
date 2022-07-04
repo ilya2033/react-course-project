@@ -1,35 +1,37 @@
-import { backendURL } from '../helpers';
-import { actionPromise } from '../reducers';
+import { backendURL, gql } from "../helpers";
+import { actionCartClear, actionPromise } from "../reducers";
 
-export const actionOrderUpsert = (order) => async (dispatch) => {
-    const formData = new FormData();
-    order._id && formData.append('_id', order._id);
-    formData.append('orderGoods', JSON.stringify(order.orderGoods || []));
-    formData.append('email', order.email);
-    formData.append('phoneNumber', order.phoneNumber);
-    formData.append('address', order.address);
-    formData.append('delivery', order.delivery);
-    formData.append('name', order.name);
-    formData.append('surname', order.surname);
-    formData.append('status', order.status);
+export const actionOrderUpsert = (orderGoods) => async (dispatch, getState) => {
+  if (!orderGoods.length) {
+    return;
+  }
+  await dispatch(
+    actionPromise(
+      "orderUpsert",
+      gql(
+        `mutation newOrder($order:OrderInput!){
+        OrderUpsert(order:$order){
+          _id price
+        }
+      }
+      `,
+        {
+          order: {
+            orderGoods: orderGoods.map((orderGood) => ({
+              count: orderGood.count,
+              good: { _id: orderGood.good._id },
+            })),
+          },
+        }
+      )
+    )
+  );
+  let {
+    promise: { orderUpsert },
+  } = getState();
 
-    dispatch(
-        actionPromise(
-            'orderUpsert',
-            fetch(`${backendURL}/order/`, {
-                method: 'POST',
-                headers: {
-                    accept: 'application/json',
-                    ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                },
-                body: formData,
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.errors) {
-                        throw new Error(JSON.stringify(data.errors));
-                    } else return data.data;
-                })
-        )
-    );
+  if (orderUpsert.status === "FULFILLED") {
+    dispatch(actionCartClear());
+    // dispatch(actionOrders(token));
+  }
 };
