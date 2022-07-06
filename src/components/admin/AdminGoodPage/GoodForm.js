@@ -1,11 +1,11 @@
-import { connect, useDispatch } from 'react-redux';
-import React, { useState, useEffect, useContext } from 'react';
-import { actionPromise, actionPromiseClear } from '../../../reducers';
-import Select from 'react-select';
-import { actionGoodUpdate } from '../../../actions/actionGoodUpdate';
-import { EntityEditor } from '../../common/EntityEditor';
-import { actionUploadFiles } from '../../../actions/actionUploadFiles';
-import { UIContext } from '../../UIContext';
+import { connect, useDispatch } from "react-redux";
+import React, { useState, useEffect, useContext } from "react";
+import { actionPromise, actionPromiseClear } from "../../../reducers";
+import Select from "react-select";
+import { actionGoodUpdate } from "../../../actions/actionGoodUpdate";
+import { EntityEditor } from "../../common/EntityEditor";
+import { actionUploadFiles } from "../../../actions/actionUploadFiles";
+import { UIContext } from "../../UIContext";
 import {
     Alert,
     Box,
@@ -20,19 +20,19 @@ import {
     TextareaAutosize,
     TextField,
     Typography,
-} from '@mui/material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { Error } from '../../common/Error';
-import { ConfirmModal } from '../../common/ConfirmModal';
-import { actionGoodDelete } from '../../../actions/actionGoodDelete';
-import { Navigate, useNavigate } from 'react-router-dom';
+} from "@mui/material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Error } from "../../common/Error";
+import { ConfirmModal } from "../../common/ConfirmModal";
+import { actionGoodDelete } from "../../../actions/actionGoodDelete";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const goodSchema = Yup.object().shape({
     name: Yup.string().required("Обов'язкове"),
     description: Yup.string().required("Обов'язкове"),
-    price: Yup.number().min(0, 'більше або равно 0').required("Обов'язкове"),
-    amount: Yup.number().min(0, 'більше або равно 0').required("Обов'язкове"),
+    price: Yup.number().min(0, "більше або равно 0").required("Обов'язкове"),
+    amount: Yup.number().min(0, "більше або равно 0").required("Обов'язкове"),
 });
 
 const CGoodEditor = connect(
@@ -64,8 +64,8 @@ export const GoodForm = ({
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
-            name: '',
-            description: '',
+            name: "",
+            description: "",
             price: 0,
             amount: 0,
         },
@@ -86,48 +86,48 @@ export const GoodForm = ({
     });
 
     useEffect(() => {
-        if (promiseStatus === 'FULFILLED') {
+        if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
             setAlert({
                 show: true,
-                severity: 'success',
-                message: 'Готово',
+                severity: "success",
+                message: "Готово",
             });
         }
-        if (promiseStatus === 'REJECTED') {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
+        if (promiseStatus === "REJECTED") {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             setAlert({
                 show: true,
-                severity: 'error',
+                severity: "error",
                 message: errorMessage,
             });
         }
     }, [promiseStatus]);
 
     useEffect(() => {
-        if (deletePromiseStatus === 'FULFILLED') {
-            navigate('/admin/goods/');
+        if (deletePromiseStatus === "FULFILLED") {
+            navigate("/admin/goods/");
         }
-        if (deletePromiseStatus === 'REJECTED') {
+        if (deletePromiseStatus === "REJECTED") {
             setAlert({
                 show: true,
-                severity: 'error',
-                message: 'Помилка',
+                severity: "error",
+                message: "Помилка",
             });
         }
         return () => {
-            dispatch(actionPromiseClear('goodDelete'));
+            dispatch(actionPromiseClear("goodDelete"));
         };
     }, [deletePromiseStatus]);
 
     useEffect(() => {
         setInputCategories(good?.categories || []);
         setInputImages(good?.images || []);
-        formik.setFieldValue('name', good.name || '');
-        formik.setFieldValue('description', good.description || '');
-        formik.setFieldValue('amount', good.amount || 0);
-        formik.setFieldValue('price', good.price || 0);
+        formik.setFieldValue("name", good.name || "");
+        formik.setFieldValue("description", good.description || "");
+        formik.setFieldValue("amount", good.amount || 0);
+        formik.setFieldValue("price", good.price || 0);
     }, [good.categories, good.name, good.description, good.amount, good.price]);
 
     useEffect(() => {
@@ -239,7 +239,7 @@ export const GoodForm = ({
                     onClose={() => setIsDeleteModalOpen(false)}
                     onNO={() => setIsDeleteModalOpen(false)}
                     onYES={() => {
-                        onDelete(good._id);
+                        onDelete(good);
                     }}
                 />
             )}
@@ -257,7 +257,7 @@ export const CGoodForm = connect(
     }),
     {
         onSave: (good) => actionGoodUpdate(good),
-        onClose: () => actionPromiseClear('goodUpsert'),
-        onDelete: (_id) => actionGoodDelete({ _id }),
+        onClose: () => actionPromiseClear("goodUpsert"),
+        onDelete: (good) => actionGoodDelete({ good }),
     }
 )(GoodForm);

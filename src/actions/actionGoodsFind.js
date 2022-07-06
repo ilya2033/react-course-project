@@ -1,29 +1,35 @@
-import { backendURL } from '../helpers';
-import { actionPromise } from '../reducers';
+import { backendURL, gql } from "../helpers";
+import { actionPromise } from "../reducers";
 
 export const actionGoodsFind =
-    ({ text = '', limit = 7, skip = 0, promiseName = 'goodsFind', orderBy = '' }) =>
+    ({ text = "", limit = 7, skip = 0, promiseName = "goodsFind", orderBy = "_id" }) =>
     async (dispatch, getState) => {
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(
-                    `${backendURL}/goods/?limit=${limit}&skip=${skip}&text=${text}${orderBy && `&orderBy=` + orderBy}`,
+                gql(
+                    `query GoodsFind($query:String){
+                        GoodFind(query: $query){
+                            _id name price images{
+                                _id url
+                            }
+                            categories{
+                                _id name
+                            }
+                            amount
+                        }
+                    }`,
                     {
-                        method: 'GET',
-                        headers: {
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                        },
+                        query: JSON.stringify([
+                            { name__contains: text },
+                            {
+                                limit: !!limit ? limit : 5,
+                                skip,
+                                orderBy,
+                            },
+                        ]),
                     }
                 )
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.errors) {
-                            throw new Error(JSON.stringify(data.errors));
-                        } else return data.data;
-                    })
             )
         );
     };

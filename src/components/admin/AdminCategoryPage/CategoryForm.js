@@ -1,16 +1,16 @@
-import { connect, useDispatch } from 'react-redux';
-import React, { useState, useEffect, useContext } from 'react';
-import Select from 'react-select';
-import { actionCategoryUpdate } from '../../../actions/actionCategoryUpdate';
-import { actionPromise, actionPromiseClear, store } from '../../../reducers';
-import { Alert, Box, Button, InputLabel, Snackbar, Stack, TextField, Typography } from '@mui/material';
-import { UIContext } from '../../UIContext';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { Error } from '../../common/Error';
-import { ConfirmModal } from '../../common/ConfirmModal';
-import { useNavigate } from 'react-router-dom';
-import { actionCategoryDelete } from '../../../actions/actionCategoryDelete';
+import { connect, useDispatch } from "react-redux";
+import React, { useState, useEffect, useContext } from "react";
+import Select from "react-select";
+import { actionCategoryUpdate } from "../../../actions/actionCategoryUpdate";
+import { actionPromise, actionPromiseClear, store } from "../../../reducers";
+import { Alert, Box, Button, InputLabel, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { UIContext } from "../../UIContext";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Error } from "../../common/Error";
+import { ConfirmModal } from "../../common/ConfirmModal";
+import { useNavigate } from "react-router-dom";
+import { actionCategoryDelete } from "../../../actions/actionCategoryDelete";
 
 const categorySchema = Yup.object().shape({
     name: Yup.string().required("Обов'язкове"),
@@ -39,7 +39,7 @@ const CategoryForm = ({
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
-            name: category?.name || '',
+            name: category?.name || "",
         },
         validationSchema: categorySchema,
         validateOnChange: true,
@@ -57,45 +57,45 @@ const CategoryForm = ({
     });
 
     useEffect(() => {
-        formik.setFieldValue('name', category.name || '');
+        formik.setFieldValue("name", category.name || "");
         setInputParent(category?.parent || null);
         setInputGoods(category?.goods || []);
         setInputSubcategories(category?.subcategories || []);
     }, [category]);
 
     useEffect(() => {
-        if (promiseStatus === 'FULFILLED') {
+        if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
             setAlert({
                 show: true,
-                severity: 'success',
-                message: 'Готово',
+                severity: "success",
+                message: "Готово",
             });
         }
-        if (promiseStatus === 'REJECTED') {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + '\n' + curr.message, '');
+        if (promiseStatus === "REJECTED") {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             setAlert({
                 show: true,
-                severity: 'error',
+                severity: "error",
                 message: errorMessage,
             });
         }
     }, [promiseStatus]);
 
     useEffect(() => {
-        if (deletePromiseStatus === 'FULFILLED') {
-            navigate('/admin/categories/');
+        if (deletePromiseStatus === "FULFILLED") {
+            navigate("/admin/categories/");
         }
-        if (deletePromiseStatus === 'REJECTED') {
+        if (deletePromiseStatus === "REJECTED") {
             setAlert({
                 show: true,
-                severity: 'error',
-                message: 'Помилка',
+                severity: "error",
+                message: "Помилка",
             });
         }
         return () => {
-            dispatch(actionPromiseClear('categoryDelete'));
+            dispatch(actionPromiseClear("categoryDelete"));
         };
     }, [deletePromiseStatus]);
 
@@ -106,7 +106,7 @@ const CategoryForm = ({
                 _id !== category?._id &&
                 !inputSubcategories?.find((subCat) => _id === subCat._id)
         );
-        parentList = [...[{ _id: null, name: 'null' }], ...parentList];
+        parentList = [...[{ _id: null, name: "null" }], ...parentList];
 
         setParentList(parentList);
     }, [inputSubcategories]);
@@ -146,7 +146,7 @@ const CategoryForm = ({
             <Box sx={{ mt: 3 }}>
                 <InputLabel className="form-label">Батьківська категорія</InputLabel>
                 <Select
-                    value={{ value: inputParent?._id || null, label: inputParent?.name || 'null' }}
+                    value={{ value: inputParent?._id || null, label: inputParent?.name || "null" }}
                     onChange={(e) => setInputParent({ _id: e.value, name: e.label })}
                     options={parentList.map(({ _id, name }) => ({ value: _id, label: name }))}
                 />
@@ -190,7 +190,7 @@ const CategoryForm = ({
                     onClose={() => setIsDeleteModalOpen(false)}
                     onNO={() => setIsDeleteModalOpen(false)}
                     onYES={() => {
-                        onDelete(category._id);
+                        onDelete(category);
                     }}
                 />
             )}
@@ -208,7 +208,7 @@ export const CCategoryForm = connect(
     }),
     {
         onSave: (cat) => actionCategoryUpdate(cat),
-        onClose: () => actionPromiseClear('categoryUpsert'),
-        onDelete: (_id) => actionCategoryDelete({ _id }),
+        onClose: () => actionPromiseClear("categoryUpsert"),
+        onDelete: (category) => actionCategoryDelete({ category }),
     }
 )(CategoryForm);

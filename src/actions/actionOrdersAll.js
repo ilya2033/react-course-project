@@ -1,8 +1,8 @@
-import { actionPromise } from '../reducers';
-import { backendURL, gql } from '../helpers';
+import { actionPromise } from "../reducers";
+import { backendURL, gql } from "../helpers";
 
 export const actionOrdersAll =
-    ({ limit = 0, skip = 0, promiseName = 'adminOrdersAll', orderBy = '', status = 0 } = {}) =>
+    ({ limit = 0, skip = 0, promiseName = "adminOrdersAll", orderBy = "_id", status = 0 } = {}) =>
     async (dispatch, getState) => {
         dispatch(
             actionPromise(
@@ -23,10 +23,13 @@ export const actionOrdersAll =
                     }`,
                     {
                         query: JSON.stringify([
-                            {},
+                            {
+                                status,
+                            },
                             {
                                 limit: !!limit ? limit : 100,
                                 skip: skip,
+                                orderBy,
                             },
                         ]),
                     }

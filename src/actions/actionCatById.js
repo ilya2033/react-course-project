@@ -1,12 +1,12 @@
-import { backendURL, mock, query, gql } from '../helpers';
+import { backendURL, mock, query, gql } from "../helpers";
 
-import { actionPromise } from '../reducers';
+import { actionPromise } from "../reducers";
 
-export const actionCatById = ({ _id, promiseName = 'catById', orderBy = '', limit = 20, skip = 0 }) =>
+export const actionCatById = ({ _id, promiseName = "catById", orderBy = "", limit = 20, skip = 0 }) =>
     actionPromise(
         promiseName,
         gql(
-            `query CatAll($q:String){
+            `query CatById($q:String){
                 CategoryFindOne(query: $q){
                     _id name
                     parent{
@@ -20,6 +20,6 @@ export const actionCatById = ({ _id, promiseName = 'catById', orderBy = '', limi
                     }
                 }
             }`,
-            { q: JSON.stringify([{ _id }]) }
+            { q: JSON.stringify([{ _id }, { limit: !!limit ? limit : 5, skip, goods_order: orderBy }]) }
         )
     );

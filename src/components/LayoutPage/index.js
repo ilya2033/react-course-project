@@ -5,6 +5,7 @@ import { Navigate, Route, Routes, useLocation, useParams } from "react-router-do
 import { actionCatById } from "../../actions/actionCatById";
 import { actionGoodById } from "../../actions/actionGoodById";
 import { actionGoodsFind } from "../../actions/actionGoodsFind";
+import { actionOrders } from "../../actions/actionOrders";
 import { AdminLayoutPage } from "../admin/AdminLayoutPage";
 import { CCartPage } from "../CartPage";
 import { Error404 } from "../common/Error404";
@@ -35,6 +36,13 @@ const GoodPageContainer = () => {
 
     dispatch(actionGoodById({ _id: params._id }));
     return <GoodPage />;
+};
+
+const DashboardPageContainer = () => {
+    const dispatch = useDispatch();
+
+    dispatch(actionOrders());
+    return <CDashboardPage />;
 };
 
 const CGoodsList = connect((state) => ({ goods: state.promise?.pageGoodsFind?.payload || [] }))(GoodList);
@@ -91,7 +99,7 @@ export const LayoutPage = () => {
                                 exact
                                 element={
                                     <CProtectedRoute roles={["user"]} fallback="/auth">
-                                        <CDashboardPage />
+                                        <DashboardPageContainer />
                                     </CProtectedRoute>
                                 }
                             />

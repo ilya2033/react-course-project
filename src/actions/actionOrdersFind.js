@@ -1,29 +1,31 @@
-import { backendURL } from '../helpers';
-import { actionPromise } from '../reducers';
+import { backendURL, gql } from "../helpers";
+import { actionPromise } from "../reducers";
 
 export const actionOrdersFind =
-    ({ text = '', limit = 7, skip = 0, promiseName = 'ordersFind', orderBy = '' }) =>
+    ({ text = "", limit = 7, skip = 0, promiseName = "ordersFind" }) =>
     async (dispatch, getState) => {
         dispatch(
             actionPromise(
                 promiseName,
-                fetch(
-                    `${backendURL}/orders/?limit=${limit}&skip=${skip}&text=${text}${orderBy && `&orderBy=` + orderBy}`,
+                gql(
+                    `query OrdersFind($query:String){
+                        OrderFind(query: $query){
+                            _id status price 
+                            owner{
+                                _id username
+                            }
+                        }
+                    }`,
                     {
-                        method: 'GET',
-                        headers: {
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-                        },
+                        query: JSON.stringify([
+                            { name__contains: text },
+                            {
+                                limit: !!limit ? limit : 5,
+                                skip,
+                            },
+                        ]),
                     }
                 )
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.errors) {
-                            throw new Error(JSON.stringify(data.errors));
-                        } else return data.data;
-                    })
             )
         );
     };

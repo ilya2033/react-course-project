@@ -1,23 +1,17 @@
-import { backendURL, getQuery, mock, query } from '../helpers';
+import { backendURL, getQuery, gql, mock, query } from "../helpers";
 
-import { actionPromise } from '../reducers';
+import { actionPromise } from "../reducers";
 
-export const actionOrderDelete = ({ _id, promiseName = 'orderDelete' } = {}) =>
+export const actionOrderDelete = ({ order, promiseName = "orderDelete" } = {}) =>
     actionPromise(
         promiseName,
-        fetch(`${backendURL}/order/${_id}/delete/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-
-                ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.errors) {
-                    throw new Error(JSON.stringify(data.errors));
-                } else return data.data;
-            })
+        gql(
+            `mutation OrderDelete($order:OrderInput!){
+            OrderDelete(order:$order){
+              _id price
+            }
+          }
+      `,
+            { order }
+        )
     );

@@ -1,22 +1,16 @@
-import { backendURL, getQuery, gql } from "../helpers";
 import { actionPromise } from "../reducers";
+import { backendURL, gql } from "../helpers";
 
-export const actionGoodsAll =
-    ({ limit = 20, skip = 0, promiseName = "goodsAll", orderBy = "_id" } = {}) =>
+export const actionUsersAll =
+    ({ limit = 0, skip = 0, promiseName = "adminUsersAll", orderBy = "_id" } = {}) =>
     async (dispatch, getState) => {
         dispatch(
             actionPromise(
                 promiseName,
                 gql(
-                    `query GoodsAll($query:String){
-                        GoodFind(query: $query){
-                            _id name price images{
-                                _id url
-                            }
-                            categories{
-                                _id name
-                            }
-                            amount
+                    `query OUsersAll($query:String){
+                        UserFind(query: $query){
+                            _id username 
                         }
                     }`,
                     {

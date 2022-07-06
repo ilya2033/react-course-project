@@ -1,11 +1,11 @@
-import { backendURL, mock, query, gql } from '../helpers';
+import { backendURL, mock, query, gql } from "../helpers";
 
-import { actionPromise } from '../reducers';
+import { actionPromise } from "../reducers";
 
 export const actionGoodsPopular = () => async (dispatch, getState) => {
     dispatch(
         actionPromise(
-            'goodsPopular',
+            "goodsPopular",
             gql(
                 `query GoodsPopular($query:String){
                     GoodFind(query: $query){
@@ -19,7 +19,8 @@ export const actionGoodsPopular = () => async (dispatch, getState) => {
                     query: JSON.stringify([
                         {},
                         {
-                            sort: 'popular',
+                            limit: 15,
+                            orderBy: "popular",
                         },
                     ]),
                 }

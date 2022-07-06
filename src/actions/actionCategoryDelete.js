@@ -1,23 +1,25 @@
-import { backendURL, getQuery, mock, query } from '../helpers';
+import { backendURL, getQuery, gql, mock, query } from "../helpers";
 
-import { actionPromise } from '../reducers';
+import { actionPromise } from "../reducers";
 
-export const actionCategoryDelete = ({ _id, promiseName = 'categoryDelete' } = {}) =>
+export const actionCategoryDelete = ({ category, promiseName = "categoryDelete" } = {}) =>
     actionPromise(
         promiseName,
-        fetch(`${backendURL}/category/${_id}/delete/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-
-                ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.errors) {
-                    throw new Error(JSON.stringify(data.errors));
-                } else return data.data;
-            })
+        gql(
+            `mutation CatDelete($category:CategoryInput!){
+                CategoryDelete(category:$category){
+                    _id name
+                    parent{
+                        _id, name
+                    }
+                    subcategories{
+                        _id name
+                    }
+                    goods{
+                        _id name price amount
+                    }
+                }
+            }`,
+            { category }
+        )
     );

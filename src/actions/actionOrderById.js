@@ -1,23 +1,27 @@
-import { backendURL, mock, query } from '../helpers';
+import { backendURL, gql, mock, query } from "../helpers";
 
-import { actionPromise } from '../reducers';
+import { actionPromise } from "../reducers";
 
-export const actionOrderById = ({ _id, promiseName = 'orderById' }) =>
+export const actionOrderById = ({ _id, promiseName = "orderById" }) =>
     actionPromise(
         promiseName,
-        fetch(`${backendURL}/orders/${_id}/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
+        gql(
+            `query OrderById($q:String){
+                OrderFindOne(query: $q){
+                _id status
+                owner{
+                    _id username
+                }
+                orderGoods{
+                    _id
+                    good{
+                        _id name
+                    }
+                    count
 
-                ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.errors) {
-                    throw new Error(JSON.stringify(data.errors));
-                } else return data.data;
-            })
+                }
+            }
+        }`,
+            { q: JSON.stringify([{ _id }]) }
+        )
     );
