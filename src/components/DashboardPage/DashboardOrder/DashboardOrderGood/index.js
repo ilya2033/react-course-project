@@ -1,4 +1,5 @@
 import { Box, Grid, Typography } from "@mui/material";
+import { backendURL } from "../../../../helpers";
 import defaultGoodImage from "../../../../images/default-good-image.png";
 
 export const DashboardOrderGood = ({ orderGood }) => {
@@ -7,7 +8,7 @@ export const DashboardOrderGood = ({ orderGood }) => {
         <Box className="DashboardOrderGood">
             <Grid container spacing={4}>
                 <Grid item xs={2}>
-                    <Box component="img" src={good?.images[0]?.url ? `/${good?.images[0]?.url}` : defaultGoodImage} />
+                    <Box component="img" src={good?.images[0]?.url ? `${backendURL}/${good?.images[0]?.url}` : defaultGoodImage} />
                 </Grid>
                 <Grid item xs={10}>
                     <Typography textAlign="left">Назва: {good?.name || "-"}</Typography>

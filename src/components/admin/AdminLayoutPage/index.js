@@ -31,10 +31,12 @@ const AdminCategoryPageContainer = ({}) => {
 
     useEffect(() => {
         dispatch(actionGoodsAll());
+        dispatch(actionCatAll());
 
         return () => {
             dispatch(actionPromiseClear("goodsAll"));
             dispatch(actionPromiseClear("adminCatById"));
+            dispatch(actionPromiseClear("catAll"));
         };
     }, []);
 

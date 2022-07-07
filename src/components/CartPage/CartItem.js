@@ -5,6 +5,7 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { actionCartChange } from "../../reducers";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { backendURL } from "../../helpers";
 
 const { Typography, Stack, IconButton, TextField, ButtonGroup, Button, TableCell, TableRow, Input } = require("@mui/material");
 
@@ -34,7 +35,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
             <TableCell>
                 <Box
                     component="img"
-                    src={images && images[0]?.url ? `/${images ? images[0]?.url : ""}` : defaultGoodImage}
+                    src={images && images[0]?.url ? `${backendURL}/${images ? images[0]?.url : ""}` : defaultGoodImage}
                     sx={{ width: 50 }}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null;

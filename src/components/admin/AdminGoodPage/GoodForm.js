@@ -45,8 +45,10 @@ export const GoodForm = ({
     const [inputImages, setInputImages] = useState([]);
     const { setAlert } = useContext(UIContext);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -67,12 +69,14 @@ export const GoodForm = ({
             goodToSave.images = inputImages?.map(({ _id }) => ({ _id })) || [];
             onSaveClick && onSaveClick();
             onSave(goodToSave);
+            setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
     });
 
     useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "success",
@@ -82,6 +86,7 @@ export const GoodForm = ({
         if (promiseStatus === "REJECTED") {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",
@@ -92,9 +97,11 @@ export const GoodForm = ({
 
     useEffect(() => {
         if (deletePromiseStatus === "FULFILLED") {
+            setPromiseTimeOut(null);
             navigate("/admin/goods/");
         }
         if (deletePromiseStatus === "REJECTED") {
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",
@@ -225,6 +232,7 @@ export const GoodForm = ({
                     onNO={() => setIsDeleteModalOpen(false)}
                     onYES={() => {
                         onDelete(good);
+                        setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
                     }}
                 />
             )}

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import defaultGoodImage from "../../../images/default-good-image.png";
 
 import { Grid, Box, Typography } from "@mui/material";
+import { backendURL } from "../../../helpers";
 const SearchGoodResultItem = ({ good, onClick, link = "" } = {}) => {
     const { _id = 0, images = [], name = "", description = "", price = "" } = good || {};
 
@@ -17,7 +18,7 @@ const SearchGoodResultItem = ({ good, onClick, link = "" } = {}) => {
             <Grid item xs={3}>
                 <Box
                     component="img"
-                    src={images ? `/${images[0]?.url}` : defaultGoodImage}
+                    src={images ? `${backendURL}/${images[0]?.url}` : defaultGoodImage}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping
                         currentTarget.src = defaultGoodImage;

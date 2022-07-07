@@ -202,7 +202,7 @@ const CategoryForm = ({
                     onNO={() => setIsDeleteModalOpen(false)}
                     onYES={() => {
                         onDelete(category);
-                        setPromiseTimeOut(setTimeout(() => formik.isSubmitting(false), 3000));
+                        setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
                     }}
                 />
             )}

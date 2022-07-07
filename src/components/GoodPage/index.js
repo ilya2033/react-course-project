@@ -4,6 +4,7 @@ import defaultGoodImage from "../../images/default-good-image.png";
 import { Divider, Grid, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Carousel } from "react-responsive-carousel";
+import { backendURL } from "../../helpers";
 
 export const GoodPage = () => {
     const good = useSelector((state) => state.promise?.goodById?.payload || {});
@@ -16,7 +17,7 @@ export const GoodPage = () => {
                         {(good.images || [{ _id: 0, url: defaultGoodImage }]).map((image) => (
                             <img
                                 key={image?._id}
-                                src={image?.url ? `/${image?.url}` : defaultGoodImage}
+                                src={image?.url ? `${backendURL}/${image?.url}` : defaultGoodImage}
                                 onError={({ currentTarget }) => {
                                     currentTarget.onerror = null; // prevents looping
                                     currentTarget.src = defaultGoodImage;
