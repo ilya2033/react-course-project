@@ -28,7 +28,16 @@ import { actionUsersAll } from "../../../actions/actionUsersAll";
 const AdminCategoryPageContainer = ({}) => {
     const dispatch = useDispatch();
     const params = useParams();
-    dispatch(actionGoodsAll());
+
+    useEffect(() => {
+        dispatch(actionGoodsAll());
+
+        return () => {
+            dispatch(actionPromiseClear("goodsAll"));
+            dispatch(actionPromiseClear("adminCatById"));
+        };
+    }, []);
+
     useEffect(() => {
         if (params._id) {
             dispatch(actionCatById({ _id: params._id, promiseName: "adminCatById" }));
@@ -123,7 +132,16 @@ const AdminCategoriesSearchPageContainer = () => {
 const AdminGoodPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    dispatch(actionCatAll());
+
+    useEffect(() => {
+        dispatch(actionCatAll());
+
+        return () => {
+            dispatch(actionPromiseClear("goodsCatAll"));
+            dispatch(actionPromiseClear("adminGoodById"));
+        };
+    }, []);
+
     useEffect(() => {
         if (params._id) {
             dispatch(actionGoodById({ _id: params._id, promiseName: "adminGoodById" }));
@@ -300,14 +318,20 @@ const AdminOrdersSearchPageContainer = () => {
 const AdminOrderPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    dispatch(actionPromiseClear("adminOrderById"));
-    dispatch(actionUsersAll());
-    dispatch(actionGoodsAll());
+
+    useEffect(() => {
+        dispatch(actionPromiseClear("adminOrderById"));
+        dispatch(actionUsersAll());
+        dispatch(actionGoodsAll());
+        return () => {
+            dispatch(actionPromiseClear("usersAll"));
+            dispatch(actionPromiseClear("goodsAll"));
+            dispatch(actionPromiseClear("adminOrderById"));
+        };
+    }, []);
     useEffect(() => {
         if (params._id) {
             dispatch(actionOrderById({ _id: params._id, promiseName: "adminOrderById" }));
-        } else {
-            dispatch(actionOrderById("adminOrderById"));
         }
     }, [params._id]);
     return <CAdminOrderPage />;

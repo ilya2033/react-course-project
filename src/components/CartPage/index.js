@@ -64,7 +64,7 @@ export const CartPage = ({ onConfirm, promiseStatus, serverErrors }) => {
 
                         <TableRow>
                             <TableCell colSpan={3}>
-                                <Typography variant="body1" bold>
+                                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
                                     Всього:
                                 </Typography>
                             </TableCell>

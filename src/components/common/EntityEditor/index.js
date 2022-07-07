@@ -35,31 +35,33 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
             <DropZone onFileDrop={(files) => onFileDrop(files)}>
                 <Typography>Drop images here!</Typography>
             </DropZone>
-            <SortableList pressDelay={200} onSortEnd={onSortEnd} axis="xy" className="SortableContainer">
-                <ImageList sx={{ maxHeight: 800 }} cols={3} fullwidth>
-                    {state.images?.map(
-                        (image, index) =>
-                            !!image?._id &&
-                            !!image?.url && (
-                                <SortableItem key={`item-${image._id}`} index={index}>
-                                    <ImageListItem key={image._id}>
-                                        <ImageListItemBar
-                                            sx={{
-                                                background: "rgba(0,0,0,0.1)",
-                                            }}
-                                            actionIcon={
-                                                <IconButton onClick={() => onItemRemove(image._id)}>
-                                                    <MdClose />
-                                                </IconButton>
-                                            }
-                                        />
-                                        <Box component="img" className="DropZoneImage" src={`/${image.url}`} loading="lazy" />
-                                    </ImageListItem>
-                                </SortableItem>
-                            )
-                    )}
-                </ImageList>
-            </SortableList>
+            {!!state?.images?.length && (
+                <SortableList pressDelay={200} onSortEnd={onSortEnd} axis="xy" className="SortableContainer">
+                    <ImageList sx={{ maxHeight: 800 }} cols={3} fullwidth="true">
+                        {state.images?.map(
+                            (image, index) =>
+                                !!image?._id &&
+                                !!image?.url && (
+                                    <SortableItem key={`item-${image._id}`} index={index}>
+                                        <ImageListItem key={image._id}>
+                                            <ImageListItemBar
+                                                sx={{
+                                                    background: "rgba(0,0,0,0.1)",
+                                                }}
+                                                actionIcon={
+                                                    <IconButton onClick={() => onItemRemove(image._id)}>
+                                                        <MdClose />
+                                                    </IconButton>
+                                                }
+                                            />
+                                            <Box component="img" className="DropZoneImage" src={`/${image.url}`} loading="lazy" />
+                                        </ImageListItem>
+                                    </SortableItem>
+                                )
+                        )}
+                    </ImageList>
+                </SortableList>
+            )}
             {!!onSave && (
                 <Button
                     onClick={() => {

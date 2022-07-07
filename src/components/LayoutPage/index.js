@@ -118,15 +118,19 @@ const GoodsSearchPageContainer = () => {
 const GoodPageContainer = () => {
     const params = useParams();
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(actionGoodById({ _id: params._id }));
+    }, []);
 
-    dispatch(actionGoodById({ _id: params._id }));
     return <GoodPage />;
 };
 
 const DashboardPageContainer = () => {
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(actionOrders());
+    }, []);
 
-    dispatch(actionOrders());
     return <CDashboardPage />;
 };
 

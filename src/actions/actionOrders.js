@@ -6,9 +6,10 @@ export const actionOrders =
         dispatch(
             actionPromise(
                 promiseName,
-                gql(`
-            query orders{
-                OrderFind(query:"[{}]"){
+                gql(
+                    `
+            query orders($query:String){
+                OrderFind(query:$query){
                     _id price createdAt status 
                     orderGoods{
                         _id count price good{
@@ -19,6 +20,8 @@ export const actionOrders =
                     }
                 }
             }
-          `)
+          `,
+                    { query: JSON.stringify([{}, { orderBy: "-createdAt", limit: 200 }]) }
+                )
             )
         );

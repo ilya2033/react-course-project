@@ -31,6 +31,8 @@ export const SearchBar = ({
         onSearchButtonClick(inputValue);
         setInputValue("");
         onSearchEnd && onSearchEnd();
+        setIsChildrenOpen(false);
+        setTouched(false);
     };
 
     useEffect(() => {

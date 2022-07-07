@@ -34,10 +34,10 @@ export const CartItem = ({ order, onDeleteClick }) => {
             <TableCell>
                 <Box
                     component="img"
-                    src={images && images[0]?.url ? `${images ? images[0]?.url : ""}` : defaultGoodImage}
+                    src={images && images[0]?.url ? `/${images ? images[0]?.url : ""}` : defaultGoodImage}
                     sx={{ width: 50 }}
                     onError={({ currentTarget }) => {
-                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.onerror = null;
                         currentTarget.src = defaultGoodImage;
                     }}
                 />

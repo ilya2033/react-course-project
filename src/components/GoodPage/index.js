@@ -13,9 +13,10 @@ export const GoodPage = () => {
             <Grid container spacing={4} className="images">
                 <Grid item xs={12} md={4}>
                     <Carousel showIndicators={false} showStatus={false} showArrows={true}>
-                        {(good.images || [{ url: defaultGoodImage }]).map((image) => (
+                        {(good.images || [{ _id: 0, url: defaultGoodImage }]).map((image) => (
                             <img
-                                src={image?.url ? `${image?.url}` : defaultGoodImage}
+                                key={image?._id}
+                                src={image?.url ? `/${image?.url}` : defaultGoodImage}
                                 onError={({ currentTarget }) => {
                                     currentTarget.onerror = null; // prevents looping
                                     currentTarget.src = defaultGoodImage;

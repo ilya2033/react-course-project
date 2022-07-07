@@ -4,5 +4,5 @@ import defaultAvatarImage from "../../../images/default-avatar-image.png";
 
 export const Ava = () => {
     const path = useSelector((state) => state.promise.aboutMe?.payload?.avatar?.url || null);
-    return <Avatar src={path ? `${path}` : defaultAvatarImage} />;
+    return <Avatar src={path ? `/${path}` : defaultAvatarImage} />;
 };

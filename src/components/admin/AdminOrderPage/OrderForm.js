@@ -171,7 +171,7 @@ export const COrderForm = connect(
         promiseStatus: state.promise.orderUpsert?.status || null,
         serverErrors: state.promise.orderUpsert?.error || null,
         order: state.promise?.adminOrderById?.payload || {},
-        userList: state.promise.adminUsersAll.payload || [],
+        userList: state.promise.adminUsersAll?.payload || [],
         deletePromiseStatus: state.promise.orderDelete?.status || null,
     }),
     {

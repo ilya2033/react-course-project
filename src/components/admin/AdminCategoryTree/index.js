@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import SortableTree from "react-sortable-tree";
 import { FaEdit } from "react-icons/fa";
 import { actionCategoryUpsert } from "../../../actions/actionCategoryUpsert";
-import { CategoryEditModal } from "../CategoryEditModal";
 import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const bulidCategoryTree = (list) => {
     let node,
@@ -54,7 +54,13 @@ const bulidCategoryList = (tree) => {
 export const AdminCategoryTree = ({ categories, onDrop, onPopupOpen }) => {
     const [treeData, setTreeData] = useState([]);
     const [selectedNode, setSelectedNode] = useState(null);
-    const [isCategoryPopupOpen, setIsCategoryPopupOpen] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (selectedNode) {
+            navigate(`/admin/category/${selectedNode._id}`);
+        }
+    }, [selectedNode]);
 
     useEffect(() => {
         setTreeData(bulidCategoryTree(categories));
@@ -62,7 +68,6 @@ export const AdminCategoryTree = ({ categories, onDrop, onPopupOpen }) => {
 
     return (
         <Box className="CategotyTree">
-            <CategoryEditModal category={selectedNode} isOpen={isCategoryPopupOpen} onClose={() => setIsCategoryPopupOpen(false)} />
             <SortableTree
                 isVirtualized={false}
                 treeData={treeData}
@@ -90,7 +95,6 @@ export const AdminCategoryTree = ({ categories, onDrop, onPopupOpen }) => {
                                     parent = { _id, name };
                                 }
                                 setSelectedNode({ name, _id, subcategories, parent });
-                                setIsCategoryPopupOpen(true);
                             }}
                         >
                             <FaEdit />

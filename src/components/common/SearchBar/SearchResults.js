@@ -13,7 +13,7 @@ export const SearchResults = ({ items, onItemClick, itemLink = "" }) => {
                 {!!items?.length ? (
                     itemLink.match(/.+(good).+/) ? (
                         items.map((good) => (
-                            <Box>
+                            <Box key={good._id}>
                                 <SearchGoodResultItem
                                     link={itemLink}
                                     good={good}
@@ -25,7 +25,7 @@ export const SearchResults = ({ items, onItemClick, itemLink = "" }) => {
                         ))
                     ) : itemLink.match(/.+(category|categories).+/) ? (
                         items.map((cat) => (
-                            <Box>
+                            <Box key={cat._id}>
                                 <SearchCategoryResultItem
                                     link={itemLink}
                                     category={cat}
@@ -37,7 +37,7 @@ export const SearchResults = ({ items, onItemClick, itemLink = "" }) => {
                         ))
                     ) : itemLink.match(/.+(order|orders).+/) ? (
                         items.map((order) => (
-                            <Box>
+                            <Box key={order._id}>
                                 <SearchOrderResultItem
                                     link={itemLink}
                                     order={order}

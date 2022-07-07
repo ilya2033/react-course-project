@@ -17,7 +17,7 @@ const SearchGoodResultItem = ({ good, onClick, link = "" } = {}) => {
             <Grid item xs={3}>
                 <Box
                     component="img"
-                    src={images ? `${images[0]?.url}` : defaultGoodImage}
+                    src={images ? `/${images[0]?.url}` : defaultGoodImage}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping
                         currentTarget.src = defaultGoodImage;

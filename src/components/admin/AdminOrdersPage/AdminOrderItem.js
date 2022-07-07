@@ -10,7 +10,7 @@ const AdminOrderItem = ({ order }) => (
         <TableCell>
             {order.orderGoods
                 ? (order.orderGoods || []).map((orderGood) => (
-                      <Typography variant="body2">
+                      <Typography variant="body2" key={orderGood._id}>
                           {orderGood.good.name} - {orderGood.count}
                       </Typography>
                   ))

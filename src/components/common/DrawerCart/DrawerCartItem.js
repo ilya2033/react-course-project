@@ -14,7 +14,7 @@ const DrawerCartItem = ({ order, onDeleteClick }) => {
             <CardMedia
                 component="img"
                 sx={{ width: 90 }}
-                src={images && images[0]?.url ? `${images ? images[0]?.url : ""}` : defaultGoodImage}
+                src={images && images[0]?.url ? `/${images ? images[0]?.url : ""}` : defaultGoodImage}
                 onError={({ currentTarget }) => {
                     currentTarget.onerror = null; // prevents looping
                     currentTarget.src = defaultGoodImage;
