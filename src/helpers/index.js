@@ -4,6 +4,6 @@ import { getGQL } from "./GraphQL";
 import { delay } from "./delay";
 import { statusNumber, statusOptions } from "./orderStatus";
 
-export const backendURL = "http://188.72.209.29:8000";
+export const backendURL = "http://188.72.209.29:8000/api";
 export const gql = getGQL(backendURL + "/graphql/");
 export { jwtDecode, delay, statusNumber, statusOptions };
