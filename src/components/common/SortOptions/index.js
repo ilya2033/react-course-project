@@ -1,10 +1,12 @@
-import { Box, Button, Menu, MenuItem } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { sortOptions } from '../../../helpers/sortOptions';
+import { Box, Button, Menu, MenuItem } from "@mui/material";
+import { useEffect, useState } from "react";
+import { sortOptions } from "../../../helpers/sortOptions";
 
-export const SortOptions = ({ onClick, options = sortOptions || [] } = {}) => {
+export const SortOptions = ({ onClick, options = sortOptions || [], defaultOption = null } = {}) => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedOption, setSelectedOption] = useState(options[0] || null);
+    const [selectedOption, setSelectedOption] = useState(
+        options.filter((option) => option.value === defaultOption || option.key === defaultOption)[0] || options[0] || null
+    );
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -25,9 +27,9 @@ export const SortOptions = ({ onClick, options = sortOptions || [] } = {}) => {
         <Box className="SortOptions">
             <Button
                 id="demo-positioned-button"
-                aria-controls={open ? 'demo-positioned-menu' : undefined}
+                aria-controls={open ? "demo-positioned-menu" : undefined}
                 aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
+                aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
             >
                 {selectedOption.label}
@@ -39,12 +41,12 @@ export const SortOptions = ({ onClick, options = sortOptions || [] } = {}) => {
                 open={open}
                 onClose={() => setAnchorEl(null)}
                 anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
+                    vertical: "top",
+                    horizontal: "left",
                 }}
                 transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
+                    vertical: "top",
+                    horizontal: "left",
                 }}
             >
                 {(options || []).map((option) => (

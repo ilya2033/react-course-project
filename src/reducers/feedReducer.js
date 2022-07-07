@@ -6,6 +6,7 @@ import { actionGoodsAll } from "../actions/actionGoodsAll";
 import { gql } from "../helpers";
 import { actionOrdersAll } from "../actions/actionOrdersAll";
 import { actionOrdersFind } from "../actions/actionOrdersFind";
+import { actionCategoryGoods } from "../actions/actionCategoryGoods";
 
 function feedReducer(state = { payload: [] }, { type, payload = [] }) {
     if (type === "FEED_ADD") {
@@ -29,16 +30,22 @@ const actionFeedGoods =
         await dispatch(actionGoodsAll({ skip, limit: 15, promiseName: "feedGoodsAll", orderBy }));
     };
 
-const actionFeedGoodsFind =
-    ({ skip = 0, text = "" }) =>
+const actionFeedCategoryGoods =
+    ({ skip = 0, orderBy = "_id", category }) =>
     async (dispatch, getState) => {
-        await dispatch(actionGoodsFind({ skip, limit: 15, promiseName: "feedGoodsFind", text }));
+        await dispatch(actionCategoryGoods({ skip, limit: 15, promiseName: "feedCategoryGoods", orderBy, category }));
+    };
+
+const actionFeedGoodsFind =
+    ({ skip = 0, text = "", orderBy = "_id" }) =>
+    async (dispatch, getState) => {
+        await dispatch(actionGoodsFind({ skip, limit: 15, promiseName: "feedGoodsFind", text, orderBy }));
     };
 
 const actionFeedCatsFind =
-    ({ skip = 0, text = "" }) =>
+    ({ skip = 0, text = "", orderBy = "_id" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionCatsFind({ skip, promiseName: "feedCatsFind", text, limit: 7 }));
+        await dispatch(actionCatsFind({ skip, promiseName: "feedCatsFind", text, limit: 7, orderBy }));
     };
 
 const actionFeedCats =
@@ -54,9 +61,9 @@ const actionFeedOrders =
     };
 
 const actionFeedOrdersFind =
-    ({ skip = 0, text = "" }) =>
+    ({ skip = 0, text = "", orderBy = "_id" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionOrdersFind({ skip, limit: 15, promiseName: "feedOrdersFind", text }));
+        await dispatch(actionOrdersFind({ skip, limit: 5, promiseName: "feedOrdersFind", text, orderBy }));
     };
 
 export {
@@ -69,4 +76,5 @@ export {
     feedReducer,
     actionFeedOrders,
     actionFeedOrdersFind,
+    actionFeedCategoryGoods,
 };

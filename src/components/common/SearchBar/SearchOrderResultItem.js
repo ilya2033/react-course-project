@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
-import { Box, Grid, Stack, Typography } from '@mui/material';
-const SearchOrderResultItem = ({ order, onClick, link = '' } = {}) => {
-    const { _id = null, email = '', phoneNumber = '' } = order || {};
+import { Link } from "react-router-dom";
+import { Box, Grid, Stack, Typography } from "@mui/material";
+import { statusNumber } from "../../../helpers";
+const SearchOrderResultItem = ({ order, onClick, link = "" } = {}) => {
+    const { _id = null, owner = null, status = "-" } = order || {};
 
     return (
         <Stack
@@ -11,11 +12,11 @@ const SearchOrderResultItem = ({ order, onClick, link = '' } = {}) => {
             onClick={() => onClick && onClick()}
             spacing={1}
         >
-            <Typography variant="body1">ID:{_id}</Typography>
+            <Typography variant="body1">ID: {_id}</Typography>
 
-            <Typography>Email:{email.length > 30 ? `${email.substring(0, 30)}...` : email}</Typography>
+            <Typography>Статус: {"" + order?.status?.length ? statusNumber[+order.status] : "-"}</Typography>
 
-            <Typography>Номер:{phoneNumber}</Typography>
+            <Typography>Користувач: {owner?.username || "-"}</Typography>
         </Stack>
     );
 };

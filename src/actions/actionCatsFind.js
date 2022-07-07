@@ -19,7 +19,7 @@ export const actionCatsFind =
                     }`,
                     {
                         query: JSON.stringify([
-                            { name__contains: text },
+                            { name__contains: text, _id__contains: text },
                             {
                                 limit: !!limit ? limit : 5,
                                 skip,

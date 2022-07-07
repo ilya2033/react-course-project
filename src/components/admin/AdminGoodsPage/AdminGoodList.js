@@ -1,32 +1,38 @@
-import { AdminGoodListHeader } from './AdminGoodListHeader';
-import { AdminGoodItem } from './AdminGoodItem';
-import { connect } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { AdminGoodListHeader } from "./AdminGoodListHeader";
+import { AdminGoodItem } from "./AdminGoodItem";
+import { connect } from "react-redux";
+import { useEffect, useState } from "react";
 
-import { SearchBar, SearchResults } from '../../common/SearchBar';
-import { actionGoodsFind } from '../../../actions/actionGoodsFind';
-import { actionPromiseClear } from '../../../reducers';
-import { Box, Table, TableBody, TableHead } from '@mui/material';
-import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { SearchBar, SearchResults } from "../../common/SearchBar";
+import { actionGoodsFind } from "../../../actions/actionGoodsFind";
+import { actionPromiseClear } from "../../../reducers";
+import { Box, Table, TableBody, TableHead } from "@mui/material";
+import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const CSearchBar = connect(null, {
-    onSearch: (text) => actionGoodsFind({ promiseName: 'adminGoodsFind', text, limit: 5 }),
-    onSearchButtonClick: () => actionPromiseClear('adminGoodsFind'),
+    onSearch: (text) => actionGoodsFind({ promiseName: "adminGoodsFind", text, limit: 5 }),
+    onSearchEnd: () => actionPromiseClear("adminGoodsFind"),
 })(SearchBar);
 
 const CSearchResults = connect((state) => ({ items: state.promise.adminGoodsFind?.payload || [] }))(SearchResults);
 
-const AdminGoodList = ({ goods, orderBy = '_id' }) => {
+const AdminGoodList = ({ goods, orderBy = "_id" }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     return (
         <Box className="AdminGoodList">
             <Box className="searchBarWrapper">
                 <CSearchBar
                     render={CSearchResults}
-                    searchLink="/admin/goods/search/"
-                    renderParams={{ itemLink: '/admin/good/' }}
+                    searchLink="/admin/goods/search"
+                    renderParams={{ itemLink: "/admin/good/" }}
+                    onSearchButtonClick={(text) => {
+                        searchParams.set("text", text);
+                        setSearchParams(searchParams);
+                        navigate({ pathname: "/admin/goods/search", search: createSearchParams(searchParams).toString() });
+                    }}
                 />
             </Box>
             <Table>

@@ -1,27 +1,41 @@
-import { useEffect, useState, useRef } from 'react';
-import { connect, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { useEffect, useState, useRef } from "react";
+import { connect } from "react-redux";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
-import { Box, TextField, Button, Container, Stack, IconButton } from '@mui/material';
-import { actionGoodsFind } from '../../../actions/actionGoodsFind';
-import { actionPromiseClear } from '../../../reducers';
-
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { Box, TextField, Button, Stack, IconButton } from "@mui/material";
+import { actionGoodsFind } from "../../../actions/actionGoodsFind";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { actionPromiseClear } from "../../../reducers";
 
 export const SearchBar = ({
+    onSearchEnd,
     onSearch,
     onSearchButtonClick,
     render = null,
     renderParams = {},
-    searchLink = '/search/',
+    searchLink = "/search/",
 } = {}) => {
     const ref = useRef();
-    const [inputValue, setInputValue] = useState('');
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+    const [inputValue, setInputValue] = useState("");
     const [isChildrenOpen, setIsChildrenOpen] = useState(false);
     const [inputTimeout, setInputTimeout] = useState(null);
+    const [touched, setTouched] = useState(false);
     const R = render;
+
+    const handleOnClick = () => {
+        if (!inputValue.trim().length) {
+            return;
+        }
+        onSearchButtonClick(inputValue);
+        setInputValue("");
+        onSearchEnd && onSearchEnd();
+    };
+
+    useEffect(() => {
+        setInputValue((searchLink === location.pathname && searchParams.get("text")) || "");
+    }, [searchParams]);
 
     useEffect(() => {
         if (inputTimeout) {
@@ -45,25 +59,28 @@ export const SearchBar = ({
             }, 700)
         );
 
-        setIsChildrenOpen(!!inputValue?.length);
-        document.addEventListener('mousedown', checkClickOutsideHeaderSearchBar);
+        touched && setIsChildrenOpen(!!inputValue?.length);
+        document.addEventListener("mousedown", checkClickOutsideHeaderSearchBar);
         return () => {
-            document.removeEventListener('mousedown', checkClickOutsideHeaderSearchBar);
+            document.removeEventListener("mousedown", checkClickOutsideHeaderSearchBar);
         };
     }, [inputValue]);
 
     return (
-        <Box className={`SearchBar ${!isChildrenOpen && 'hide'}`} ref={ref}>
+        <Box className={`SearchBar ${!isChildrenOpen && "hide"}`} ref={ref}>
             <Stack direction="row" alignItems="center">
                 <TextField
                     variant="standard"
                     value={inputValue}
                     placeholder="Пошук"
                     onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleOnClick()}
                     className="SearchBarInput"
+                    onBlur={() => setTouched(true)}
+                    onClick={() => setTouched(true)}
                     InputProps={{
                         endAdornment: (
-                            <IconButton onClick={() => setInputValue('')} edge="end">
+                            <IconButton onClick={() => setInputValue("")} edge="end">
                                 {inputValue && <AiOutlineCloseCircle />}
                             </IconButton>
                         ),
@@ -71,15 +88,7 @@ export const SearchBar = ({
                 />
 
                 {!!inputValue ? (
-                    <Button
-                        className="Link"
-                        onClick={() => {
-                            setInputValue('');
-                            onSearchButtonClick();
-                        }}
-                        variant="text"
-                        color="inherit"
-                    >
+                    <Button className="Link" onClick={handleOnClick} variant="text" color="inherit">
                         Пошук
                     </Button>
                 ) : (
@@ -92,8 +101,8 @@ export const SearchBar = ({
                 {isChildrenOpen && (
                     <R
                         onItemClick={() => {
-                            setInputValue('');
-                            onSearchButtonClick();
+                            setInputValue("");
+                            onSearchEnd && onSearchEnd();
                         }}
                         {...renderParams}
                     />
@@ -105,5 +114,5 @@ export const SearchBar = ({
 
 export const CSearchBar = connect(null, {
     onSearch: (text) => actionGoodsFind({ text, limit: 5 }),
-    onSearchButtonClick: () => actionPromiseClear('goodsFind'),
+    onSearchEnd: () => actionPromiseClear("goodsFind"),
 })(SearchBar);

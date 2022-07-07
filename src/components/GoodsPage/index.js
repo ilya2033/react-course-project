@@ -1,20 +1,19 @@
-import { Grid, Stack, Typography, Divider } from '@mui/material';
-import { Box } from '@mui/system';
-import { connect, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { GoodCard } from '../common/GoodCard';
-import { GoodList } from '../common/GoodList';
-import { SubCategories } from './SubCategories';
-import { SortOptions } from '../common/SortOptions';
-import { actionCatById } from '../../actions/actionCatById';
-import { useEffect } from 'react';
+import { Grid, Stack, Typography, Divider } from "@mui/material";
+import { Box } from "@mui/system";
+import { connect, useDispatch } from "react-redux";
+import { useParams, useSearchParams } from "react-router-dom";
+import { GoodCard } from "../common/GoodCard";
+import { GoodList } from "../common/GoodList";
+import { SubCategories } from "./SubCategories";
+import { SortOptions } from "../common/SortOptions";
+import { actionCatById } from "../../actions/actionCatById";
+import { useEffect } from "react";
+import { actionCategoryGoods } from "../../actions/actionCategoryGoods";
 
-const GoodsPage = ({ category = {} }) => {
-    const { goods = [], name = '', subcategories = [] } = category || {};
-    useEffect(() => {
-        console.log(category);
-    }, [category]);
-    const dispatch = useDispatch();
+const GoodsPage = ({ category = {}, goods = [] }) => {
+    const { name = "", subcategories = [] } = category || {};
+    const [searchParams, setSearchParams] = useSearchParams();
+
     return (
         <Box className="GoodsPage">
             <Box>
@@ -23,13 +22,15 @@ const GoodsPage = ({ category = {} }) => {
                 </Typography>
             </Box>
 
-            <Divider className="Divider" />
+            {name && <Divider className="Divider" />}
             <Stack>
                 <Box className="sortOptionsWrapper">
                     <SortOptions
-                        onClick={(option) =>
-                            category._id && dispatch(actionCatById({ _id: category._id, orderBy: option.value }))
-                        }
+                        defaultOption={searchParams.get("orderBy", null)}
+                        onClick={(option) => {
+                            searchParams.set("orderBy", option.value);
+                            setSearchParams(searchParams);
+                        }}
                     />
                 </Box>
                 {!!subcategories.length ? (

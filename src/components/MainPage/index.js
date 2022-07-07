@@ -1,8 +1,8 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import MainPageImage from '../../images/main-page-image.png';
-import { GoodCardSlider } from '../common/GoodCardSlider';
+import { Box, Stack, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import MainPageImage from "../../images/main-page-image.png";
+import { GoodCardSlider } from "../common/GoodCardSlider";
 
 const MainPage = () => {
     const popularGoods = useSelector((state) => state.promise?.goodsPopular?.payload || []);

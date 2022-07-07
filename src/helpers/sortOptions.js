@@ -1,18 +1,18 @@
 export const sortOptions = [
     {
-        value: 'date',
-        label: 'Спочатку нові',
+        value: "createdAt",
+        label: "Спочатку нові",
     },
     {
-        value: '-date',
-        label: 'Спочатку старі',
+        value: "-createdAt",
+        label: "Спочатку старі",
     },
     {
-        value: 'price',
-        label: 'Від дешевих до дорогих',
+        value: "price",
+        label: "Від дешевих до дорогих",
     },
     {
-        value: '-price',
-        label: 'Від дорогих до дешевих',
+        value: "-price",
+        label: "Від дорогих до дешевих",
     },
 ];

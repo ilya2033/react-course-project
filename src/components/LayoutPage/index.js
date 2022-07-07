@@ -1,19 +1,20 @@
 import { Box, Grid } from "@mui/material";
 import { useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
-import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { Navigate, Route, Routes, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { actionCatById } from "../../actions/actionCatById";
 import { actionGoodById } from "../../actions/actionGoodById";
 import { actionGoodsFind } from "../../actions/actionGoodsFind";
 import { actionOrders } from "../../actions/actionOrders";
+import { actionPromiseClear, store } from "../../reducers";
+import { actionFeedAdd, actionFeedCategoryGoods, actionFeedClear, actionFeedGoodsFind } from "../../reducers/feedReducer";
 import { AdminLayoutPage } from "../admin/AdminLayoutPage";
 import { CCartPage } from "../CartPage";
-import { Error404 } from "../common/Error404";
 import { GoodList } from "../common/GoodList";
-import { CProtectedRoute, ProtectedRoute } from "../common/ProtectedRoute";
+import { CProtectedRoute } from "../common/ProtectedRoute";
 import { CDashboardPage } from "../DashboardPage";
 import { GoodPage } from "../GoodPage";
-import { CGoodsPage } from "../GoodsPage";
+import { CGoodsPage, GoodsPage } from "../GoodsPage";
 import { Aside } from "../layout/Aside";
 import Content from "../layout/Content";
 import { Footer } from "../layout/Footer";
@@ -22,12 +23,96 @@ import { MainPage } from "../MainPage";
 
 const GoodsPageContainer = () => {
     const params = useParams();
+    const category = useSelector((state) => state.promise?.catById?.payload || null);
+    const goods = useSelector((state) => state.promise?.feedCategoryGoods?.payload || []);
+    const feed = useSelector((state) => state.feed?.payload || []);
     const dispatch = useDispatch();
-    if (params._id) {
-        dispatch(actionCatById({ _id: params._id }));
-    }
+    const [searchParams] = useSearchParams();
+    const orderBy = searchParams.get("orderBy") || "_id";
 
-    return <CGoodsPage />;
+    useEffect(() => {
+        if (params._id) {
+            dispatch(actionCatById({ _id: params._id }));
+        }
+
+        return () => {
+            dispatch(actionPromiseClear("catById"));
+        };
+    }, [params._id]);
+
+    useEffect(() => {
+        dispatch(actionFeedClear());
+        dispatch(actionPromiseClear("feedCategoryGoods"));
+        dispatch(actionFeedCategoryGoods({ category, orderBy, skip: 0 }));
+    }, [orderBy, category]);
+
+    useEffect(() => {
+        dispatch(actionFeedCategoryGoods({ skip: goods?.length || 0, orderBy }));
+        window.onscroll = (e) => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                const {
+                    feed,
+                    promise: { feedCategoryGoods },
+                } = store.getState();
+
+                if (feedCategoryGoods.status !== "PENDING") {
+                    dispatch(actionFeedCategoryGoods({ skip: feed.payload?.length || 0, orderBy }));
+                }
+            }
+        };
+        return () => {
+            dispatch(actionFeedClear());
+            dispatch(actionPromiseClear("feedCategoryGoods"));
+            window.onscroll = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (goods?.length) store.dispatch(actionFeedAdd(goods));
+    }, [goods]);
+    return <CGoodsPage goods={feed} />;
+};
+
+const GoodsSearchPageContainer = () => {
+    const goods = useSelector((state) => state.promise?.feedGoodsFind?.payload || []);
+    const feed = useSelector((state) => state.feed?.payload || []);
+    const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
+    const orderBy = searchParams.get("orderBy") || "_id";
+    const text = searchParams.get("text") || "";
+
+    useEffect(() => {
+        dispatch(actionFeedClear());
+        dispatch(actionPromiseClear("feedGoodsFind"));
+        dispatch(actionFeedGoodsFind({ text, orderBy, skip: 0 }));
+    }, [orderBy, text]);
+
+    useEffect(() => {
+        dispatch(actionFeedGoodsFind({ text, skip: goods?.length || 0, orderBy }));
+        window.onscroll = (e) => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                const {
+                    feed,
+                    promise: { feedGoodsFind },
+                } = store.getState();
+
+                if (feedGoodsFind.status !== "PENDING") {
+                    dispatch(actionFeedGoodsFind({ text, skip: feed.payload?.length || 0, orderBy }));
+                }
+            }
+        };
+        return () => {
+            dispatch(actionFeedClear());
+            dispatch(actionPromiseClear("feedGoodsFind"));
+            window.onscroll = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (goods?.length) store.dispatch(actionFeedAdd(goods));
+    }, [goods]);
+
+    return <GoodsPage goods={feed} />;
 };
 
 const GoodPageContainer = () => {
@@ -63,12 +148,12 @@ export const LayoutPage = () => {
         <Box className="LayoutPage">
             <Header />
             <Grid container columns={14} rows={1}>
-                {!!location.pathname.match(/(\/categor)|(\/good)|(\/order)|(\/admin)|(\/dashboard)+/) && (
+                {!!location.pathname.match(/(\/categor)|(\/good)|(\/order)|(\/admin)+/) && (
                     <Grid xs={3} item>
                         <Aside />
                     </Grid>
                 )}
-                <Grid xs={location.pathname.match(/(\/categor)|(\/good)|(\/order)|(\/admin)|(\/dashboard)+/) ? 11 : 14} item>
+                <Grid xs={location.pathname.match(/(\/categor)|(\/good)|(\/order)|(\/admin)+/) ? 11 : 14} item>
                     <Content>
                         <Routes>
                             <Route path="/" exact element={<MainPage />} />
@@ -85,6 +170,7 @@ export const LayoutPage = () => {
                             <Route path="/category/:_id" element={<GoodsPageContainer />} />
                             <Route path="/category/" element={<GoodsPageContainer />} />
                             <Route path="/good/:_id" element={<GoodPageContainer />} />
+                            <Route path="/goods/search" element={<GoodsSearchPageContainer />} />
                             <Route
                                 path="/admin/*"
                                 exact

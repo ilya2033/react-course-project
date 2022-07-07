@@ -1,14 +1,14 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import { Box } from '@mui/material';
-import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { actionPageStart } from '../../actions/actionPageStart';
-import { useDispatch, useSelector } from 'react-redux';
+import { Box } from "@mui/material";
+import styles from "react-responsive-carousel/lib/styles/carousel.min.css";
+import { actionPageStart } from "../../actions/actionPageStart";
+import { useDispatch, useSelector } from "react-redux";
 
-import { AuthPage } from '../AuthPage';
-import { LayoutPage } from '../LayoutPage';
-import { CProtectedRoute } from '../common/ProtectedRoute';
-import { Error404 } from '../common/Error404';
+import { AuthPage } from "../AuthPage";
+import { LayoutPage } from "../LayoutPage";
+import { CProtectedRoute } from "../common/ProtectedRoute";
+import { Error404 } from "../common/Error404";
 
 const Root = () => {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const Root = () => {
                 <Route
                     path="/auth"
                     element={
-                        <CProtectedRoute roles={['anon']} fallback="/admin">
+                        <CProtectedRoute roles={["anon"]} fallback="/admin">
                             <AuthPage />
                         </CProtectedRoute>
                     }

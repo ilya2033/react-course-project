@@ -1,11 +1,8 @@
-import { Box, Grid } from '@mui/material';
-import { useEffect } from 'react';
-import { GoodCard } from '../GoodCard';
+import { Box, Grid } from "@mui/material";
+import { useEffect } from "react";
+import { GoodCard } from "../GoodCard";
 
 export const GoodList = ({ goods = [] } = {}) => {
-    useEffect(() => {
-        console.log(goods);
-    }, [goods]);
     return (
         <Box className="GoodList">
             <Grid container spacing={2}>

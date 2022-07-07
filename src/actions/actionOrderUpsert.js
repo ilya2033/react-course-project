@@ -10,11 +10,11 @@ export const actionOrderUpsert = (order) => async (dispatch, getState) => {
             "orderUpsert",
             gql(
                 `mutation newOrder($order:OrderInput!){
-        OrderUpsert(order:$order){
-          _id price
-        }
-      }
-      `,
+                  OrderUpsert(order:$order){
+                    _id price
+                  }
+                }
+            `,
                 {
                     order,
                 }

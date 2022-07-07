@@ -1,14 +1,17 @@
-import { backendURL, gql } from "../helpers";
+import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
 
-export const actionGoodsFind =
-    ({ text = "", limit = 7, skip = 0, promiseName = "goodsFind", orderBy = "_id" }) =>
+export const actionCategoryGoods =
+    ({ limit = 20, skip = 0, promiseName = "categoryGoods", orderBy = "_id", category } = {}) =>
     async (dispatch, getState) => {
+        if (!category) {
+            return;
+        }
         dispatch(
             actionPromise(
                 promiseName,
                 gql(
-                    `query GoodsFind($query:String){
+                    `query GCategoryGoods($query:String){
                         GoodFind(query: $query){
                             _id name price images{
                                 _id url
@@ -22,12 +25,11 @@ export const actionGoodsFind =
                     {
                         query: JSON.stringify([
                             {
-                                name__contains: text,
-                                description__contains: text,
+                                categories__in: [category._id],
                             },
                             {
-                                limit: !!limit ? limit : 5,
-                                skip,
+                                limit: !!limit ? limit : 100,
+                                skip: skip,
                                 orderBy,
                             },
                         ]),
