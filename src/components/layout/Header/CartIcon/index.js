@@ -1,7 +1,7 @@
-import { Badge, Box, IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { MdOutlineShoppingCart } from 'react-icons/md';
+import { Badge, Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { MdOutlineShoppingCart } from "react-icons/md";
 
 export const CartIcon = ({ cart }) => {
     const [count, setCount] = useState(0);

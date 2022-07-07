@@ -1,8 +1,8 @@
-import { backendURL, getQuery, gql, mock, query } from '../helpers';
+import { gql } from "../helpers";
 
-import { actionPromise } from '../reducers';
+import { actionPromise } from "../reducers";
 
-export const actionGoodById = ({ _id, promiseName = 'goodById' } = {}) =>
+export const actionGoodById = ({ _id, promiseName = "goodById" } = {}) =>
     actionPromise(
         promiseName,
         gql(

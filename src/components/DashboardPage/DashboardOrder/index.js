@@ -1,4 +1,4 @@
-import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Divider, Paper, Stack, Typography } from "@mui/material";
 import { statusNumber } from "../../../helpers";
 import { DashboardOrderGood } from "./DashboardOrderGood";
 

@@ -1,14 +1,14 @@
-import { backendURL } from '../helpers';
-import { actionPromise } from '../reducers';
+import { backendURL } from "../helpers";
+import { actionPromise } from "../reducers";
 
 export const actionUploadFile = (file) => {
     const fd = new FormData();
-    fd.append('photo', file);
+    fd.append("photo", file);
     return actionPromise(
-        'uploadFile',
+        "uploadFile",
         fetch(`${backendURL}/upload/`, {
-            method: 'POST',
-            headers: localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {},
+            method: "POST",
+            headers: localStorage.authToken ? { Authorization: "Bearer " + localStorage.authToken } : {},
             body: fd,
         })
             .then((res) => res.json())

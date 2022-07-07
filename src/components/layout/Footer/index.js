@@ -1,5 +1,5 @@
-import { Container, Grid, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
-import { Box } from '@mui/system';
+import { Container, Grid, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 
 const Footer = () => (
     <Box className="Footer">

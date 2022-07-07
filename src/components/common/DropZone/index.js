@@ -1,7 +1,6 @@
-import { useDropzone } from 'react-dropzone';
-import { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Box } from '@mui/material';
+import { useDropzone } from "react-dropzone";
+import { useEffect } from "react";
+import { Box } from "@mui/material";
 export const DropZone = ({ onFileDrop, children }) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
@@ -12,7 +11,7 @@ export const DropZone = ({ onFileDrop, children }) => {
     }, [acceptedFiles]);
 
     return (
-        <Box {...getRootProps({ className: 'Dropzone' })}>
+        <Box {...getRootProps({ className: "Dropzone" })}>
             {/* <input {...getInputProps()} /> */}
             {children}
         </Box>

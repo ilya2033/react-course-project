@@ -1,28 +1,11 @@
 import { connect, useDispatch, useSelector } from "react-redux";
-import React, { useState, useEffect, useContext } from "react";
-import { actionPromise, actionPromiseClear } from "../../../reducers";
+import { useState, useEffect, useContext } from "react";
+import { actionPromiseClear } from "../../../reducers";
 import Select from "react-select";
 import { actionOrderUpdate } from "../../../actions/actionOrderUpdate";
-import { EntityEditor } from "../../common/EntityEditor";
-import { actionUploadFiles } from "../../../actions/actionUploadFiles";
 import { UIContext } from "../../UIContext";
-import {
-    Box,
-    Button,
-    Chip,
-    FormControl,
-    Grid,
-    InputLabel,
-    MenuItem,
-    OutlinedInput,
-    Stack,
-    TextareaAutosize,
-    TextField,
-    Typography,
-} from "@mui/material";
-import { FormikProvider, useFormik } from "formik";
-import * as Yup from "yup";
-import { Error } from "../../common/Error";
+import { Box, Button, Grid, InputLabel, Stack } from "@mui/material";
+import { useFormik } from "formik";
 import { statusNumber, statusOptions } from "../../../helpers";
 import { OrderGoodsEditor } from "./OrderGoodsEditor";
 import { useNavigate } from "react-router-dom";

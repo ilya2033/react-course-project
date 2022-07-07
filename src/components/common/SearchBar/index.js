@@ -1,6 +1,6 @@
-import { SearchBar, CSearchBar } from './SearchBar';
+import { SearchBar, CSearchBar } from "./SearchBar";
 
-import { SearchResults, CSearchResults } from './SearchResults';
+import { SearchResults, CSearchResults } from "./SearchResults";
 // import SearchGoodResultItem from './SearchGoodResultItem';
 
 // export { SearchBar, SearchResults, CSearchResults, SearchGoodResultItem };

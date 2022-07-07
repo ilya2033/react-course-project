@@ -1,7 +1,7 @@
-import { Carousel } from 'react-responsive-carousel';
-import { GoodCardSet } from './GoodCardSet';
-import { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Carousel } from "react-responsive-carousel";
+import { GoodCardSet } from "./GoodCardSet";
+import { useState, useEffect } from "react";
+import { Box } from "@mui/material";
 export const GoodCardSlider = ({ goods = [] } = {}) => {
     const [goodSets, setGoodSets] = useState([]);
     const num = 5;

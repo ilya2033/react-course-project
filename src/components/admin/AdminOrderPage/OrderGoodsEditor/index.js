@@ -1,7 +1,6 @@
-import { Box, Table, TableBody } from '@mui/material';
-import { OrderGood } from './OrderGood';
-import Select from 'react-select';
-import { useEffect, useState } from 'react';
+import { Box, Table, TableBody } from "@mui/material";
+import { OrderGood } from "./OrderGood";
+import Select from "react-select";
 
 export const OrderGoodsEditor = ({ orderGoods = [], onChange = null, goodList = [] } = {}) => {
     const handleChange = (goods) => {

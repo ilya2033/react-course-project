@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { Box, Button, TableCell, TableRow, Typography } from "@mui/material";
+import { Button, TableCell, TableRow, Typography } from "@mui/material";
 import { statusNumber } from "../../../helpers";
 
 const AdminOrderItem = ({ order }) => (

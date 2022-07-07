@@ -1,14 +1,10 @@
-import { Grid, Stack, Typography, Divider } from "@mui/material";
+import { Stack, Typography, Divider } from "@mui/material";
 import { Box } from "@mui/system";
-import { connect, useDispatch } from "react-redux";
-import { useParams, useSearchParams } from "react-router-dom";
-import { GoodCard } from "../common/GoodCard";
+import { connect } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import { GoodList } from "../common/GoodList";
 import { SubCategories } from "./SubCategories";
 import { SortOptions } from "../common/SortOptions";
-import { actionCatById } from "../../actions/actionCatById";
-import { useEffect } from "react";
-import { actionCategoryGoods } from "../../actions/actionCategoryGoods";
 
 const GoodsPage = ({ category = {}, goods = [] }) => {
     const { name = "", subcategories = [] } = category || {};

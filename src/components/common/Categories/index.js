@@ -1,8 +1,7 @@
-import { Paper, List, ListItem, ListItemButton, ListItemText, Box } from '@mui/material';
-import { useEffect } from 'react';
-import { Category } from './Category';
+import { List, Box } from "@mui/material";
+import { Category } from "./Category";
 
-const Categories = ({ categories = [], url = '/category/' }) => {
+const Categories = ({ categories = [], url = "/category/" }) => {
     return (
         <Box className="Categories">
             <List>

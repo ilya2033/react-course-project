@@ -3,11 +3,11 @@ import { actionLogin } from "../../actions/actionLogin";
 import { useState, useEffect, useContext } from "react";
 import { connect, useSelector } from "react-redux";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { Box, Button, IconButton, TextField, Stack } from "@mui/material";
+import { Box, Button, IconButton, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { UIContext } from "../UIContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const signInSchema = Yup.object().shape({
     username: Yup.string().required("Обов'язкове"),

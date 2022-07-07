@@ -1,27 +1,16 @@
-import { Box, width } from '@mui/system';
-import defaultGoodImage from '../../images/default-good-image.png';
-import { IoCloseOutline } from 'react-icons/io5';
-import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
-import { actionCartChange } from '../../reducers';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { backendURL } from '../../helpers';
+import { Box } from "@mui/system";
+import defaultGoodImage from "../../images/default-good-image.png";
+import { IoCloseOutline } from "react-icons/io5";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { actionCartChange } from "../../reducers";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
-const {
-    Typography,
-    Stack,
-    IconButton,
-    TextField,
-    ButtonGroup,
-    Button,
-    TableCell,
-    TableRow,
-    Input,
-} = require('@mui/material');
+const { Typography, Stack, IconButton, TextField, ButtonGroup, Button, TableCell, TableRow, Input } = require("@mui/material");
 
 export const CartItem = ({ order, onDeleteClick }) => {
     const { good, count = 1 } = order || {};
-    const { _id, images = [], name = '', price = 0, amount = 1 } = good;
+    const { _id, images = [], name = "", price = 0, amount = 1 } = good;
 
     const dispatch = useDispatch();
     const [countInput, setCountInput] = useState(count || 1);
@@ -45,7 +34,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
             <TableCell>
                 <Box
                     component="img"
-                    src={images && images[0]?.url ? `${images ? images[0]?.url : ''}` : defaultGoodImage}
+                    src={images && images[0]?.url ? `${images ? images[0]?.url : ""}` : defaultGoodImage}
                     sx={{ width: 50 }}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping

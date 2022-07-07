@@ -1,9 +1,7 @@
-import { actionPromise } from ".";
 import { actionCatAll } from "../actions/actionCatAll";
 import { actionGoodsFind } from "../actions/actionGoodsFind";
 import { actionCatsFind } from "../actions/actionCatsFind";
 import { actionGoodsAll } from "../actions/actionGoodsAll";
-import { gql } from "../helpers";
 import { actionOrdersAll } from "../actions/actionOrdersAll";
 import { actionOrdersFind } from "../actions/actionOrdersFind";
 import { actionCategoryGoods } from "../actions/actionCategoryGoods";

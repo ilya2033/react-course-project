@@ -1,9 +1,7 @@
-import { Badge, Box, IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { MdLogout, MdOutlineShoppingCart } from 'react-icons/md';
-import { useSelect } from '@mui/base';
-import { actionLogout } from '../../../../actions/actionLogout';
+import { Box, IconButton } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { MdLogout } from "react-icons/md";
+import { actionLogout } from "../../../../actions/actionLogout";
 
 export const LogoutIcon = () => {
     const dispatch = useDispatch();

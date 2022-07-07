@@ -1,4 +1,4 @@
-import { backendURL, mock, query, gql } from "../helpers";
+import { gql } from "../helpers";
 
 import { actionPromise } from "../reducers";
 

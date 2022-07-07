@@ -5,7 +5,6 @@ import { actionCatsFind } from "../../../actions/actionCatsFind";
 import { actionPromiseClear } from "../../../reducers";
 import { SearchBar, SearchResults } from "../../common/SearchBar";
 import { Box, Table, TableBody, TableHead } from "@mui/material";
-import { useEffect, useState } from "react";
 import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const CSearchBar = connect(null, {

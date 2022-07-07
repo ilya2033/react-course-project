@@ -1,5 +1,5 @@
 import { actionPromise } from "../reducers";
-import { backendURL, gql } from "../helpers";
+import { gql } from "../helpers";
 
 export const actionOrdersAll =
     ({ limit = 0, skip = 0, promiseName = "adminOrdersAll", orderBy = "_id", status = 0 } = {}) =>

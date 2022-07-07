@@ -1,11 +1,11 @@
-import { backendURL, mock, query, gql } from '../helpers';
+import { gql } from "../helpers";
 
-import { actionPromise } from '../reducers';
+import { actionPromise } from "../reducers";
 
 export const actionRootCats = () => async (dispatch, getState) => {
     dispatch(
         actionPromise(
-            'rootCats',
+            "rootCats",
             gql(
                 `query rootCats($query:String) {
                 CategoryFind(query: $query){

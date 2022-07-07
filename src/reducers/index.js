@@ -1,16 +1,9 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
-import { authReducer, actionAuthLogin, actionAuthLogout } from './authReducer';
-import {
-    promiseReducer,
-    actionPending,
-    actionFulfilled,
-    actionRejected,
-    actionPromise,
-    actionPromiseClear,
-} from './promiseReducer';
-import { cartReducer, actionCartAdd, actionCartChange, actionCartDelete, actionCartClear } from './cartReducer';
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunk from "redux-thunk";
+import { authReducer, actionAuthLogin, actionAuthLogout } from "./authReducer";
+import { promiseReducer, actionPending, actionFulfilled, actionRejected, actionPromise, actionPromiseClear } from "./promiseReducer";
+import { cartReducer, actionCartAdd, actionCartChange, actionCartDelete, actionCartClear } from "./cartReducer";
 import {
     actionFeedCats,
     actionFeedCatsFind,
@@ -21,8 +14,7 @@ import {
     actionFeedOrdersFind,
     actionFeedOrders,
     feedReducer,
-} from './feedReducer';
-import { createStoreHook } from 'react-redux';
+} from "./feedReducer";
 
 export { cartReducer, actionCartAdd, actionCartChange, actionCartDelete, actionCartClear };
 export { authReducer, actionAuthLogin, actionAuthLogout };

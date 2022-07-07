@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ReactComponent as ShoppingLogo } from "../../../images/shopping-logo.svg";
-import { actionPromiseClear } from "../../../reducers";
 import { AuthModal } from "../../common/AuthModal";
 import { DrawerCart } from "../../common/DrawerCart/DrawerCart";
 import { CSearchBar } from "../../common/SearchBar";

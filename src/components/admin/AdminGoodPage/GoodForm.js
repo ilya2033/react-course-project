@@ -1,32 +1,17 @@
 import { connect, useDispatch } from "react-redux";
-import React, { useState, useEffect, useContext } from "react";
-import { actionPromise, actionPromiseClear } from "../../../reducers";
+import { useState, useEffect, useContext } from "react";
+import { actionPromiseClear } from "../../../reducers";
 import Select from "react-select";
 import { actionGoodUpdate } from "../../../actions/actionGoodUpdate";
 import { EntityEditor } from "../../common/EntityEditor";
 import { actionUploadFiles } from "../../../actions/actionUploadFiles";
 import { UIContext } from "../../UIContext";
-import {
-    Alert,
-    Box,
-    Button,
-    Chip,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    OutlinedInput,
-    Snackbar,
-    Stack,
-    TextareaAutosize,
-    TextField,
-    Typography,
-} from "@mui/material";
+import { Box, Button, InputLabel, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Error } from "../../common/Error";
 import { ConfirmModal } from "../../common/ConfirmModal";
 import { actionGoodDelete } from "../../../actions/actionGoodDelete";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const goodSchema = Yup.object().shape({
     name: Yup.string().required("Обов'язкове"),

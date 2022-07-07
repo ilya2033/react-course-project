@@ -1,5 +1,5 @@
 import { actionPromise } from "../reducers";
-import { backendURL, gql } from "../helpers";
+import { gql } from "../helpers";
 import { actionAuthLogin } from "../reducers";
 import { actionAboutMe } from "./actionAboutMe";
 import { actionLogout } from "./actionLogout";

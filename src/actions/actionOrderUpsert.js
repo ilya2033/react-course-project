@@ -1,4 +1,4 @@
-import { backendURL, gql } from "../helpers";
+import { gql } from "../helpers";
 import { actionCartClear, actionPromise } from "../reducers";
 
 export const actionOrderUpsert = (order) => async (dispatch, getState) => {

@@ -1,4 +1,4 @@
-import { backendURL, gql } from "../helpers";
+import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
 
 export const actionCatsFind =

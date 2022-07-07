@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
 import styles from "react-responsive-carousel/lib/styles/carousel.min.css";
 import { actionPageStart } from "../../actions/actionPageStart";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { AuthPage } from "../AuthPage";
 import { LayoutPage } from "../LayoutPage";

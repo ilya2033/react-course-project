@@ -1,5 +1,4 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import MainPageImage from "../../images/main-page-image.png";
 import { GoodCardSlider } from "../common/GoodCardSlider";

@@ -1,5 +1,5 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { Modal } from '../Modal';
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { Modal } from "../Modal";
 
 export const ConfirmModal = ({ open, text, onYES, onNO, onClose }) => {
     return (

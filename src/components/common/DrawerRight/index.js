@@ -1,5 +1,5 @@
-import { Drawer } from '@mui/material';
-import ReactDOM from 'react-dom';
+import { Drawer } from "@mui/material";
+import ReactDOM from "react-dom";
 
 export const DrawerRight = ({ children, onClose = null, open } = {}) => {
     return ReactDOM.createPortal(

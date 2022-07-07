@@ -1,14 +1,12 @@
-import { connect } from 'react-redux';
-import { useEffect } from 'react';
-import SearchGoodResultItem from './SearchGoodResultItem';
-import { HiOutlineEmojiSad } from 'react-icons/hi';
-import SearchCategoryResultItem from './SearchCategoryResultItem';
-import { Divider, Paper, Stack, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import { Error } from '../Error';
-import SearchOrderResultItem from './SearchOrderResultItem';
+import { connect } from "react-redux";
+import SearchGoodResultItem from "./SearchGoodResultItem";
+import SearchCategoryResultItem from "./SearchCategoryResultItem";
+import { Divider, Paper, Stack } from "@mui/material";
+import { Box } from "@mui/system";
+import { Error } from "../Error";
+import SearchOrderResultItem from "./SearchOrderResultItem";
 
-export const SearchResults = ({ items, onItemClick, itemLink = '' }) => {
+export const SearchResults = ({ items, onItemClick, itemLink = "" }) => {
     return (
         <Paper className="SearchResults">
             <Stack>

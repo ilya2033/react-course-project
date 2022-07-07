@@ -1,5 +1,3 @@
-import { connect } from "react-redux";
-
 import { AddButton } from "../../common/AddButton";
 import { TableCell, TableRow, TableSortLabel } from "@mui/material";
 import { useNavigate } from "react-router-dom";

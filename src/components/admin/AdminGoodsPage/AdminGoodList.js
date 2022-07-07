@@ -1,7 +1,6 @@
 import { AdminGoodListHeader } from "./AdminGoodListHeader";
 import { AdminGoodItem } from "./AdminGoodItem";
 import { connect } from "react-redux";
-import { useEffect, useState } from "react";
 
 import { SearchBar, SearchResults } from "../../common/SearchBar";
 import { actionGoodsFind } from "../../../actions/actionGoodsFind";

@@ -1,5 +1,5 @@
-import { IconButton, Stack, TableCell, TableRow, Typography } from '@mui/material';
-import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
+import { IconButton, Stack, TableCell, TableRow, Typography } from "@mui/material";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 export const OrderGood = ({ orderGood, onChange }) => {
     return (

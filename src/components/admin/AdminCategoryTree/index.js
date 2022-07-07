@@ -1,11 +1,11 @@
-import 'react-sortable-tree/style.css';
-import { Component, useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import SortableTree from 'react-sortable-tree';
-import { FaEdit } from 'react-icons/fa';
-import { actionCategoryUpsert } from '../../../actions/actionCategoryUpsert';
-import { CategoryEditModal } from '../CategoryEditModal';
-import { Box, Button } from '@mui/material';
+import "react-sortable-tree/style.css";
+import { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import SortableTree from "react-sortable-tree";
+import { FaEdit } from "react-icons/fa";
+import { actionCategoryUpsert } from "../../../actions/actionCategoryUpsert";
+import { CategoryEditModal } from "../CategoryEditModal";
+import { Box, Button } from "@mui/material";
 
 const bulidCategoryTree = (list) => {
     let node,
@@ -62,11 +62,7 @@ export const AdminCategoryTree = ({ categories, onDrop, onPopupOpen }) => {
 
     return (
         <Box className="CategotyTree">
-            <CategoryEditModal
-                category={selectedNode}
-                isOpen={isCategoryPopupOpen}
-                onClose={() => setIsCategoryPopupOpen(false)}
-            />
+            <CategoryEditModal category={selectedNode} isOpen={isCategoryPopupOpen} onClose={() => setIsCategoryPopupOpen(false)} />
             <SortableTree
                 isVirtualized={false}
                 treeData={treeData}
@@ -76,8 +72,7 @@ export const AdminCategoryTree = ({ categories, onDrop, onPopupOpen }) => {
                         const { _id, title: name } = node;
                         if (parentNode) {
                             let { _id, title: name } = parentNode;
-                            let subcategories =
-                                parentNode?.children?.map(({ _id, title: name }) => ({ _id, name })) || [];
+                            let subcategories = parentNode?.children?.map(({ _id, title: name }) => ({ _id, name })) || [];
                             onDrop({ _id, name, subcategories });
                         } else {
                             onDrop({ _id, name, parent: null });
@@ -101,7 +96,7 @@ export const AdminCategoryTree = ({ categories, onDrop, onPopupOpen }) => {
                             <FaEdit />
                         </Button>,
                     ],
-                    className: 'TreeNode',
+                    className: "TreeNode",
                 })}
             />
         </Box>

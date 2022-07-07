@@ -1,5 +1,5 @@
 import { actionPromise } from "../reducers";
-import { backendURL, gql } from "../helpers";
+import { gql } from "../helpers";
 
 export const actionCatAll =
     ({ limit = 20, skip = 0, promiseName = "catAll", orderBy = "_id" } = {}) =>
@@ -15,6 +15,9 @@ export const actionCatAll =
                                 _id, name
                             }
                             subcategories{
+                                _id name
+                            }
+                            goods{
                                 _id name
                             }
                         }

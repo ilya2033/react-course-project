@@ -9,99 +9,112 @@ import * as Yup from "yup";
 import { UIContext } from "../../UIContext";
 
 const signInSchema = Yup.object().shape({
-  username: Yup.string().min(3, "Too Short!").max(15, "Too Long!").required("Required"),
-  password: Yup.string().min(3, "Too Short!").max(15, "Too Long!").required("Required"),
+    username: Yup.string().min(3, "Too Short!").max(15, "Too Long!").required("Required"),
+    password: Yup.string().min(3, "Too Short!").max(15, "Too Long!").required("Required"),
 });
 
 export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serverErrors }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const { setAlert } = useContext(UIContext);
+    const [showPassword, setShowPassword] = useState(false);
+    const { setAlert } = useContext(UIContext);
 
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-      repeatPassword: "",
-    },
-    validationSchema: signInSchema,
-    validateOnChange: true,
-    onSubmit: () => {
-      onLogin(formik.values.username, formik.values.password);
-    },
-  });
+    const formik = useFormik({
+        initialValues: {
+            username: "",
+            password: "",
+            repeatPassword: "",
+        },
+        validationSchema: signInSchema,
+        validateOnChange: true,
+        onSubmit: () => {
+            onLogin(formik.values.username, formik.values.password);
+        },
+    });
 
-  useEffect(() => {
-    if (promiseStatus === "FULFILLED") {
-      formik.setSubmitting(false);
-      setAlert({
-        show: true,
-        severity: "success",
-        message: "Готово",
-      });
-    }
-    if (promiseStatus === "REJECTED") {
-      const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
-      formik.setSubmitting(false);
-      setAlert({
-        show: true,
-        severity: "error",
-        message: errorMessage,
-      });
-    }
-  }, [promiseStatus]);
+    useEffect(() => {
+        if (promiseStatus === "FULFILLED") {
+            formik.setSubmitting(false);
+            setAlert({
+                show: true,
+                severity: "success",
+                message: "Готово",
+            });
+        }
+        if (promiseStatus === "REJECTED") {
+            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            formik.setSubmitting(false);
+            setAlert({
+                show: true,
+                severity: "error",
+                message: errorMessage,
+            });
+        }
+    }, [promiseStatus]);
 
-  return (
-    <Box className="LoginForm" display="flex" flexDirection="column" alignItems="center" component="form" onSubmit={formik.handleSubmit}>
-      <TextField
-        id="username"
-        name="username"
-        variant="standard"
-        label="Username"
-        error={formik.touched.username && Boolean(formik.errors.username)}
-        value={formik.values.username}
-        onBlur={formik.handleBlur}
-        onChange={formik.handleChange}
-        helperText={formik.touched.username && formik.errors.username}
-        fullWidth
-        sx={{ mt: 2 }}
-      />
+    return (
+        <Box
+            className="LoginForm"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            component="form"
+            onSubmit={formik.handleSubmit}
+        >
+            <TextField
+                id="username"
+                name="username"
+                variant="standard"
+                label="Username"
+                error={formik.touched.username && Boolean(formik.errors.username)}
+                value={formik.values.username}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                helperText={formik.touched.username && formik.errors.username}
+                fullWidth
+                sx={{ mt: 2 }}
+            />
 
-      <TextField
-        id="password"
-        name="password"
-        variant="standard"
-        label="Password"
-        type={showPassword ? "text" : "password"}
-        error={formik.touched.password && Boolean(formik.errors.password)}
-        value={formik.values.password}
-        onBlur={formik.handleBlur}
-        onChange={formik.handleChange}
-        helperText={formik.touched.password && formik.errors.password}
-        InputProps={{
-          endAdornment: (
-            <IconButton onClick={() => setShowPassword((prev) => !prev)} edge="end">
-              {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-            </IconButton>
-          ),
-        }}
-        fullWidth
-        sx={{ mt: 2 }}
-      />
+            <TextField
+                id="password"
+                name="password"
+                variant="standard"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                value={formik.values.password}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                helperText={formik.touched.password && formik.errors.password}
+                InputProps={{
+                    endAdornment: (
+                        <IconButton onClick={() => setShowPassword((prev) => !prev)} edge="end">
+                            {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                        </IconButton>
+                    ),
+                }}
+                fullWidth
+                sx={{ mt: 2 }}
+            />
 
-      <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }}>
-        <Button variant="text" color="primary" type="submit" disabled={formik.isSubmitting || !formik.isValid} sx={{ mt: 2, mr: 1 }}>
-          Войти
-        </Button>
+            <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }}>
+                <Button
+                    variant="text"
+                    color="primary"
+                    type="submit"
+                    disabled={formik.isSubmitting || !formik.isValid}
+                    sx={{ mt: 2, mr: 1 }}
+                >
+                    Войти
+                </Button>
 
-        <Button variant="text" onClick={onRegisterButtonClick} sx={{ mt: 2 }}>
-          Регистрация
-        </Button>
-      </Stack>
-    </Box>
-  );
+                <Button variant="text" onClick={onRegisterButtonClick} sx={{ mt: 2 }}>
+                    Регистрация
+                </Button>
+            </Stack>
+        </Box>
+    );
 };
 
 export const CLoginForm = connect(
-  (state) => ({ promiseStatus: state.promise?.login?.status || null, serverErrors: state.promise?.login?.error || [] }),
-  { onLogin: (login, password) => actionLogin(login, password) }
+    (state) => ({ promiseStatus: state.promise?.login?.status || null, serverErrors: state.promise?.login?.error || [] }),
+    { onLogin: (login, password) => actionLogin(login, password) }
 )(LoginForm);

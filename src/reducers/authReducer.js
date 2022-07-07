@@ -1,15 +1,15 @@
-import { jwtDecode } from '../helpers';
+import { jwtDecode } from "../helpers";
 
 export function authReducer(state, { type, token }) {
     if (state === undefined) {
         if (localStorage.authToken) {
             token = localStorage.authToken;
-            type = 'AUTH_LOGIN';
+            type = "AUTH_LOGIN";
             state = {};
         }
     }
 
-    if (type === 'AUTH_LOGIN') {
+    if (type === "AUTH_LOGIN") {
         if (!token || !jwtDecode(token)) return {};
         localStorage.authToken = token;
         return {
@@ -19,16 +19,16 @@ export function authReducer(state, { type, token }) {
         };
     }
 
-    if (type === 'AUTH_LOGOUT') {
-        localStorage.removeItem('authToken');
+    if (type === "AUTH_LOGOUT") {
+        localStorage.removeItem("authToken");
         return {};
     }
     return state || {};
 }
 
 export const actionAuthLogin = (token) => ({
-    type: 'AUTH_LOGIN',
+    type: "AUTH_LOGIN",
     token: token,
 });
 
-export const actionAuthLogout = () => ({ type: 'AUTH_LOGOUT' });
+export const actionAuthLogout = () => ({ type: "AUTH_LOGOUT" });

@@ -1,9 +1,9 @@
 export const getGQL = (url) => (query, variables) =>
     fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            ...(localStorage.authToken ? { Authorization: 'Bearer ' + localStorage.authToken } : {}),
+            "Content-Type": "application/json",
+            ...(localStorage.authToken ? { Authorization: "Bearer " + localStorage.authToken } : {}),
         },
         body: JSON.stringify({ query, variables }),
     })

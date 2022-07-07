@@ -1,13 +1,12 @@
 import { connect, useDispatch } from "react-redux";
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import Select from "react-select";
 import { actionCategoryUpdate } from "../../../actions/actionCategoryUpdate";
-import { actionPromise, actionPromiseClear, store } from "../../../reducers";
-import { Alert, Box, Button, InputLabel, Snackbar, Stack, TextField, Typography } from "@mui/material";
+import { actionPromiseClear } from "../../../reducers";
+import { Box, Button, InputLabel, Stack, TextField } from "@mui/material";
 import { UIContext } from "../../UIContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Error } from "../../common/Error";
 import { ConfirmModal } from "../../common/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { actionCategoryDelete } from "../../../actions/actionCategoryDelete";
@@ -35,6 +34,7 @@ const CategoryForm = ({
     const [parentList, setParentList] = useState([]);
     const { setAlert } = useContext(UIContext);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const formik = useFormik({
@@ -53,8 +53,15 @@ const CategoryForm = ({
             categoryToSave.subcategories = inputSubcategories;
             onSaveClick && onSaveClick();
             onSave(categoryToSave);
+            setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
     });
+
+    useEffect(() => {
+        return () => {
+            setPromiseTimeOut(null);
+        };
+    }, []);
 
     useEffect(() => {
         formik.setFieldValue("name", category.name || "");
@@ -66,6 +73,7 @@ const CategoryForm = ({
     useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "success",
@@ -75,6 +83,7 @@ const CategoryForm = ({
         if (promiseStatus === "REJECTED") {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",
@@ -85,9 +94,11 @@ const CategoryForm = ({
 
     useEffect(() => {
         if (deletePromiseStatus === "FULFILLED") {
+            setPromiseTimeOut(null);
             navigate("/admin/categories/");
         }
         if (deletePromiseStatus === "REJECTED") {
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",
@@ -191,6 +202,7 @@ const CategoryForm = ({
                     onNO={() => setIsDeleteModalOpen(false)}
                     onYES={() => {
                         onDelete(category);
+                        setPromiseTimeOut(setTimeout(() => formik.isSubmitting(false), 3000));
                     }}
                 />
             )}

@@ -1,8 +1,7 @@
-import { backendURL, gql } from '../helpers';
-import { actionPromise } from '../reducers';
+import { gql } from "../helpers";
+import { actionPromise } from "../reducers";
 
 export const actionGoodUpsert = (good) => async (dispatch) => {
-
     dispatch(
         actionPromise(
             "goodUpsert",
