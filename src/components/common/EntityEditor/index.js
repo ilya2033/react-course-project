@@ -58,7 +58,7 @@ export const EntityEditor = ({ entity = { images: [] }, onSave, onFileDrop, uplo
                                             <Box
                                                 component="img"
                                                 className="DropZoneImage"
-                                                src={`${backendURL}/${image.url}`}
+                                                src={`${backendURL}${image.url}`}
                                                 loading="lazy"
                                             />
                                         </ImageListItem>
