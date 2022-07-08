@@ -1,6 +1,7 @@
 import { Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { backendURL, mediaURL } from "../../../helpers";
 import defaultGoodImage from "../../../images/default-good-image.png";
 import { actionCartAdd } from "../../../reducers";
 import { CBuyButton } from "../BuyButton";
@@ -12,7 +13,7 @@ const GoodCard = ({ good = {} }) => {
                 <CardMedia
                     component="img"
                     height="200"
-                    image={`/${good.images ? good.images[0]?.url : defaultGoodImage}`}
+                    image={`${backendURL}${mediaURL}${good.images ? good.images[0]?.url : defaultGoodImage}`}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null;
                         currentTarget.src = defaultGoodImage;

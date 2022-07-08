@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import defaultGoodImage from "../../../images/default-good-image.png";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
-import { backendURL } from "../../../helpers";
+import { backendURL, mediaURL } from "../../../helpers";
 
 const AdminGoodItem = ({ good }) => (
     <TableRow className="AdminGoodItem">
@@ -11,7 +11,7 @@ const AdminGoodItem = ({ good }) => (
             {
                 <Box
                     component="img"
-                    src={good.images?.length ? `${backendURL}/${good.images ? good.images[0]?.url : ""}` : defaultGoodImage}
+                    src={good.images?.length ? `${backendURL}${mediaURL}${good.images ? good.images[0]?.url : ""}` : defaultGoodImage}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null; // prevents looping
                         currentTarget.src = defaultGoodImage;
