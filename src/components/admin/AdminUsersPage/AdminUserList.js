@@ -18,7 +18,7 @@ const CSearchResults = connect((state) => ({ items: state.promise.adminUsersFind
 const AdminUserList = ({ users, orderBy = "_id" }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-
+    console.log(1);
     return (
         <Box className="AdminUserList">
             <Box className="searchBarWrapper">

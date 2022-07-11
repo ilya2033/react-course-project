@@ -3,7 +3,8 @@ import defaultGoodImage from "../../../images/default-good-image.png";
 
 import { Grid, Box, Typography } from "@mui/material";
 import { backendURL, mediaURL } from "../../../helpers";
-const SearchGoodResultItem = ({ good, onClick, link = "" } = {}) => {
+
+export const SearchGoodResultItem = ({ good, onClick, link = "" } = {}) => {
     const { _id = 0, images = [], name = "", description = "", price = "" } = good || {};
 
     return (
@@ -39,5 +40,3 @@ const SearchGoodResultItem = ({ good, onClick, link = "" } = {}) => {
         </Grid>
     );
 };
-
-export default SearchGoodResultItem;

@@ -10,7 +10,10 @@ export const actionUsersFind =
                 gql(
                     `query UsersFind($query:String){
                         UserFind(query: $query){
-                            _id username 
+                            _id username acl is_active
+                            avatar{
+                                _id url
+                            }
                         }
                     }`,
                     {

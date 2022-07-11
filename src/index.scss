@@ -313,7 +313,8 @@
                         padding: 10px;
                         z-index: 2;
 
-                        & .SearchGoodResultItem {
+                        & .SearchGoodResultItem,
+                        & .SearchUserResultItem {
                             text-align: left;
                             & img {
                                 width: 100%;
@@ -323,6 +324,7 @@
                                 background: #f1f2f4;
                             }
                         }
+
                         & .SearchOrderResultItem {
                             text-align: left;
                             &:hover {

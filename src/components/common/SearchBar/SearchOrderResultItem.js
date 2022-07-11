@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { Stack, Typography } from "@mui/material";
 import { statusNumber } from "../../../helpers";
-const SearchOrderResultItem = ({ order, onClick, link = "" } = {}) => {
-    const { _id = null, owner = null, status = "-" } = order || {};
+
+export const SearchOrderResultItem = ({ order, onClick, link = "" } = {}) => {
+    const { _id = null, owner = null } = order || {};
 
     return (
         <Stack
@@ -20,5 +21,3 @@ const SearchOrderResultItem = ({ order, onClick, link = "" } = {}) => {
         </Stack>
     );
 };
-
-export default SearchOrderResultItem;

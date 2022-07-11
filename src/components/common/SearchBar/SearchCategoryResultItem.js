@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Stack, Typography } from "@mui/material";
-const SearchCategoryResultItem = ({ category, onClick, link = "" } = {}) => {
+export const SearchCategoryResultItem = ({ category, onClick, link = "" } = {}) => {
     const { _id = null, name = "" } = category || {};
 
     return (
@@ -13,5 +13,3 @@ const SearchCategoryResultItem = ({ category, onClick, link = "" } = {}) => {
         </Link>
     );
 };
-
-export default SearchCategoryResultItem;

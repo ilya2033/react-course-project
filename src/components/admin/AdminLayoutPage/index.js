@@ -12,7 +12,14 @@ import {
     actionFeedOrdersFind,
     actionFeedCatsFind,
 } from "../../../reducers";
-import { actionFeedAdd, actionFeedClear, actionFeedGoods, actionFeedOrders, actionFeedUsers } from "../../../reducers/feedReducer";
+import {
+    actionFeedAdd,
+    actionFeedClear,
+    actionFeedGoods,
+    actionFeedOrders,
+    actionFeedUsers,
+    actionFeedUsersFind,
+} from "../../../reducers/feedReducer";
 import { CAdminGoodPage } from "../AdminGoodPage";
 import { AdminGoodsPage } from "../AdminGoodsPage";
 import { AdminCategoriesPage } from "../AdminCategoriesPage";
@@ -79,7 +86,6 @@ const AdminCategoriesPageContainer = ({ cats }) => {
     }, [orderBy]);
 
     useEffect(() => {
-        dispatch(actionFeedCats({ skip: cats?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -120,7 +126,6 @@ const AdminCategoriesSearchPageContainer = () => {
     }, [orderBy, text]);
 
     useEffect(() => {
-        dispatch(actionFeedCatsFind({ text, skip: categories?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -183,7 +188,6 @@ const AdminGoodsPageContainer = ({ goods }) => {
     }, [orderBy]);
 
     useEffect(() => {
-        dispatch(actionFeedGoods({ skip: goods?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -224,7 +228,6 @@ const AdminGoodsSearchPageContainer = () => {
     }, [orderBy, text]);
 
     useEffect(() => {
-        dispatch(actionFeedGoodsFind({ text, skip: goods?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -265,7 +268,6 @@ const AdminOrdersPageContainer = ({ orders }) => {
     }, [orderBy, status]);
 
     useEffect(() => {
-        dispatch(actionFeedOrders({ skip: orders?.length || 0, orderBy, status }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
                 const {
@@ -306,7 +308,6 @@ const AdminOrdersSearchPageContainer = () => {
     }, [orderBy, text]);
 
     useEffect(() => {
-        dispatch(actionFeedOrdersFind({ text, skip: orders?.length || 0, orderBy }));
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 const {
@@ -353,6 +354,47 @@ const AdminOrderPageContainer = () => {
         }
     }, [params._id]);
     return <CAdminOrderPage />;
+};
+
+const AdminUsersSearchPageContainer = () => {
+    const dispatch = useDispatch();
+    const users = useSelector((state) => state.promise?.feedUsersFind?.payload || []);
+    const [searchParams] = useSearchParams();
+    const orderBy = searchParams.get("orderBy") || "_id";
+    const text = searchParams.get("text") || "";
+
+    useEffect(() => {
+        dispatch(actionFeedClear());
+        dispatch(actionPromiseClear("feedUsersFind"));
+        dispatch(actionPromiseClear("userUpsert"));
+        dispatch(actionFeedUsersFind({ skip: 0, orderBy, text }));
+    }, [orderBy, text]);
+
+    useEffect(() => {
+        window.onscroll = (e) => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                const {
+                    feed,
+                    promise: { feedUsersFind },
+                } = store.getState();
+
+                if (feedUsersFind.status !== "PENDING") {
+                    dispatch(actionFeedOrdersFind({ text, skip: feed.payload?.length || 0, orderBy }));
+                }
+            }
+        };
+        return () => {
+            dispatch(actionFeedClear());
+            dispatch(actionPromiseClear("feedUsersFind"));
+            dispatch(actionPromiseClear("userUpsert"));
+            window.onscroll = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (users?.length) store.dispatch(actionFeedAdd(users));
+    }, [users]);
+    return <AdminUsersPage orderBy={orderBy} />;
 };
 
 const AdminUsersPageContainer = ({ users }) => {
@@ -443,6 +485,7 @@ const AdminLayoutPage = () => {
                 <Route path="/orders/search" element={<AdminOrdersSearchPageContainer />} />
                 <Route path="/order/" element={<AdminOrderPageContainer />} />
                 <Route path="/order/:_id" element={<AdminOrderPageContainer />} />
+                <Route path="/users/search" element={<AdminUsersSearchPageContainer />} />
                 <Route path="/users/" element={<CAdminUsersPageContainer />} />
                 <Route path="/user/" element={<AdminUserPageContainer />} />
                 <Route path="/user/:_id" element={<AdminUserPageContainer />} />
