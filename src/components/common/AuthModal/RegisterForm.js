@@ -21,6 +21,8 @@ const signUpSchema = Yup.object().shape({
 export const RegisterForm = ({ serverErrors, promiseStatus, onRegister, onLoginButtonClick }) => {
     const [showPassword, setShowPassword] = useState(false);
     const { setAlert } = useContext(UIContext);
+    const [promiseTimeOut, setPromiseTimeOut] = useState(null);
+
     const formik = useFormik({
         initialValues: {
             username: "",
@@ -31,12 +33,22 @@ export const RegisterForm = ({ serverErrors, promiseStatus, onRegister, onLoginB
         validateOnChange: true,
         onSubmit: () => {
             onRegister(formik.values.username, formik.values.password);
+            setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
     });
 
     useEffect(() => {
+        return () => {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
+        };
+    }, []);
+
+    useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "success",
@@ -46,6 +58,8 @@ export const RegisterForm = ({ serverErrors, promiseStatus, onRegister, onLoginB
         if (promiseStatus === "REJECTED") {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",

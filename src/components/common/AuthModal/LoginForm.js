@@ -13,9 +13,17 @@ const signInSchema = Yup.object().shape({
     password: Yup.string().min(3, "Too Short!").max(15, "Too Long!").required("Required"),
 });
 
-export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serverErrors }) => {
+export const LoginForm = ({
+    onLogin,
+    onRegisterButtonClick,
+    promiseStatus,
+    serverErrors,
+    inputVariant = "standard",
+    buttonVariant = "text",
+} = {}) => {
     const [showPassword, setShowPassword] = useState(false);
     const { setAlert } = useContext(UIContext);
+    const [promiseTimeOut, setPromiseTimeOut] = useState(null);
 
     const formik = useFormik({
         initialValues: {
@@ -27,12 +35,22 @@ export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serve
         validateOnChange: true,
         onSubmit: () => {
             onLogin(formik.values.username, formik.values.password);
+            setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
     });
 
     useEffect(() => {
+        return () => {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
+        };
+    }, []);
+
+    useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "success",
@@ -42,6 +60,8 @@ export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serve
         if (promiseStatus === "REJECTED") {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",
@@ -62,7 +82,7 @@ export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serve
             <TextField
                 id="username"
                 name="username"
-                variant="standard"
+                variant={inputVariant}
                 label="Username"
                 error={formik.touched.username && Boolean(formik.errors.username)}
                 value={formik.values.username}
@@ -76,7 +96,7 @@ export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serve
             <TextField
                 id="password"
                 name="password"
-                variant="standard"
+                variant={inputVariant}
                 label="Password"
                 type={showPassword ? "text" : "password"}
                 error={formik.touched.password && Boolean(formik.errors.password)}
@@ -97,7 +117,7 @@ export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serve
 
             <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }}>
                 <Button
-                    variant="text"
+                    variant={buttonVariant}
                     color="primary"
                     type="submit"
                     disabled={formik.isSubmitting || !formik.isValid}
@@ -106,9 +126,13 @@ export const LoginForm = ({ onLogin, onRegisterButtonClick, promiseStatus, serve
                     Войти
                 </Button>
 
-                <Button variant="text" onClick={onRegisterButtonClick} sx={{ mt: 2 }}>
-                    Регистрация
-                </Button>
+                {onRegisterButtonClick ? (
+                    <Button variant={buttonVariant} onClick={onRegisterButtonClick} sx={{ mt: 2 }}>
+                        Регистрация
+                    </Button>
+                ) : (
+                    ""
+                )}
             </Stack>
         </Box>
     );

@@ -1,12 +1,27 @@
-import { Stack } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { connect } from "react-redux";
 import { Error } from "../common/Error";
 import { DashboardOrder } from "./DashboardOrder";
+import { CProfileForm } from "./ProfileForm";
 
 export const DashboardPage = ({ orders = [] }) => {
     return (
         <Stack className="DashboardPage" spacing={4}>
-            {!!orders.length ? orders.map((order) => <DashboardOrder order={order} key={order._id} />) : <Error>Пока пусто </Error>}
+            <Paper className="Paper">
+                <CProfileForm />
+            </Paper>
+            {!!orders.length ? (
+                <Box mt={2}>
+                    <Typography pb={2} variant="h5">
+                        Замовлення
+                    </Typography>
+                    {orders.map((order) => (
+                        <DashboardOrder order={order} key={order._id} />
+                    ))}
+                </Box>
+            ) : (
+                ""
+            )}
         </Stack>
     );
 };

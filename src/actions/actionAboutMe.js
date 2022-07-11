@@ -15,7 +15,7 @@ export const actionAboutMe = () => async (dispatch, getState) => {
             gql(
                 `query AboutMe($q:String){
                         UserFindOne(query:$q){
-                            _id username avatar{
+                            _id username name nick avatar{
                                 _id url
                             }
                         }

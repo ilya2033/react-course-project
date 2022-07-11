@@ -37,6 +37,7 @@ const CategoryForm = ({
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const formik = useFormik({
         initialValues: {
             name: category?.name || "",
@@ -59,6 +60,7 @@ const CategoryForm = ({
 
     useEffect(() => {
         return () => {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
         };
     }, []);
@@ -68,12 +70,15 @@ const CategoryForm = ({
         setInputParent(category?.parent || null);
         setInputGoods(category?.goods || []);
         setInputSubcategories(category?.subcategories || []);
+        formik.validateForm();
     }, [category]);
 
     useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
+
             setAlert({
                 show: true,
                 severity: "success",
@@ -83,6 +88,7 @@ const CategoryForm = ({
         if (promiseStatus === "REJECTED") {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
             setAlert({
                 show: true,
@@ -94,10 +100,12 @@ const CategoryForm = ({
 
     useEffect(() => {
         if (deletePromiseStatus === "FULFILLED") {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
             navigate("/admin/categories/");
         }
         if (deletePromiseStatus === "REJECTED") {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
             setAlert({
                 show: true,

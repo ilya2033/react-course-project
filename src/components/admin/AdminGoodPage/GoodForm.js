@@ -74,8 +74,16 @@ export const GoodForm = ({
     });
 
     useEffect(() => {
+        return () => {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
+        };
+    }, []);
+
+    useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
             setAlert({
                 show: true,
@@ -86,6 +94,7 @@ export const GoodForm = ({
         if (promiseStatus === "REJECTED") {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
             setAlert({
                 show: true,
@@ -97,10 +106,12 @@ export const GoodForm = ({
 
     useEffect(() => {
         if (deletePromiseStatus === "FULFILLED") {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
             navigate("/admin/goods/");
         }
         if (deletePromiseStatus === "REJECTED") {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
             setAlert({
                 show: true,
@@ -120,6 +131,7 @@ export const GoodForm = ({
         formik.setFieldValue("description", good.description || "");
         formik.setFieldValue("amount", good.amount || 0);
         formik.setFieldValue("price", good.price || 0);
+        formik.validateForm();
     }, [good.categories, good.name, good.description, good.amount, good.price]);
 
     useEffect(() => {
@@ -127,6 +139,7 @@ export const GoodForm = ({
             onClose && onClose();
         };
     }, []);
+
     return (
         <Box className="GoodForm" component="form" onSubmit={formik.handleSubmit}>
             <TextField

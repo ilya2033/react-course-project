@@ -188,7 +188,7 @@ export const LayoutPage = () => {
                                 path="/dashboard/"
                                 exact
                                 element={
-                                    <CProtectedRoute roles={["user"]} fallback="/auth">
+                                    <CProtectedRoute roles={["user"]} fallback="/">
                                         <DashboardPageContainer />
                                     </CProtectedRoute>
                                 }

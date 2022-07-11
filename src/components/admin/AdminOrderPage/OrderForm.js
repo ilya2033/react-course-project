@@ -12,11 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { actionOrderDelete } from "../../../actions/actionOrderDelete";
 import { ConfirmModal } from "../../common/ConfirmModal";
 
-const deliveryOptions = [
-    { label: "Нова пошта", value: "nova-poshta" },
-    { label: "Justin", value: "justin" },
-];
-
 export const OrderForm = ({
     serverErrors = [],
     onSaveClick,
@@ -33,6 +28,7 @@ export const OrderForm = ({
     const { setAlert } = useContext(UIContext);
     const goodList = useSelector((state) => state.promise?.goodsAll?.payload || []);
     const [inputOrderGoods, setInputOrderGoods] = useState([]);
+    const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -47,22 +43,29 @@ export const OrderForm = ({
             orderToSave.orderGoods = inputOrderGoods;
             onSaveClick && onSaveClick();
             onSave(orderToSave);
+            setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
     });
+
+    useEffect(() => {
+        return () => {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
+        };
+    }, []);
 
     useEffect(() => {
         setInputStatus(order?.status || null);
         setInputUser(order?.owner || null);
         setInputOrderGoods(order.orderGoods || []);
-    }, [order]);
-
-    useEffect(() => {
         formik.validateForm();
-    }, [formik.values]);
+    }, [order]);
 
     useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "success",
@@ -72,6 +75,8 @@ export const OrderForm = ({
         if (promiseStatus === "REJECTED") {
             const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",
@@ -82,9 +87,17 @@ export const OrderForm = ({
 
     useEffect(() => {
         if (deletePromiseStatus === "FULFILLED") {
+            formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
+
             navigate("/admin/orders/");
         }
         if (deletePromiseStatus === "REJECTED") {
+            formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
+
             setAlert({
                 show: true,
                 severity: "error",
