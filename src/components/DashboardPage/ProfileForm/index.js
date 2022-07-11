@@ -4,15 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { actionUpdateAvatar } from "../../../actions/actionUpdateAvatar";
 import { actionUserUpdate } from "../../../actions/actionUserUpdate";
-import { Ava } from "../../common/Ava";
 import { DropZone } from "../../common/DropZone";
-import { CProfileImage } from "./ProfileImage";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { UIContext } from "../../UIContext";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { ProfileImageEditor } from "../../common/ProfileImageEditor";
 
-const CDropZone = connect(null, { onFileDrop: (acceptedFiles) => actionUpdateAvatar(acceptedFiles[0]) })(DropZone);
+const CProfileImageEditor = connect((state) => ({ avatar: state.promise?.aboutMe?.payload?.avatar || null }), {
+    onFileDrop: (acceptedFiles) => actionUpdateAvatar(acceptedFiles[0]),
+})(ProfileImageEditor);
 
 const profileSchema = Yup.object().shape({
     name: Yup.string(),
@@ -22,7 +23,6 @@ const profileSchema = Yup.object().shape({
 });
 
 export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, serverErrors = [] } = {}) => {
-    const [isLetterShown, setIsLetterShown] = useState(false);
     const [editMod, setEditMod] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const { setAlert } = useContext(UIContext);
@@ -86,19 +86,10 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
         <Box component="form" className="ProfileForm" onSubmit={formik.handleSubmit}>
             <Grid container spacing={3}>
                 <Grid xs={4} item>
-                    <CDropZone>
-                        <Box
-                            className="profileImageWrapper"
-                            onMouseEnter={() => setIsLetterShown(true)}
-                            onMouseLeave={() => setIsLetterShown(false)}
-                        >
-                            <CProfileImage />
-                            <Box className={`letter ${isLetterShown && "show"}`}>Drop file or click to update</Box>
-                        </Box>
-                    </CDropZone>
+                    <CProfileImageEditor />
                 </Grid>
                 <Grid xs={8} item>
-                    <Table justify>
+                    <Table>
                         <TableBody>
                             <TableRow>
                                 <TableCell>Username</TableCell>

@@ -5,7 +5,7 @@ export const actionAboutMe = () => async (dispatch, getState) => {
     const {
         auth: {
             payload: {
-                sub: { id },
+                sub: { _id },
             },
         },
     } = getState();
@@ -21,7 +21,7 @@ export const actionAboutMe = () => async (dispatch, getState) => {
                         }
                     }`,
                 {
-                    q: JSON.stringify([{ _id: id }]),
+                    q: JSON.stringify([{ _id }]),
                 }
             )
         )

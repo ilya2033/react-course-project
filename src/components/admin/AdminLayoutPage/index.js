@@ -12,7 +12,7 @@ import {
     actionFeedOrdersFind,
     actionFeedCatsFind,
 } from "../../../reducers";
-import { actionFeedAdd, actionFeedClear, actionFeedGoods, actionFeedOrders } from "../../../reducers/feedReducer";
+import { actionFeedAdd, actionFeedClear, actionFeedGoods, actionFeedOrders, actionFeedUsers } from "../../../reducers/feedReducer";
 import { CAdminGoodPage } from "../AdminGoodPage";
 import { AdminGoodsPage } from "../AdminGoodsPage";
 import { AdminCategoriesPage } from "../AdminCategoriesPage";
@@ -24,6 +24,22 @@ import { actionCatAll } from "../../../actions/actionCatAll";
 import { actionGoodsAll } from "../../../actions/actionGoodsAll";
 import { CAdminCategoryTree } from "../AdminCategoryTree";
 import { actionUsersAll } from "../../../actions/actionUsersAll";
+import { AdminUsersPage } from "../AdminUsersPage";
+import { CAdminUserPage } from "../AdminUserPage.js";
+import { actionUserById } from "../../../actions/actionUserById";
+
+const AdminCategoryTreePageContainer = ({}) => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(actionCatAll());
+        return () => {
+            dispatch(actionPromiseClear("catAll"));
+        };
+    }, []);
+
+    return <CAdminCategoryTree />;
+};
 
 const AdminCategoryPageContainer = ({}) => {
     const dispatch = useDispatch();
@@ -339,6 +355,66 @@ const AdminOrderPageContainer = () => {
     return <CAdminOrderPage />;
 };
 
+const AdminUsersPageContainer = ({ users }) => {
+    const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
+    const orderBy = searchParams.get("orderBy") || "_id";
+
+    useEffect(() => {
+        dispatch(actionFeedClear());
+        dispatch(actionPromiseClear("feedUsersAll"));
+        dispatch(actionPromiseClear("userUpsert"));
+        dispatch(actionFeedUsers({ skip: 0, orderBy }));
+    }, [orderBy]);
+
+    useEffect(() => {
+        dispatch(actionFeedUsers({ skip: users?.length || 0, orderBy }));
+        window.onscroll = (e) => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                const {
+                    feed,
+                    promise: { feedUsersAll },
+                } = store.getState();
+
+                if (feedUsersAll.status !== "PENDING") {
+                    dispatch(actionFeedUsers({ skip: feed.payload?.length || 0, orderBy }));
+                }
+            }
+        };
+        return () => {
+            dispatch(actionFeedClear());
+            dispatch(actionPromiseClear("feedUsersAll"));
+            dispatch(actionPromiseClear("userUpsert"));
+            window.onscroll = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (users?.length) store.dispatch(actionFeedAdd(users));
+    }, [users]);
+    return <AdminUsersPage orderBy={orderBy} />;
+};
+
+const AdminUserPageContainer = () => {
+    const params = useParams();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(actionPromiseClear("adminUserById"));
+        dispatch(actionPromiseClear("uploadFile"));
+        return () => {
+            dispatch(actionPromiseClear("adminUserById"));
+            dispatch(actionPromiseClear("uploadFile"));
+        };
+    }, []);
+    useEffect(() => {
+        if (params._id) {
+            dispatch(actionUserById({ _id: params._id, promiseName: "adminUserById" }));
+        }
+    }, [params._id]);
+    return <CAdminUserPage />;
+};
+
 const CAdminGoodsPageContainer = connect((state) => ({ goods: state.promise?.feedGoodsAll?.payload || [] }))(AdminGoodsPageContainer);
 
 const CAdminOrdersPageContainer = connect((state) => ({ orders: state.promise?.feedOrdersAll?.payload || [] }))(AdminOrdersPageContainer);
@@ -347,12 +423,14 @@ const CAdminCategoriesPageContainer = connect((state) => ({ cats: state.promise?
     AdminCategoriesPageContainer
 );
 
+const CAdminUsersPageContainer = connect((state) => ({ users: state.promise?.feedUsersAll?.payload || [] }))(AdminUsersPageContainer);
+
 const AdminLayoutPage = () => {
     return (
         <Box className="AdminLayoutPage">
             <Routes>
                 <Route path="/" element={<Navigate to={"/admin/goods/"} />} />
-                <Route path="/tree/" element={<CAdminCategoryTree />} />
+                <Route path="/tree/" element={<AdminCategoryTreePageContainer />} />
                 <Route path="/goods/" element={<CAdminGoodsPageContainer />} />
                 <Route path="/goods/search" element={<AdminGoodsSearchPageContainer />} />
                 <Route path="/good/" element={<AdminGoodPageContainer />} />
@@ -365,6 +443,9 @@ const AdminLayoutPage = () => {
                 <Route path="/orders/search" element={<AdminOrdersSearchPageContainer />} />
                 <Route path="/order/" element={<AdminOrderPageContainer />} />
                 <Route path="/order/:_id" element={<AdminOrderPageContainer />} />
+                <Route path="/users/" element={<CAdminUsersPageContainer />} />
+                <Route path="/user/" element={<AdminUserPageContainer />} />
+                <Route path="/user/:_id" element={<AdminUserPageContainer />} />
                 <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
         </Box>

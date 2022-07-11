@@ -1,442 +1,395 @@
-*{
-  padding: 0;
-  margin:0;
+* {
+    padding: 0;
+    margin: 0;
 }
 
-.Link{
-  color:inherit;
-  text-decoration: none;
+.Link {
+    color: inherit;
+    text-decoration: none;
 }
 
-
-.Modal{
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100vw;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.1);
-
-
-
-  & .modalContent {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 7px;
-    width:50%;
-
-  }
-
-
-}
-
-
-
-
-
-
-
-.AuthPage{
-
-  display: flex;
-  justify-content: center;
-  min-width: 100%;
-  height: 100vh;
-  align-items: center;
-  & .LoginForm{
-    min-width: 400px;
-  }
-}
-
-
-.carousel {
-  &   .thumb {
-
-    border: 1px solid rgba(0,0,0,0)!important;
-    cursor:pointer;
-    &:hover{
-      border:1px solid #C9C5CA!important;
-    }
-  }
-
-}
-
-.GoodCard{
-
-  & .BuyButton{
-    margin-left: auto;
-    white-space: nowrap;
-  }
-}
-
-
-.DrawerCart{
-  width:350px;
-  & .header{
-    justify-content: space-between;
-    width: 100%;
-  }
-  & .header{
-    padding: 10px;
-  }
-
-
-  & .DrawerCartItem{
-    width:100%;
-    display: flex;
-
-
-    & .content{
-      flex:1;
-    }
-
-    & .buttons{
-      padding: 10px;
-      display: flex;
-      align-items: center;
-    }
-  }
-  & .list{
-
-  }
-}
-
-
-
-.App{
-  & .Error404{
-    height: 99vh;
-  }
-
-
-  & .Header{
-    margin-bottom: 30px;
-
-
-    & .AppBar{
-      background: white;
-      color:#6750A4;
-
-      & .ToolBar{
-        padding-left: 50px;
-        padding-right: 50px;
-
-        & .AvatarButton{
-          height: 46px;
-          width: 46px;
-        }
-
-        & .Logo{
-          width:50px;
-          height:50px;
-          margin-right: 10px;
-        }
-        & .SearchBarWrapper{
-          flex-grow: 1;
-          margin-left: 10px;
-
-          & .SearchBar{
-            position: relative;
-            justify-content: center;
-            padding-left: 20%;
-            & .SearchBarInput{
-              width: 100%;
-              max-width: 500px;
-            }
-            & .SearchResults{
-              position: absolute;
-              width: 100%;
-              max-width: 480px;
-              background: white;
-              padding: 10px;
-              z-index: 2;
-
-              & .SearchGoodResultItem{
-                text-align: left;
-                & img{
-                  width:100%;
-                  max-height: 100px;
-                }
-                &:hover{
-                  background: #F1F2F4;
-                }
-              }
-            }
-
-          }
-        }
-        & .CartIcon{
-          & .MuiBadge-badge{
-            right: 4px;
-            top: 35px;
-            padding: 0 4px;
-          }
-
-          & .CartLogo{
-            color:#6750A4;
-            width:30px;
-            height:30px;
-          }
-        }
-
-        & .LogoutIcon{
-
-          & .LogoutLogo{
-            color:#6750A4;
-            width:30px;
-            height:30px;
-          }
-        }
-      }
-
-    }
-
-  }
-  & .Aside{
-    margin-left: 50px;
-
-
-    & .body{
-      padding: 10px 0px 100px 0px;
-      border-radius: 5px;
-      border:1px solid #C9C5CA ;
-      & .Categories{
-
-      }
-    }
-
-  }
-
-  & .Content{
-    margin-left: 50px;
-    margin-right: 50px;
-    min-height: 600px;
-    border-radius: 5px;
-    flex:1;
-    border:1px solid #C9C5CA ;
-
-    & .DashboardPage{
-      padding: 20px;
-
-      & .Paper{
-        padding: 20px;
-      }
-
-      & .ProfileForm{
-        & .profileImageWrapper{
-          position: relative;
-          overflow: hidden;
-          & .ProfileImage{
+.ProfileImageEditor {
+    & .profileImageWrapper {
+        position: relative;
+        overflow: hidden;
+        & .ProfileImage {
             max-width: 100%;
-
-          }
-          & .letter{
+        }
+        & .letter {
             z-index: 2;
             display: block;
             position: absolute;
-
             width: 100%;
-            transition:.2s;
+            transition: 0.2s;
             text-align: center;
-            background: #CECECE;
+            background: #cecece;
             padding: 10px;
-            opacity: .9;
+            opacity: 0.9;
 
-            &.show{
-              margin-top:-43px;
+            &.show {
+                margin-top: -43px;
             }
-          }
-
         }
-
-
-
-        MuiTableCell-root{border-right: 1px solid grey}
-
-
-      }
-
-      & .DashboardOrder{
-        padding:20px;
-
-        & .DashboardOrderGood{
-          & img{
-           width:100%;
-          }
-        }
-      }
     }
-
-    & .AdminLayoutPage{
-      padding: 10px;
-      padding-bottom: 400px;
-
-      & .AdminOrderPage{
-        text-align: left;
-      }
-
-      & .AdminGoodPage{
-        & .GoodForm{
-          width:40%;
-          text-align: left;
-        }
-        & .EntityEditor{
-          & .DropZoneImage{
-            width: 100%;
-          }
-          & .Dropzone{
-            background: #F1F2F4;
-            width: 100%;
-            padding: 70px 0;
-            border: 1px dashed #E9EAEC;
-            border-radius: 5px;
-            text-align: center;
-
-          }
-        }
-      }
-      & .AdminGoodList{
-        width:90%;
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-left: 5%;
-
-
-
-        & .AdminGoodItem{
-          & img{
-            width: 100px;
-          }
-        }
-      }
-
-      & .AdminCategoryPage{
-        & .CategoryForm{
-          width:40%;
-          text-align: left;
-        }
-
-        & .AdminCategoryList{
-          width:90%;
-          display: flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          margin-left: 5%;
-
-
-        }
-      }
-
-      & .searchBarWrapper{
-        display: flex;
-        justify-content: center;
-        margin-bottom:10px ;
-
-        & .SearchBar{
-
-          position: relative;
-          & .SearchBarInput{
-            width: 100%;
-            max-width: 500px;
-            min-width: 500px;
-          }
-          & .SearchResults{
-            position: absolute;
-            width: 100%;
-            max-width: 480px;
-            background: white;
-            padding: 10px;
-            z-index: 2;
-
-            & .SearchGoodResultItem{
-              text-align: left;
-              & img{
-                width:100%;
-                max-height: 100px;
-              }
-              &:hover{
-                background: #F1F2F4;
-              }
-            }
-            & .SearchOrderResultItem{
-              text-align:left;
-              &:hover{
-                background: #F1F2F4;
-              }
-            }
-          }
-
-        }
-      }
-    }
-
-
-    & .MainPage{
-      padding: 10px;
-      & .MainPageImage{
-        width: 100%;
-        border-radius: 10px;
-      }
-
-    }
-
-    & .CartPage{
-      & .OrderForm{
-        padding: 10px 15px;
-        text-align: left;
-      }
-    }
-
-    & .GoodPage{
-      padding:10px;
-      & .content{
-        text-align: left;
-      }
-
-    }
-
-    & .GoodsPage{
-      padding:10px;
-      & .sortOptionsWrapper{
-        display: flex;
-        justify-content: right;
-        padding-right: 15px;
-
-      }
-      & .Divider{
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-      & .SubCategories{
-        padding-top: 10px;
-        padding-bottom: 10px;
-        display: flex;
-        & .SubCategory{
-          width: 250px;
-          padding: 15px 7px;
-          margin-right: 15px;
-          margin-bottom: 15px;
-          cursor: pointer;
-        }
-
-      }
-    }
-  }
-
-  & .Footer{
-    margin-top:70px;
-    background-color:  #F4EFF4;
-    padding: 25px 0px;
-    & .TableCell{
-      border-bottom: none;
-      padding: 0;
-      padding-top: 5px;
-    }
-
-  }
 }
 
+.Modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vw;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.1);
+
+    & .modalContent {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 7px;
+        width: 50%;
+    }
+}
+
+.AuthPage {
+    display: flex;
+    justify-content: center;
+    min-width: 100%;
+    height: 100vh;
+    align-items: center;
+    & .LoginForm {
+        min-width: 400px;
+    }
+}
+
+.carousel {
+    & .thumb {
+        border: 1px solid rgba(0, 0, 0, 0) !important;
+        cursor: pointer;
+        &:hover {
+            border: 1px solid #c9c5ca !important;
+        }
+    }
+}
+
+.GoodCard {
+    & .BuyButton {
+        margin-left: auto;
+        white-space: nowrap;
+    }
+}
+
+.DrawerCart {
+    width: 350px;
+    & .header {
+        justify-content: space-between;
+        width: 100%;
+    }
+    & .header {
+        padding: 10px;
+    }
+
+    & .DrawerCartItem {
+        width: 100%;
+        display: flex;
+
+        & .content {
+            flex: 1;
+        }
+
+        & .buttons {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+    }
+    & .list {
+    }
+}
+
+.App {
+    & .Error404 {
+        height: 99vh;
+    }
+
+    & .Header {
+        margin-bottom: 30px;
+
+        & .AppBar {
+            background: white;
+            color: #6750a4;
+
+            & .ToolBar {
+                padding-left: 50px;
+                padding-right: 50px;
+
+                & .AvatarButton {
+                    height: 46px;
+                    width: 46px;
+                }
+
+                & .Logo {
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 10px;
+                }
+                & .SearchBarWrapper {
+                    flex-grow: 1;
+                    margin-left: 10px;
+
+                    & .SearchBar {
+                        position: relative;
+                        justify-content: center;
+                        padding-left: 20%;
+                        & .SearchBarInput {
+                            width: 100%;
+                            max-width: 500px;
+                        }
+                        & .SearchResults {
+                            position: absolute;
+                            width: 100%;
+                            max-width: 480px;
+                            background: white;
+                            padding: 10px;
+                            z-index: 2;
+
+                            & .SearchGoodResultItem {
+                                text-align: left;
+                                & img {
+                                    width: 100%;
+                                    max-height: 100px;
+                                }
+                                &:hover {
+                                    background: #f1f2f4;
+                                }
+                            }
+                        }
+                    }
+                }
+                & .CartIcon {
+                    & .MuiBadge-badge {
+                        right: 4px;
+                        top: 35px;
+                        padding: 0 4px;
+                    }
+
+                    & .CartLogo {
+                        color: #6750a4;
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+
+                & .LogoutIcon {
+                    & .LogoutLogo {
+                        color: #6750a4;
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
+        }
+    }
+    & .Aside {
+        margin-left: 50px;
+
+        & .body {
+            padding: 10px 0px 100px 0px;
+            border-radius: 5px;
+            border: 1px solid #c9c5ca;
+            & .Categories {
+            }
+        }
+    }
+
+    & .Content {
+        margin-left: 50px;
+        margin-right: 50px;
+        min-height: 600px;
+        border-radius: 5px;
+        flex: 1;
+        border: 1px solid #c9c5ca;
+
+        & .DashboardPage {
+            padding: 20px;
+
+            & .Paper {
+                padding: 20px;
+            }
+
+            & .ProfileForm {
+                MuiTableCell-root {
+                    border-right: 1px solid grey;
+                }
+            }
+
+            & .DashboardOrder {
+                padding: 20px;
+
+                & .DashboardOrderGood {
+                    & img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        & .AdminLayoutPage {
+            padding: 10px;
+            padding-bottom: 400px;
+
+            & .AdminOrderPage {
+                text-align: left;
+            }
+
+            & .AdminUserList {
+                & .AdminUserItem {
+                    & img {
+                        width: 100px;
+                    }
+                }
+            }
+
+            & .AdminGoodPage {
+                & .GoodForm {
+                    width: 40%;
+                    text-align: left;
+                }
+                & .EntityEditor {
+                    & .DropZoneImage {
+                        width: 100%;
+                    }
+                    & .Dropzone {
+                        background: #f1f2f4;
+                        width: 100%;
+                        padding: 70px 0;
+                        border: 1px dashed #e9eaec;
+                        border-radius: 5px;
+                        text-align: center;
+                    }
+                }
+            }
+            & .AdminGoodList {
+                & .AdminGoodItem {
+                    & img {
+                        width: 100px;
+                    }
+                }
+            }
+
+            & .AdminCategoryPage {
+                & .CategoryForm {
+                    width: 40%;
+                    text-align: left;
+                }
+
+                & .AdminCategoryList {
+                    width: 90%;
+                    display: flex;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    margin-left: 5%;
+                }
+            }
+
+            & .searchBarWrapper {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 10px;
+
+                & .SearchBar {
+                    position: relative;
+                    & .SearchBarInput {
+                        width: 100%;
+                        max-width: 500px;
+                        min-width: 500px;
+                    }
+                    & .SearchResults {
+                        position: absolute;
+                        width: 100%;
+                        max-width: 480px;
+                        background: white;
+                        padding: 10px;
+                        z-index: 2;
+
+                        & .SearchGoodResultItem {
+                            text-align: left;
+                            & img {
+                                width: 100%;
+                                max-height: 100px;
+                            }
+                            &:hover {
+                                background: #f1f2f4;
+                            }
+                        }
+                        & .SearchOrderResultItem {
+                            text-align: left;
+                            &:hover {
+                                background: #f1f2f4;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        & .MainPage {
+            padding: 10px;
+            & .MainPageImage {
+                width: 100%;
+                border-radius: 10px;
+            }
+        }
+
+        & .CartPage {
+            & .OrderForm {
+                padding: 10px 15px;
+                text-align: left;
+            }
+        }
+
+        & .GoodPage {
+            padding: 10px;
+            & .content {
+                text-align: left;
+            }
+        }
+
+        & .GoodsPage {
+            padding: 10px;
+            & .sortOptionsWrapper {
+                display: flex;
+                justify-content: right;
+                padding-right: 15px;
+            }
+            & .Divider {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            & .SubCategories {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                display: flex;
+                & .SubCategory {
+                    width: 250px;
+                    padding: 15px 7px;
+                    margin-right: 15px;
+                    margin-bottom: 15px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    & .Footer {
+        margin-top: 70px;
+        background-color: #f4eff4;
+        padding: 25px 0px;
+        & .TableCell {
+            border-bottom: none;
+            padding: 0;
+            padding-top: 5px;
+        }
+    }
+}

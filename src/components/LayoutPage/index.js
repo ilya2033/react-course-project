@@ -165,7 +165,7 @@ export const LayoutPage = () => {
                                 path="/cart"
                                 exact
                                 element={
-                                    <CProtectedRoute roles={["user"]} fallback="/auth">
+                                    <CProtectedRoute roles={["active"]} fallback="/auth">
                                         <CCartPage />
                                     </CProtectedRoute>
                                 }
@@ -188,7 +188,7 @@ export const LayoutPage = () => {
                                 path="/dashboard/"
                                 exact
                                 element={
-                                    <CProtectedRoute roles={["user"]} fallback="/">
+                                    <CProtectedRoute roles={["active"]} fallback="/">
                                         <DashboardPageContainer />
                                     </CProtectedRoute>
                                 }

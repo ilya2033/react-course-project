@@ -14,6 +14,8 @@ import {
     actionFeedOrdersFind,
     actionFeedOrders,
     feedReducer,
+    actionFeedUsers,
+    actionFeedUsersFind,
 } from "./feedReducer";
 
 export { cartReducer, actionCartAdd, actionCartChange, actionCartDelete, actionCartClear };
@@ -28,6 +30,8 @@ export {
     actionFeedAdd,
     actionFeedOrdersFind,
     actionFeedOrders,
+    actionFeedUsers,
+    actionFeedUsersFind,
     feedReducer,
 };
 export const store = createStore(

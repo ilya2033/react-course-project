@@ -5,6 +5,8 @@ import { actionGoodsAll } from "../actions/actionGoodsAll";
 import { actionOrdersAll } from "../actions/actionOrdersAll";
 import { actionOrdersFind } from "../actions/actionOrdersFind";
 import { actionCategoryGoods } from "../actions/actionCategoryGoods";
+import { actionUsersFind } from "../actions/actionUsersFind";
+import { actionUsersAll } from "../actions/actionUsersAll";
 
 function feedReducer(state = { payload: [] }, { type, payload = [] }) {
     if (type === "FEED_ADD") {
@@ -64,6 +66,18 @@ const actionFeedOrdersFind =
         await dispatch(actionOrdersFind({ skip, limit: 5, promiseName: "feedOrdersFind", text, orderBy }));
     };
 
+const actionFeedUsersFind =
+    ({ skip = 0, text = "", orderBy = "_id" }) =>
+    async (dispatch, getState) => {
+        await dispatch(actionUsersFind({ skip, promiseName: "feedUsersFind", text, limit: 7, orderBy }));
+    };
+
+const actionFeedUsers =
+    ({ skip = 0, orderBy = "_id" }) =>
+    async (dispatch, getState) => {
+        await dispatch(actionUsersAll({ promiseName: "feedUsersAll", skip, limit: 15, orderBy }));
+    };
+
 export {
     actionFeedCats,
     actionFeedCatsFind,
@@ -75,4 +89,6 @@ export {
     actionFeedOrders,
     actionFeedOrdersFind,
     actionFeedCategoryGoods,
+    actionFeedUsers,
+    actionFeedUsersFind,
 };

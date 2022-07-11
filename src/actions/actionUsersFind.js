@@ -1,24 +1,24 @@
 import { actionPromise } from "../reducers";
 import { gql } from "../helpers";
 
-export const actionUsersAll =
-    ({ limit = 0, skip = 0, promiseName = "adminUsersAll", orderBy = "_id" } = {}) =>
+export const actionUsersFind =
+    ({ text = "", limit = 0, skip = 0, promiseName = "adminUsersFind", orderBy = "_id" } = {}) =>
     async (dispatch, getState) => {
         dispatch(
             actionPromise(
                 promiseName,
                 gql(
-                    `query UsersAll($query:String){
+                    `query UsersFind($query:String){
                         UserFind(query: $query){
-                            _id username is_active acl
-                            avatar{
-                                _id url
-                            }
+                            _id username 
                         }
                     }`,
                     {
                         query: JSON.stringify([
-                            {},
+                            {
+                                username__contains: text,
+                                _id__contains: text,
+                            },
                             {
                                 limit: !!limit ? limit : 100,
                                 skip: skip,
