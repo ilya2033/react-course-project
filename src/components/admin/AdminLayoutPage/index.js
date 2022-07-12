@@ -37,18 +37,21 @@ import { actionUserById } from "../../../actions/actionUserById";
 import { actioAdminCategoryPage, actionAdminCategoryPage } from "../../../actions/actionAdminCategoryPage";
 import { actionAdminCategoryPageClear } from "../../../actions/actionAdminCategoryPageClear";
 
-const AdminCategoryTreePageContainer = ({}) => {
-    const dispatch = useDispatch();
-
+const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
-        dispatch(actionCatAll());
+        onLoad();
         return () => {
-            dispatch(actionPromiseClear("catAll"));
+            onUnmount();
         };
     }, []);
 
     return <CAdminCategoryTree />;
 };
+
+const CAdminCategoryTreePageContainer = connect(null, {
+    onUnmount: () => actionCatAll(),
+    onLoad: () => actionPromiseClear("catAll"),
+})(AdminCategoryTreePageContainer);
 
 const AdminCategoryPageContainer = ({ onUnmount, onLoad }) => {
     const params = useParams();
@@ -472,7 +475,7 @@ const AdminLayoutPage = () => {
         <Box className="AdminLayoutPage">
             <Routes>
                 <Route path="/" element={<Navigate to={"/admin/goods/"} />} />
-                <Route path="/tree/" element={<AdminCategoryTreePageContainer />} />
+                <Route path="/tree/" element={<CAdminCategoryTreePageContainer />} />
                 <Route path="/goods/" element={<CAdminGoodsPageContainer />} />
                 <Route path="/goods/search" element={<AdminGoodsSearchPageContainer />} />
                 <Route path="/good/" element={<AdminGoodPageContainer />} />
