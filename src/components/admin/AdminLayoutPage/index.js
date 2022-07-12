@@ -87,7 +87,7 @@ const AdminCategoriesPageContainer = ({ cats }) => {
 
     useEffect(() => {
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 const {
                     feed,
                     promise: { feedCatAll },
@@ -127,7 +127,7 @@ const AdminCategoriesSearchPageContainer = () => {
 
     useEffect(() => {
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 const {
                     feed,
                     promise: { feedCatsFind },
@@ -189,7 +189,7 @@ const AdminGoodsPageContainer = ({ goods }) => {
 
     useEffect(() => {
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 const {
                     feed,
                     promise: { feedGoodsAll },
@@ -229,7 +229,7 @@ const AdminGoodsSearchPageContainer = () => {
 
     useEffect(() => {
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 const {
                     feed,
                     promise: { feedGoodsFind },
@@ -269,7 +269,7 @@ const AdminOrdersPageContainer = ({ orders }) => {
 
     useEffect(() => {
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 const {
                     feed,
                     promise: { feedOrdersAll },
@@ -377,14 +377,14 @@ const AdminUsersSearchPageContainer = () => {
 
     useEffect(() => {
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 const {
                     feed,
                     promise: { feedUsersFind },
                 } = store.getState();
 
                 if (feedUsersFind.status !== "PENDING") {
-                    dispatch(actionFeedOrdersFind({ text, skip: feed.payload?.length || 0, orderBy }));
+                    dispatch(actionFeedUsersFind({ text, skip: feed.payload?.length || 0, orderBy }));
                 }
             }
         };
