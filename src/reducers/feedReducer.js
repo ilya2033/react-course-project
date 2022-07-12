@@ -69,7 +69,7 @@ const actionFeedOrdersFind =
 const actionFeedUsersFind =
     ({ skip = 0, text = "", orderBy = "_id" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionUsersFind({ skip, promiseName: "feedUsersFind", text, limit: 7, orderBy }));
+        await dispatch(actionUsersFind({ skip, promiseName: "feedUsersFind", text, limit: 3, orderBy }));
     };
 
 const actionFeedUsers =

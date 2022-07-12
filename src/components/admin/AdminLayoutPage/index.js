@@ -359,6 +359,11 @@ const AdminOrderPageContainer = () => {
 const AdminUsersSearchPageContainer = () => {
     const dispatch = useDispatch();
     const users = useSelector((state) => state.promise?.feedUsersFind?.payload || []);
+    const {
+        feed,
+        promise: { feedUsersFind },
+    } = useSelector((state) => state);
+
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
     const text = searchParams.get("text") || "";
@@ -384,12 +389,9 @@ const AdminUsersSearchPageContainer = () => {
             }
         };
         return () => {
-            dispatch(actionFeedClear());
-            dispatch(actionPromiseClear("feedUsersFind"));
-            dispatch(actionPromiseClear("userUpsert"));
             window.onscroll = null;
         };
-    }, []);
+    }, [feed, feedUsersFind]);
 
     useEffect(() => {
         if (users?.length) store.dispatch(actionFeedAdd(users));

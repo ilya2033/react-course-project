@@ -49,7 +49,7 @@ const CategoryForm = ({
             category?._id && (categoryToSave._id = category?._id);
             categoryToSave.name = formik.values.name;
             inputGoods && (categoryToSave.goods = inputGoods);
-            inputParent && (categoryToSave.parent = inputParent);
+            inputParent && (categoryToSave.parent = inputParent._id ? inputParent : null);
 
             categoryToSave.subcategories = inputSubcategories;
             onSaveClick && onSaveClick();
@@ -128,14 +128,15 @@ const CategoryForm = ({
         parentList = [...[{ _id: null, name: "null" }], ...parentList];
 
         setParentList(parentList);
-    }, [inputSubcategories]);
+    }, [inputSubcategories, initialCatList]);
 
     useEffect(() => {
         let subCatList = initialCatList.filter(
             ({ _id }) => _id !== category?.parent?._id && _id !== category?._id && inputParent?._id !== _id
         );
+
         setSubCatList(subCatList);
-    }, [inputParent]);
+    }, [inputParent, initialCatList]);
 
     useEffect(() => {
         return () => {
