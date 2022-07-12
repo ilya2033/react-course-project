@@ -8,7 +8,7 @@ export const actionAdminCategoryPage =
     async (dispatch, getState) => {
         dispatch(actionGoodsAll());
         dispatch(actionCatAll());
-        console.log(1);
+
         if (_id) {
             dispatch(actionCatById({ _id, promiseName: "adminCatById" }));
         } else {

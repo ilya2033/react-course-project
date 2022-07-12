@@ -36,6 +36,8 @@ import { CAdminUserPage } from "../AdminUserPage.js";
 import { actionUserById } from "../../../actions/actionUserById";
 import { actioAdminCategoryPage, actionAdminCategoryPage } from "../../../actions/actionAdminCategoryPage";
 import { actionAdminCategoryPageClear } from "../../../actions/actionAdminCategoryPageClear";
+import { actionAdminCategoriesPage } from "../../../actions/actionAdminCategoriesPage";
+import { actionAdminCategoriesPageClear } from "../../../actions/actionAdminCategoriesPageClear";
 
 const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
@@ -74,37 +76,31 @@ const CAdminCategoryPageContainer = connect(null, {
     onLoad: (_id) => actionAdminCategoryPage({ _id }),
 })(AdminCategoryPageContainer);
 
-const AdminCategoriesPageContainer = ({ cats }) => {
+const AdminCategoriesPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
 
     useEffect(() => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedCatAll"));
-        dispatch(actionPromiseClear("categoryUpsert"));
-        dispatch(actionFeedCats({ skip: 0, orderBy }));
+        onLoad({ skip: 0, orderBy });
+
+        return () => {
+            onUnmount();
+        };
     }, [orderBy]);
 
     useEffect(() => {
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                const {
-                    feed,
-                    promise: { feedCatAll },
-                } = store.getState();
-                if (feedCatAll.status !== "PENDING") {
-                    dispatch(actionFeedCats(feed.payload?.length || 0, orderBy));
+                if (promiseStatus !== "PENDING") {
+                    dispatch(actionFeedCats({ skip: feed?.length || 0, orderBy }));
                 }
             }
         };
         return () => {
-            dispatch(actionFeedClear());
-            dispatch(actionPromiseClear("feedCatAll"));
-            dispatch(actionPromiseClear("categoryUpsert"));
             window.onscroll = null;
         };
-    }, []);
+    }, [feed, promiseStatus]);
 
     useEffect(() => {
         if (cats.length) dispatch(actionFeedAdd(cats));
@@ -112,6 +108,18 @@ const AdminCategoriesPageContainer = ({ cats }) => {
 
     return <AdminCategoriesPage orderBy={orderBy} />;
 };
+
+const CAdminCategoriesPageContainer = connect(
+    (state) => ({
+        cats: state.promise?.feedCatAll?.payload || [],
+        feed: state.feed?.payload || [],
+        promiseStatus: state.promise?.feedCatAll?.status || null,
+    }),
+    {
+        onUnmount: () => actionAdminCategoriesPageClear(),
+        onLoad: ({ skip, orderBy }) => actionAdminCategoriesPage({ skip, orderBy }),
+    }
+)(AdminCategoriesPageContainer);
 
 const AdminCategoriesSearchPageContainer = () => {
     const categories = useSelector((state) => state.promise?.feedCatsFind?.payload || []);
@@ -463,10 +471,6 @@ const AdminUserPageContainer = () => {
 const CAdminGoodsPageContainer = connect((state) => ({ goods: state.promise?.feedGoodsAll?.payload || [] }))(AdminGoodsPageContainer);
 
 const CAdminOrdersPageContainer = connect((state) => ({ orders: state.promise?.feedOrdersAll?.payload || [] }))(AdminOrdersPageContainer);
-
-const CAdminCategoriesPageContainer = connect((state) => ({ cats: state.promise?.feedCatAll?.payload || [] }))(
-    AdminCategoriesPageContainer
-);
 
 const CAdminUsersPageContainer = connect((state) => ({ users: state.promise?.feedUsersAll?.payload || [] }))(AdminUsersPageContainer);
 
