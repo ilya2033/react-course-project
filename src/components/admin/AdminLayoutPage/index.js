@@ -34,6 +34,8 @@ import { actionUsersAll } from "../../../actions/actionUsersAll";
 import { AdminUsersPage } from "../AdminUsersPage";
 import { CAdminUserPage } from "../AdminUserPage.js";
 import { actionUserById } from "../../../actions/actionUserById";
+import { actioAdminCategoryPage, actionAdminCategoryPage } from "../../../actions/actionAdminCategoryPage";
+import { actionAdminCategoryPageClear } from "../../../actions/actionAdminCategoryPageClear";
 
 const AdminCategoryTreePageContainer = ({}) => {
     const dispatch = useDispatch();
@@ -48,30 +50,26 @@ const AdminCategoryTreePageContainer = ({}) => {
     return <CAdminCategoryTree />;
 };
 
-const AdminCategoryPageContainer = ({}) => {
-    const dispatch = useDispatch();
+const AdminCategoryPageContainer = ({ onUnmount, onLoad }) => {
     const params = useParams();
 
     useEffect(() => {
-        dispatch(actionGoodsAll());
-        dispatch(actionCatAll());
-
         return () => {
-            dispatch(actionPromiseClear("goodsAll"));
-            dispatch(actionPromiseClear("adminCatById"));
-            dispatch(actionPromiseClear("catAll"));
+            onUnmount();
         };
     }, []);
 
     useEffect(() => {
-        if (params._id) {
-            dispatch(actionCatById({ _id: params._id, promiseName: "adminCatById" }));
-        } else {
-            dispatch(actionPromiseClear("adminCatById"));
-        }
+        onLoad(params._id);
     }, [params._id]);
+
     return <CAdminCategoryPage />;
 };
+
+const CAdminCategoryPageContainer = connect(null, {
+    onUnmount: () => actionAdminCategoryPageClear(),
+    onLoad: (_id) => actionAdminCategoryPage({ _id }),
+})(AdminCategoryPageContainer);
 
 const AdminCategoriesPageContainer = ({ cats }) => {
     const dispatch = useDispatch();
@@ -481,8 +479,8 @@ const AdminLayoutPage = () => {
                 <Route path="/good/:_id" element={<AdminGoodPageContainer />} />
                 <Route path="/categories/" element={<CAdminCategoriesPageContainer />} />
                 <Route path="/categories/search" element={<AdminCategoriesSearchPageContainer />} />
-                <Route path="/category/" element={<AdminCategoryPageContainer />} />
-                <Route path="/category/:_id" element={<AdminCategoryPageContainer />} />
+                <Route path="/category/" element={<CAdminCategoryPageContainer />} />
+                <Route path="/category/:_id" element={<CAdminCategoryPageContainer />} />
                 <Route path="/orders/" element={<CAdminOrdersPageContainer />} />
                 <Route path="/orders/search" element={<AdminOrdersSearchPageContainer />} />
                 <Route path="/order/" element={<AdminOrderPageContainer />} />
