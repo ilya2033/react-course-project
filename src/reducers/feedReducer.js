@@ -39,13 +39,13 @@ const actionFeedCategoryGoods =
 const actionFeedGoodsFind =
     ({ skip = 0, text = "", orderBy = "_id" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionGoodsFind({ skip, limit: 15, promiseName: "feedGoodsFind", text, orderBy }));
+        await dispatch(actionGoodsFind({ skip, limit: 1, promiseName: "feedGoodsFind", text, orderBy }));
     };
 
 const actionFeedCatsFind =
     ({ skip = 0, text = "", orderBy = "_id" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionCatsFind({ skip, promiseName: "feedCatsFind", text, limit: 7, orderBy }));
+        await dispatch(actionCatsFind({ skip, promiseName: "feedCatsFind", text, limit: 1, orderBy }));
     };
 
 const actionFeedCats =

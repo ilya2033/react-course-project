@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Navigate, Route, Routes, useParams, useSearchParams } from "react-router-dom";
 import { actionGoodById } from "../../../actions/actionGoodById";
-import { actionCatById } from "../../../actions/actionCatById";
 import {
     actionPromiseClear,
     store,
@@ -34,10 +33,12 @@ import { actionUsersAll } from "../../../actions/actionUsersAll";
 import { AdminUsersPage } from "../AdminUsersPage";
 import { CAdminUserPage } from "../AdminUserPage.js";
 import { actionUserById } from "../../../actions/actionUserById";
-import { actioAdminCategoryPage, actionAdminCategoryPage } from "../../../actions/actionAdminCategoryPage";
+import { actionAdminCategoryPage } from "../../../actions/actionAdminCategoryPage";
 import { actionAdminCategoryPageClear } from "../../../actions/actionAdminCategoryPageClear";
 import { actionAdminCategoriesPage } from "../../../actions/actionAdminCategoriesPage";
 import { actionAdminCategoriesPageClear } from "../../../actions/actionAdminCategoriesPageClear";
+import { actionAdminCategoriesSearchPageClear } from "../../../actions/actionAdminCategoriesSearchPageClear";
+import { actionAdminCategoriesSearchPage } from "../../../actions/actionAdminCategoriesSearchPage";
 
 const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
@@ -82,7 +83,7 @@ const AdminCategoriesPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnm
     const orderBy = searchParams.get("orderBy") || "_id";
 
     useEffect(() => {
-        onLoad({ skip: 0, orderBy });
+        onLoad({ orderBy });
 
         return () => {
             onUnmount();
@@ -117,49 +118,54 @@ const CAdminCategoriesPageContainer = connect(
     }),
     {
         onUnmount: () => actionAdminCategoriesPageClear(),
-        onLoad: ({ skip, orderBy }) => actionAdminCategoriesPage({ skip, orderBy }),
+        onLoad: ({ orderBy }) => actionAdminCategoriesPage({ orderBy }),
     }
 )(AdminCategoriesPageContainer);
 
-const AdminCategoriesSearchPageContainer = () => {
-    const categories = useSelector((state) => state.promise?.feedCatsFind?.payload || []);
+const AdminCategoriesSearchPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
     const text = searchParams.get("text") || "";
 
     useEffect(() => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedCatsFind"));
-        dispatch(actionFeedCatsFind({ text, orderBy, skip: 0 }));
+        onLoad({ orderBy, text });
+        return () => {
+            onUnmount();
+        };
     }, [orderBy, text]);
 
     useEffect(() => {
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                const {
-                    feed,
-                    promise: { feedCatsFind },
-                } = store.getState();
-
-                if (feedCatsFind.status !== "PENDING") {
-                    dispatch(actionFeedCatsFind({ text, skip: feed.payload?.length || 0, orderBy }));
+                if (promiseStatus !== "PENDING") {
+                    dispatch(actionFeedCatsFind({ text, skip: feed?.length || 0, orderBy }));
                 }
             }
         };
         return () => {
-            dispatch(actionFeedClear());
-            dispatch(actionPromiseClear("feedCatsFind"));
             window.onscroll = null;
         };
-    }, []);
+    }, [promiseStatus, feed, text]);
 
     useEffect(() => {
-        if (categories?.length) store.dispatch(actionFeedAdd(categories));
-    }, [categories]);
+        if (cats?.length) store.dispatch(actionFeedAdd(cats));
+    }, [cats]);
 
     return <AdminCategoriesPage orderBy={orderBy} />;
 };
+
+const CAdminCategoriesSearchPageContainer = connect(
+    (state) => ({
+        cats: state.promise?.feedCatsFind?.payload || [],
+        feed: state.feed?.payload || [],
+        promiseStatus: state.promise?.feedCatsFind?.status || null,
+    }),
+    {
+        onUnmount: () => actionAdminCategoriesSearchPageClear(),
+        onLoad: ({ orderBy, text }) => actionAdminCategoriesSearchPage({ orderBy, text }),
+    }
+)(AdminCategoriesSearchPageContainer);
 
 const AdminGoodPageContainer = () => {
     const params = useParams();
@@ -485,7 +491,7 @@ const AdminLayoutPage = () => {
                 <Route path="/good/" element={<AdminGoodPageContainer />} />
                 <Route path="/good/:_id" element={<AdminGoodPageContainer />} />
                 <Route path="/categories/" element={<CAdminCategoriesPageContainer />} />
-                <Route path="/categories/search" element={<AdminCategoriesSearchPageContainer />} />
+                <Route path="/categories/search" element={<CAdminCategoriesSearchPageContainer />} />
                 <Route path="/category/" element={<CAdminCategoryPageContainer />} />
                 <Route path="/category/:_id" element={<CAdminCategoryPageContainer />} />
                 <Route path="/orders/" element={<CAdminOrdersPageContainer />} />

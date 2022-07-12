@@ -1,7 +1,7 @@
 import { actionFeedCats, actionFeedClear, actionPromiseClear } from "../reducers";
 
 export const actionAdminCategoriesPage =
-    ({ skip = 0, orderBy = "_id" }) =>
+    ({ orderBy = "_id" }) =>
     async (dispatch, getState) => {
         dispatch(actionFeedClear());
         dispatch(actionPromiseClear("feedCatAll"));
