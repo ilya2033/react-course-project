@@ -45,6 +45,11 @@ import { actionAdminGoodPage } from "../../../actions/actionAdminGoodPage";
 import { actionAdminGoodPageClear } from "../../../actions/actionAdminGoodPageClear";
 import { actionAdminGoodsSearchPageClear } from "../../../actions/actionAdminGoodsSearchPageClear";
 import { actionAdminGoodsSearchPage } from "../../../actions/actionAdminGoodsSearchPage";
+import { actionAdminOrdersPageClear } from "../../../actions/actionAdminOrdersPageClear";
+import { actionAdminOrdersPage } from "../../../actions/actionAdminOrdersPage";
+import { actionAdminOrdersSearchPageClear } from "../../../actions/actionAdminOrdersSearchPageClear";
+import { actionAdminOrderPage } from "../../../actions/actionAdminOrderPage";
+import { actionAdminOrderPageClear } from "../../../actions/actionAdminOrderPageClear";
 
 const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
@@ -284,107 +289,118 @@ const CAdminGoodsSearchPageContainer = connect(
     }
 )(AdminGoodsSearchPageContainer);
 
-const AdminOrdersPageContainer = ({ orders }) => {
+const AdminOrdersPageContainer = ({ feed, orders, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
     const status = searchParams.get("status") || 0;
 
     useEffect(() => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedOrdersAll"));
-        dispatch(actionPromiseClear("orderUpsert"));
-        dispatch(actionFeedOrders({ skip: 0, orderBy, status }));
+        onLoad({ orderBy, status });
+        return () => {
+            onUnmount();
+        };
     }, [orderBy, status]);
 
     useEffect(() => {
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                const {
-                    feed,
-                    promise: { feedOrdersAll },
-                } = store.getState();
-
-                if (feedOrdersAll.status !== "PENDING") {
-                    dispatch(actionFeedOrders({ skip: feed.payload?.length || 0, orderBy, status }));
+                if (promiseStatus !== "PENDING") {
+                    onScroll({ feed, orderBy, status });
                 }
             }
         };
         return () => {
-            dispatch(actionFeedClear());
-            dispatch(actionPromiseClear("feedOrdersAll"));
-            dispatch(actionPromiseClear("orderUpsert"));
             window.onscroll = null;
         };
-    }, []);
+    }, [promiseStatus, feed, status]);
 
     useEffect(() => {
-        if (orders?.length) store.dispatch(actionFeedAdd(orders));
+        if (orders?.length) dispatch(actionFeedAdd(orders));
     }, [orders]);
+
     return <AdminOrdersPage orderBy={orderBy} />;
 };
 
-const AdminOrdersSearchPageContainer = () => {
-    const orders = useSelector((state) => state.promise?.feedOrdersFind?.payload || []);
+const CAdminOrdersPageContainer = connect(
+    (state) => ({
+        orders: state.promise?.feedOrdersAll?.payload || [],
+        feed: state.feed?.payload || [],
+        promiseStatus: state.promise?.feedOrdersAll?.status || null,
+    }),
+    {
+        onUnmount: () => actionAdminOrdersPageClear(),
+        onLoad: ({ orderBy, status }) => actionAdminOrdersPage({ orderBy, status }),
+        onScroll: ({ feed, orderBy, status }) => actionFeedOrders({ skip: feed?.length || 0, orderBy, status }),
+    }
+)(AdminOrdersPageContainer);
+
+const AdminOrdersSearchPageContainer = ({ feed, orders, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
     const text = searchParams.get("text") || "";
+    const status = searchParams.get("status") || 0;
 
     useEffect(() => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedOrdersFind"));
-        dispatch(actionFeedOrdersFind({ text, orderBy, skip: 0 }));
-    }, [orderBy, text]);
+        onLoad({ orderBy, text });
+        return () => {
+            onUnmount();
+        };
+    }, [orderBy, text, status]);
 
     useEffect(() => {
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                const {
-                    feed,
-                    promise: { feedOrdersFind },
-                } = store.getState();
-
-                if (feedOrdersFind.status !== "PENDING") {
-                    dispatch(actionFeedOrdersFind({ text, skip: feed.payload?.length || 0, orderBy }));
+                if (promiseStatus !== "PENDING") {
+                    onScroll({ feed, orderBy, text, status });
                 }
             }
         };
         return () => {
-            dispatch(actionFeedClear());
-            dispatch(actionPromiseClear("feedOrdersFind"));
             window.onscroll = null;
         };
-    }, []);
+    }, [promiseStatus, feed, text, status]);
 
     useEffect(() => {
-        if (orders?.length) store.dispatch(actionFeedAdd(orders));
+        if (orders?.length) dispatch(actionFeedAdd(orders));
     }, [orders]);
 
     return <AdminOrdersPage orderBy={orderBy} />;
 };
 
-const AdminOrderPageContainer = () => {
+const CAdminOrdersSearchPageContainer = connect(
+    (state) => ({
+        goods: state.promise?.feedOrdersFind?.payload || [],
+        feed: state.feed?.payload || [],
+        promiseStatus: state.promise?.feedOrdersFind?.status || null,
+    }),
+    {
+        onUnmount: () => actionAdminOrdersSearchPageClear(),
+        onLoad: ({ orderBy, text, status }) => actionAdminOrdersSearchPageClear({ orderBy, text, status }),
+        onScroll: ({ feed, orderBy, text, status }) => actionFeedOrdersFind({ text, skip: feed?.length || 0, orderBy, status }),
+    }
+)(AdminOrdersSearchPageContainer);
+
+const AdminOrderPageContainer = ({ onLoad, onUnmount }) => {
     const params = useParams();
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(actionPromiseClear("adminOrderById"));
-        dispatch(actionUsersAll());
-        dispatch(actionGoodsAll());
         return () => {
-            dispatch(actionPromiseClear("usersAll"));
-            dispatch(actionPromiseClear("goodsAll"));
-            dispatch(actionPromiseClear("adminOrderById"));
+            onUnmount();
         };
     }, []);
+
     useEffect(() => {
-        if (params._id) {
-            dispatch(actionOrderById({ _id: params._id, promiseName: "adminOrderById" }));
-        }
+        onLoad(params._id);
     }, [params._id]);
     return <CAdminOrderPage />;
 };
+
+const CAdminOrderPageContainer = connect(null, {
+    onUnmount: () => actionAdminOrderPageClear(),
+    onLoad: (_id) => actionAdminOrderPage({ _id }),
+})(AdminOrderPageContainer);
 
 const AdminUsersSearchPageContainer = () => {
     const dispatch = useDispatch();
@@ -489,8 +505,6 @@ const AdminUserPageContainer = () => {
     return <CAdminUserPage />;
 };
 
-const CAdminOrdersPageContainer = connect((state) => ({ orders: state.promise?.feedOrdersAll?.payload || [] }))(AdminOrdersPageContainer);
-
 const CAdminUsersPageContainer = connect((state) => ({ users: state.promise?.feedUsersAll?.payload || [] }))(AdminUsersPageContainer);
 
 const AdminLayoutPage = () => {
@@ -508,9 +522,9 @@ const AdminLayoutPage = () => {
                 <Route path="/category/" element={<CAdminCategoryPageContainer />} />
                 <Route path="/category/:_id" element={<CAdminCategoryPageContainer />} />
                 <Route path="/orders/" element={<CAdminOrdersPageContainer />} />
-                <Route path="/orders/search" element={<AdminOrdersSearchPageContainer />} />
-                <Route path="/order/" element={<AdminOrderPageContainer />} />
-                <Route path="/order/:_id" element={<AdminOrderPageContainer />} />
+                <Route path="/orders/search" element={<CAdminOrdersSearchPageContainer />} />
+                <Route path="/order/" element={<CAdminOrderPageContainer />} />
+                <Route path="/order/:_id" element={<CAdminOrderPageContainer />} />
                 <Route path="/users/search" element={<AdminUsersSearchPageContainer />} />
                 <Route path="/users/" element={<CAdminUsersPageContainer />} />
                 <Route path="/user/" element={<AdminUserPageContainer />} />

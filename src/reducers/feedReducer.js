@@ -33,7 +33,7 @@ const actionFeedGoods =
 const actionFeedCategoryGoods =
     ({ skip = 0, orderBy = "_id", category }) =>
     async (dispatch, getState) => {
-        await dispatch(actionCategoryGoods({ skip, limit: 15, promiseName: "feedCategoryGoods", orderBy, category }));
+        await dispatch(actionCategoryGoods({ skip, limit: 1, promiseName: "feedCategoryGoods", orderBy, category }));
     };
 
 const actionFeedGoodsFind =
@@ -51,19 +51,19 @@ const actionFeedCatsFind =
 const actionFeedCats =
     ({ skip = 0, orderBy = "_id" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionCatAll({ promiseName: "feedCatAll", skip, limit: 2, orderBy }));
+        await dispatch(actionCatAll({ promiseName: "feedCatAll", skip, limit: 1, orderBy }));
     };
 
 const actionFeedOrders =
     ({ skip = 0, orderBy = "_id", status = 0 }) =>
     async (dispatch, getState) => {
-        await dispatch(actionOrdersAll({ skip, limit: 15, promiseName: "feedOrdersAll", orderBy, status }));
+        await dispatch(actionOrdersAll({ skip, limit: 1, promiseName: "feedOrdersAll", orderBy, status }));
     };
 
 const actionFeedOrdersFind =
-    ({ skip = 0, text = "", orderBy = "_id" }) =>
+    ({ skip = 0, text = "", orderBy = "_id", status = "0" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionOrdersFind({ skip, limit: 5, promiseName: "feedOrdersFind", text, orderBy }));
+        await dispatch(actionOrdersFind({ skip, limit: 1, promiseName: "feedOrdersFind", text, orderBy, status }));
     };
 
 const actionFeedUsersFind =
