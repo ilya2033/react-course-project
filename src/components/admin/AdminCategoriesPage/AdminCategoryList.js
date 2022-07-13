@@ -38,12 +38,8 @@ const AdminCategoryList = ({ categories, orderBy = "_id" } = {}) => {
                     <AdminCategoryListHeader
                         sort={orderBy}
                         onSortChange={(orderBy) => {
-                            navigate({
-                                pathname: location.pathname,
-                                search: createSearchParams({
-                                    orderBy,
-                                }).toString(),
-                            });
+                            searchParams.set("orderBy", orderBy);
+                            setSearchParams(searchParams);
                         }}
                     />
                 </TableHead>

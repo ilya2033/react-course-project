@@ -43,6 +43,8 @@ import { actionAdminGoodsPageClear } from "../../../actions/actionAdminGoodsPage
 import { actionAdminGoodsPage } from "../../../actions/actionAdminGoodsPage";
 import { actionAdminGoodPage } from "../../../actions/actionAdminGoodPage";
 import { actionAdminGoodPageClear } from "../../../actions/actionAdminGoodPageClear";
+import { actionAdminGoodsSearchPageClear } from "../../../actions/actionAdminGoodsSearchPageClear";
+import { actionAdminGoodsSearchPage } from "../../../actions/actionAdminGoodsSearchPage";
 
 const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
@@ -237,45 +239,50 @@ const CAdminGoodsPageContainer = connect(
     }
 )(AdminGoodsPageContainer);
 
-const AdminGoodsSearchPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount }) => {
-    const goods = useSelector((state) => state.promise?.feedGoodsFind?.payload || []);
+const AdminGoodsSearchPageContainer = ({ feed, goods, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
     const text = searchParams.get("text") || "";
 
     useEffect(() => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedGoodsFind"));
-        dispatch(actionFeedGoodsFind({ text, orderBy, skip: 0 }));
+        onLoad({ orderBy, text });
+        return () => {
+            onUnmount();
+        };
     }, [orderBy, text]);
 
     useEffect(() => {
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                const {
-                    feed,
-                    promise: { feedGoodsFind },
-                } = store.getState();
-
-                if (feedGoodsFind.status !== "PENDING") {
-                    dispatch(actionFeedGoodsFind({ text, skip: feed.payload?.length || 0, orderBy }));
+                if (promiseStatus !== "PENDING") {
+                    onScroll({ feed, orderBy, text });
                 }
             }
         };
         return () => {
-            dispatch(actionFeedClear());
-            dispatch(actionPromiseClear("feedGoodsFind"));
             window.onscroll = null;
         };
-    }, []);
+    }, [promiseStatus, feed, text]);
 
     useEffect(() => {
-        if (goods?.length) store.dispatch(actionFeedAdd(goods));
+        if (goods?.length) dispatch(actionFeedAdd(goods));
     }, [goods]);
-
     return <AdminGoodsPage orderBy={orderBy} />;
 };
+
+const CAdminGoodsSearchPageContainer = connect(
+    (state) => ({
+        goods: state.promise?.feedGoodsFind?.payload || [],
+        feed: state.feed?.payload || [],
+        promiseStatus: state.promise?.feedGoodsFind?.status || null,
+    }),
+    {
+        onUnmount: () => actionAdminGoodsSearchPageClear(),
+        onLoad: ({ orderBy, text }) => actionAdminGoodsSearchPage({ orderBy, text }),
+        onScroll: ({ feed, orderBy, text }) => actionFeedGoodsFind({ text, skip: feed?.length || 0, orderBy }),
+    }
+)(AdminGoodsSearchPageContainer);
 
 const AdminOrdersPageContainer = ({ orders }) => {
     const dispatch = useDispatch();
@@ -493,7 +500,7 @@ const AdminLayoutPage = () => {
                 <Route path="/" element={<Navigate to={"/admin/goods/"} />} />
                 <Route path="/tree/" element={<CAdminCategoryTreePageContainer />} />
                 <Route path="/goods/" element={<CAdminGoodsPageContainer />} />
-                <Route path="/goods/search" element={<AdminGoodsSearchPageContainer />} />
+                <Route path="/goods/search" element={<CAdminGoodsSearchPageContainer />} />
                 <Route path="/good/" element={<CAdminGoodPageContainer />} />
                 <Route path="/good/:_id" element={<CAdminGoodPageContainer />} />
                 <Route path="/categories/" element={<CAdminCategoriesPageContainer />} />
