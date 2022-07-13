@@ -46,7 +46,7 @@ const AdminUserListHeader = ({ onSortChange, sort }) => {
             <TableCell scope="col">
                 <AddButton
                     onClick={() => {
-                        navigate("/admin/order/");
+                        navigate("/admin/user/");
                     }}
                 />
             </TableCell>

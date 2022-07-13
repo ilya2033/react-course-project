@@ -2,16 +2,15 @@ import { actionPromiseClear } from "../reducers";
 import { actionCatAll } from "./actionCatAll";
 import { actionCatById } from "./actionCatById";
 import { actionGoodsAll } from "./actionGoodsAll";
+import { actionUserById } from "./actionUserById";
 
-export const actionAdminCategoryPage =
+export const actionAdminUserPage =
     ({ _id }) =>
     async (dispatch, getState) => {
-        dispatch(actionGoodsAll());
-        dispatch(actionCatAll());
-
+        dispatch(actionPromiseClear("uploadFile"));
         if (_id) {
-            dispatch(actionCatById({ _id, promiseName: "adminCatById" }));
+            dispatch(actionUserById({ _id, promiseName: "adminUserById" }));
         } else {
-            dispatch(actionPromiseClear("adminCatById"));
+            dispatch(actionPromiseClear("adminUserById"));
         }
     };

@@ -57,7 +57,8 @@ export const UserForm = ({
             userToSave = formik.values;
             user?._id && (userToSave._id = user._id);
             userToSave.acl = acl;
-            userToSave.avatar = avatar;
+            avatar ? (userToSave.avatar = avatar) : delete userToSave.avatar;
+            console.log(userToSave);
             onSaveClick && onSaveClick();
             onSave(userToSave);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
@@ -121,7 +122,6 @@ export const UserForm = ({
         formik.setFieldValue("username", user.username || "");
         formik.setFieldValue("nick", user.nick || "");
         formik.setFieldValue("password", user.password || "");
-        formik.setFieldValue();
         formik.validateForm();
     }, [user]);
 
@@ -209,13 +209,13 @@ export const UserForm = ({
                         sx={{ mt: 2 }}
                     />
                     <Box sx={{ mt: 3 }}>
-                        <InputLabel>Категорії</InputLabel>
+                        <InputLabel>Permissions</InputLabel>
                         <Select
                             placeholder="Обрати категорії"
                             value={acl.map((value) => ({ value, label: value }))}
                             closeMenuOnSelect={false}
                             onChange={(e) => setAcl(e.map(({ value }) => value))}
-                            options={(aclList || [])?.map((value) => ({ value, label: value }))}
+                            options={aclList}
                             isMulti={true}
                         />
                     </Box>

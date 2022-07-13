@@ -1,8 +1,6 @@
 import { actionPromiseClear } from "../reducers";
 import { actionCatAll } from "./actionCatAll";
-import { actionCatById } from "./actionCatById";
 import { actionGoodById } from "./actionGoodById";
-import { actionGoodsAll } from "./actionGoodsAll";
 
 export const actionAdminGoodPage =
     ({ _id }) =>

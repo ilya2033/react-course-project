@@ -1,10 +1,9 @@
-import { actionFeedCats, actionFeedClear, actionPromiseClear } from "../reducers";
+import { actionFeedCats, actionFeedClear, actionFeedUsers, actionPromiseClear } from "../reducers";
 
-export const actionAdminCategoriesPage =
+export const actionAdminUsersPage =
     ({ orderBy = "_id" }) =>
     async (dispatch, getState) => {
         dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedCatAll"));
-        dispatch(actionPromiseClear("categoryUpsert"));
-        dispatch(actionFeedCats({ skip: 0, orderBy }));
+        dispatch(actionPromiseClear("feedUsersAll"));
+        dispatch(actionFeedUsers({ skip: 0, orderBy }));
     };

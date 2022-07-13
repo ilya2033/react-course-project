@@ -1,35 +1,17 @@
 import { Box } from "@mui/material";
 import { useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Navigate, Route, Routes, useParams, useSearchParams } from "react-router-dom";
-import { actionGoodById } from "../../../actions/actionGoodById";
-import {
-    actionPromiseClear,
-    store,
-    actionFeedCats,
-    actionFeedGoodsFind,
-    actionFeedOrdersFind,
-    actionFeedCatsFind,
-} from "../../../reducers";
-import {
-    actionFeedAdd,
-    actionFeedClear,
-    actionFeedGoods,
-    actionFeedOrders,
-    actionFeedUsers,
-    actionFeedUsersFind,
-} from "../../../reducers/feedReducer";
+import { actionPromiseClear, actionFeedCats, actionFeedGoodsFind, actionFeedOrdersFind, actionFeedCatsFind } from "../../../reducers";
+import { actionFeedAdd, actionFeedGoods, actionFeedOrders, actionFeedUsers, actionFeedUsersFind } from "../../../reducers/feedReducer";
 import { CAdminGoodPage } from "../AdminGoodPage";
 import { AdminGoodsPage } from "../AdminGoodsPage";
 import { AdminCategoriesPage } from "../AdminCategoriesPage";
 import { CAdminCategoryPage } from "../AdminCategoryPage";
 import { AdminOrdersPage } from "../AdminOrdersPage";
 import { CAdminOrderPage } from "../AdminOrderPage";
-import { actionOrderById } from "../../../actions/actionOrderById";
 import { actionCatAll } from "../../../actions/actionCatAll";
-import { actionGoodsAll } from "../../../actions/actionGoodsAll";
 import { CAdminCategoryTree } from "../AdminCategoryTree";
-import { actionUsersAll } from "../../../actions/actionUsersAll";
 import { AdminUsersPage } from "../AdminUsersPage";
 import { CAdminUserPage } from "../AdminUserPage.js";
 import { actionUserById } from "../../../actions/actionUserById";
@@ -50,6 +32,12 @@ import { actionAdminOrdersPage } from "../../../actions/actionAdminOrdersPage";
 import { actionAdminOrdersSearchPageClear } from "../../../actions/actionAdminOrdersSearchPageClear";
 import { actionAdminOrderPage } from "../../../actions/actionAdminOrderPage";
 import { actionAdminOrderPageClear } from "../../../actions/actionAdminOrderPageClear";
+import { actionAdminUsersSearchPageClear } from "../../../actions/actionAdminUsersSearchPageClear";
+import { actionAdminUsersSearchPage } from "../../../actions/actionAdminUsersSearchPage";
+import { actionAdminUsersPageClear } from "../../../actions/actionAdminUsersPageClear";
+import { actionAdminUsersPage } from "../../../actions/actionAdminUsersPage";
+import { actionAdminUserPageClear } from "../../../actions/actionAdminUserPageClear";
+import { actionAdminUserPage } from "../../../actions/actionAdminUserPage";
 
 const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
@@ -371,7 +359,7 @@ const AdminOrdersSearchPageContainer = ({ feed, orders, promiseStatus, onLoad, o
 
 const CAdminOrdersSearchPageContainer = connect(
     (state) => ({
-        goods: state.promise?.feedOrdersFind?.payload || [],
+        orders: state.promise?.feedOrdersFind?.payload || [],
         feed: state.feed?.payload || [],
         promiseStatus: state.promise?.feedOrdersFind?.status || null,
     }),
@@ -402,110 +390,115 @@ const CAdminOrderPageContainer = connect(null, {
     onLoad: (_id) => actionAdminOrderPage({ _id }),
 })(AdminOrderPageContainer);
 
-const AdminUsersSearchPageContainer = () => {
+const AdminUsersSearchPageContainer = ({ feed, users, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
-    const users = useSelector((state) => state.promise?.feedUsersFind?.payload || []);
-    const {
-        feed,
-        promise: { feedUsersFind },
-    } = useSelector((state) => state);
-
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
     const text = searchParams.get("text") || "";
 
     useEffect(() => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedUsersFind"));
-        dispatch(actionPromiseClear("userUpsert"));
-        dispatch(actionFeedUsersFind({ skip: 0, orderBy, text }));
+        onLoad({ orderBy, text });
+        return () => {
+            onUnmount();
+        };
     }, [orderBy, text]);
 
     useEffect(() => {
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                const {
-                    feed,
-                    promise: { feedUsersFind },
-                } = store.getState();
-
-                if (feedUsersFind.status !== "PENDING") {
-                    dispatch(actionFeedUsersFind({ text, skip: feed.payload?.length || 0, orderBy }));
+                if (promiseStatus !== "PENDING") {
+                    onScroll({ feed, orderBy, text });
                 }
             }
         };
         return () => {
             window.onscroll = null;
         };
-    }, [feed, feedUsersFind]);
+    }, [promiseStatus, feed, text]);
 
     useEffect(() => {
-        if (users?.length) store.dispatch(actionFeedAdd(users));
+        if (users?.length) dispatch(actionFeedAdd(users));
     }, [users]);
+
     return <AdminUsersPage orderBy={orderBy} />;
 };
 
-const AdminUsersPageContainer = ({ users }) => {
+const CAdminUsersSearchPageContainer = connect(
+    (state) => ({
+        users: state.promise?.feedUsersFind?.payload || [],
+        feed: state.feed?.payload || [],
+        promiseStatus: state.promise?.feedUsersFind?.status || null,
+    }),
+    {
+        onUnmount: () => actionAdminUsersSearchPageClear(),
+        onLoad: ({ orderBy, text }) => actionAdminUsersSearchPage({ orderBy, text }),
+        onScroll: ({ feed, orderBy, text }) => actionFeedUsersFind({ text, skip: feed?.length || 0, orderBy }),
+    }
+)(AdminUsersSearchPageContainer);
+
+const AdminUsersPageContainer = ({ feed, users, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
 
     useEffect(() => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedUsersAll"));
-        dispatch(actionPromiseClear("userUpsert"));
-        dispatch(actionFeedUsers({ skip: 0, orderBy }));
+        onLoad({ orderBy });
+        return () => {
+            onUnmount();
+        };
     }, [orderBy]);
 
     useEffect(() => {
-        dispatch(actionFeedUsers({ skip: users?.length || 0, orderBy }));
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-                const {
-                    feed,
-                    promise: { feedUsersAll },
-                } = store.getState();
-
-                if (feedUsersAll.status !== "PENDING") {
-                    dispatch(actionFeedUsers({ skip: feed.payload?.length || 0, orderBy }));
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                if (promiseStatus !== "PENDING") {
+                    onScroll({ feed, orderBy });
                 }
             }
         };
         return () => {
-            dispatch(actionFeedClear());
-            dispatch(actionPromiseClear("feedUsersAll"));
-            dispatch(actionPromiseClear("userUpsert"));
             window.onscroll = null;
         };
-    }, []);
+    }, [promiseStatus, feed]);
 
     useEffect(() => {
-        if (users?.length) store.dispatch(actionFeedAdd(users));
+        if (users?.length) dispatch(actionFeedAdd(users));
     }, [users]);
     return <AdminUsersPage orderBy={orderBy} />;
 };
 
-const AdminUserPageContainer = () => {
+const CAdminUsersPageContainer = connect(
+    (state) => ({
+        users: state.promise?.feedUsersAll?.payload || [],
+        feed: state.feed?.payload || [],
+        promiseStatus: state.promise?.feedUsersAll?.status || null,
+    }),
+    {
+        onUnmount: () => actionAdminUsersPageClear(),
+        onLoad: ({ orderBy }) => actionAdminUsersPage({ orderBy }),
+        onScroll: ({ feed, orderBy }) => actionFeedUsers({ skip: feed?.length || 0, orderBy }),
+    }
+)(AdminUsersPageContainer);
+
+const AdminUserPageContainer = ({ onLoad, onUnmount }) => {
     const params = useParams();
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(actionPromiseClear("adminUserById"));
-        dispatch(actionPromiseClear("uploadFile"));
         return () => {
-            dispatch(actionPromiseClear("adminUserById"));
-            dispatch(actionPromiseClear("uploadFile"));
+            onUnmount();
         };
     }, []);
+
     useEffect(() => {
-        if (params._id) {
-            dispatch(actionUserById({ _id: params._id, promiseName: "adminUserById" }));
-        }
+        onLoad(params._id);
     }, [params._id]);
     return <CAdminUserPage />;
 };
 
-const CAdminUsersPageContainer = connect((state) => ({ users: state.promise?.feedUsersAll?.payload || [] }))(AdminUsersPageContainer);
+const CAdminUserPageContainer = connect(null, {
+    onUnmount: () => actionAdminUserPageClear(),
+    onLoad: (_id) => actionAdminUserPage({ _id }),
+})(AdminUserPageContainer);
 
 const AdminLayoutPage = () => {
     return (
@@ -525,10 +518,10 @@ const AdminLayoutPage = () => {
                 <Route path="/orders/search" element={<CAdminOrdersSearchPageContainer />} />
                 <Route path="/order/" element={<CAdminOrderPageContainer />} />
                 <Route path="/order/:_id" element={<CAdminOrderPageContainer />} />
-                <Route path="/users/search" element={<AdminUsersSearchPageContainer />} />
+                <Route path="/users/search" element={<CAdminUsersSearchPageContainer />} />
                 <Route path="/users/" element={<CAdminUsersPageContainer />} />
-                <Route path="/user/" element={<AdminUserPageContainer />} />
-                <Route path="/user/:_id" element={<AdminUserPageContainer />} />
+                <Route path="/user/" element={<CAdminUserPageContainer />} />
+                <Route path="/user/:_id" element={<CAdminUserPageContainer />} />
                 <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
         </Box>
