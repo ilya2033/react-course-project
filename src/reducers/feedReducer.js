@@ -27,7 +27,7 @@ const actionFeedClear = () => ({ type: "FEED_CLEAR" });
 const actionFeedGoods =
     ({ skip = 0, orderBy = "_id" }) =>
     async (dispatch, getState) => {
-        await dispatch(actionGoodsAll({ skip, limit: 15, promiseName: "feedGoodsAll", orderBy }));
+        await dispatch(actionGoodsAll({ skip, limit: 1, promiseName: "feedGoodsAll", orderBy }));
     };
 
 const actionFeedCategoryGoods =
