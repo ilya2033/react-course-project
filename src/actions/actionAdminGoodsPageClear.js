@@ -1,9 +1,7 @@
-import { actionFeedClear, actionFeedGoods, actionPromiseClear } from "../reducers";
+import { actionFeedClear, actionPromiseClear } from "../reducers";
 
-export const actionAdminGoodsPageClear =
-    ({ orderBy }) =>
-    async (dispatch, getState) => {
-        dispatch(actionFeedClear());
-        dispatch(actionPromiseClear("feedGoodsAll"));
-        dispatch(actionPromiseClear("goodUpsert"));
-    };
+export const actionAdminGoodsPageClear = () => async (dispatch, getState) => {
+    dispatch(actionFeedClear());
+    dispatch(actionPromiseClear("feedGoodsAll"));
+    dispatch(actionPromiseClear("goodUpsert"));
+};

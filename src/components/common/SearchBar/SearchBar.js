@@ -36,6 +36,12 @@ export const SearchBar = ({
     };
 
     useEffect(() => {
+        return () => {
+            onSearchEnd && onSearchEnd();
+        };
+    }, []);
+
+    useEffect(() => {
         setInputValue((searchLink === location.pathname && searchParams.get("text")) || "");
     }, [searchParams]);
 

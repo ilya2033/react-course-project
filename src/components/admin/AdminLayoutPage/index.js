@@ -41,6 +41,8 @@ import { actionAdminCategoriesSearchPageClear } from "../../../actions/actionAdm
 import { actionAdminCategoriesSearchPage } from "../../../actions/actionAdminCategoriesSearchPage";
 import { actionAdminGoodsPageClear } from "../../../actions/actionAdminGoodsPageClear";
 import { actionAdminGoodsPage } from "../../../actions/actionAdminGoodsPage";
+import { actionAdminGoodPage } from "../../../actions/actionAdminGoodPage";
+import { actionAdminGoodPageClear } from "../../../actions/actionAdminGoodPageClear";
 
 const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
@@ -79,14 +81,13 @@ const CAdminCategoryPageContainer = connect(null, {
     onLoad: (_id) => actionAdminCategoryPage({ _id }),
 })(AdminCategoryPageContainer);
 
-const AdminCategoriesPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount }) => {
+const AdminCategoriesPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
 
     useEffect(() => {
         onLoad({ orderBy });
-
         return () => {
             onUnmount();
         };
@@ -96,7 +97,7 @@ const AdminCategoriesPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnm
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 if (promiseStatus !== "PENDING") {
-                    dispatch(actionFeedCats({ skip: feed?.length || 0, orderBy }));
+                    onScroll({ feed, orderBy });
                 }
             }
         };
@@ -121,10 +122,11 @@ const CAdminCategoriesPageContainer = connect(
     {
         onUnmount: () => actionAdminCategoriesPageClear(),
         onLoad: ({ orderBy }) => actionAdminCategoriesPage({ orderBy }),
+        onScroll: ({ feed, orderBy }) => actionFeedCats({ skip: feed?.length || 0, orderBy }),
     }
 )(AdminCategoriesPageContainer);
 
-const AdminCategoriesSearchPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount }) => {
+const AdminCategoriesSearchPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
@@ -141,7 +143,7 @@ const AdminCategoriesSearchPageContainer = ({ feed, cats, promiseStatus, onLoad,
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 if (promiseStatus !== "PENDING") {
-                    dispatch(actionFeedCatsFind({ text, skip: feed?.length || 0, orderBy }));
+                    onScroll({ feed, orderBy, text });
                 }
             }
         };
@@ -151,7 +153,7 @@ const AdminCategoriesSearchPageContainer = ({ feed, cats, promiseStatus, onLoad,
     }, [promiseStatus, feed, text]);
 
     useEffect(() => {
-        if (cats?.length) store.dispatch(actionFeedAdd(cats));
+        if (cats?.length) dispatch(actionFeedAdd(cats));
     }, [cats]);
 
     return <AdminCategoriesPage orderBy={orderBy} />;
@@ -166,46 +168,48 @@ const CAdminCategoriesSearchPageContainer = connect(
     {
         onUnmount: () => actionAdminCategoriesSearchPageClear(),
         onLoad: ({ orderBy, text }) => actionAdminCategoriesSearchPage({ orderBy, text }),
+        onScroll: ({ feed, orderBy, text }) => actionFeedCatsFind({ text, skip: feed?.length || 0, orderBy }),
     }
 )(AdminCategoriesSearchPageContainer);
 
-const AdminGoodPageContainer = () => {
+const AdminGoodPageContainer = ({ onUnmount, onLoad }) => {
     const params = useParams();
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(actionCatAll());
-
         return () => {
-            dispatch(actionPromiseClear("goodsCatAll"));
-            dispatch(actionPromiseClear("adminGoodById"));
+            onUnmount();
         };
     }, []);
 
     useEffect(() => {
-        if (params._id) {
-            dispatch(actionGoodById({ _id: params._id, promiseName: "adminGoodById" }));
-        } else {
-            dispatch(actionPromiseClear("adminGoodById"));
-        }
+        onLoad(params._id);
     }, [params._id]);
+
     return <CAdminGoodPage />;
 };
 
-const AdminGoodsPageContainer = ({ feed, goods, promiseStatus, onLoad, onUnmount }) => {
+const CAdminGoodPageContainer = connect(null, {
+    onUnmount: () => actionAdminGoodPageClear(),
+    onLoad: (_id) => actionAdminGoodPage({ _id }),
+})(AdminGoodPageContainer);
+
+const AdminGoodsPageContainer = ({ feed, goods, promiseStatus, onLoad, onUnmount, onScroll }) => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
 
     useEffect(() => {
         onLoad({ orderBy });
+        return () => {
+            onUnmount();
+        };
     }, [orderBy]);
 
     useEffect(() => {
         window.onscroll = (e) => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
                 if (promiseStatus !== "PENDING") {
-                    dispatch(actionFeedGoods({ skip: feed?.length || 0, orderBy }));
+                    onScroll({ feed, orderBy });
                 }
             }
         };
@@ -229,10 +233,11 @@ const CAdminGoodsPageContainer = connect(
     {
         onUnmount: () => actionAdminGoodsPageClear(),
         onLoad: ({ orderBy }) => actionAdminGoodsPage({ orderBy }),
+        onScroll: ({ feed, orderBy }) => actionFeedGoods({ skip: feed?.length || 0, orderBy }),
     }
 )(AdminGoodsPageContainer);
 
-const AdminGoodsSearchPageContainer = () => {
+const AdminGoodsSearchPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount }) => {
     const goods = useSelector((state) => state.promise?.feedGoodsFind?.payload || []);
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
@@ -489,8 +494,8 @@ const AdminLayoutPage = () => {
                 <Route path="/tree/" element={<CAdminCategoryTreePageContainer />} />
                 <Route path="/goods/" element={<CAdminGoodsPageContainer />} />
                 <Route path="/goods/search" element={<AdminGoodsSearchPageContainer />} />
-                <Route path="/good/" element={<AdminGoodPageContainer />} />
-                <Route path="/good/:_id" element={<AdminGoodPageContainer />} />
+                <Route path="/good/" element={<CAdminGoodPageContainer />} />
+                <Route path="/good/:_id" element={<CAdminGoodPageContainer />} />
                 <Route path="/categories/" element={<CAdminCategoriesPageContainer />} />
                 <Route path="/categories/search" element={<CAdminCategoriesSearchPageContainer />} />
                 <Route path="/category/" element={<CAdminCategoryPageContainer />} />
