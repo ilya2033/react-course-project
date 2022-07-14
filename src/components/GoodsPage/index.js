@@ -50,5 +50,5 @@ const GoodsPage = ({ category = {}, goods = [] }) => {
     );
 };
 
-const CGoodsPage = connect((state) => ({ category: state?.promise?.catById?.payload || [] }))(GoodsPage);
+const CGoodsPage = connect((state) => ({ category: state?.promise?.catById?.payload || {}, goods: state?.feed?.payload || [] }))(GoodsPage);
 export { GoodsPage, CGoodsPage };

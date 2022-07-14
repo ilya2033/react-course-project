@@ -1,11 +1,8 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
 import MainPageImage from "../../images/main-page-image.png";
 import { GoodCardSlider } from "../common/GoodCardSlider";
 
-const MainPage = () => {
-    const popularGoods = useSelector((state) => state.promise?.goodsPopular?.payload || []);
-
+const MainPage = ({ goods = [] } = {}) => {
     return (
         <Box className="MainPage">
             <Stack spacing={3}>
@@ -16,7 +13,7 @@ const MainPage = () => {
                     </Typography>
                 </Box>
                 <Box>
-                    <GoodCardSlider goods={popularGoods} />
+                    <GoodCardSlider goods={goods} />
                 </Box>
             </Stack>
         </Box>

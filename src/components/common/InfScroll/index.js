@@ -7,7 +7,7 @@ export const InfScroll = ({ component = null, onScroll = null, items = [], promi
     const dispatch = useDispatch();
     useEffect(() => {
         window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 400) {
                 if (promiseStatus !== "PENDING") {
                     onScroll && onScroll();
                 }
