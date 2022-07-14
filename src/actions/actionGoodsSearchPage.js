@@ -1,6 +1,6 @@
 import { actionFeedCats, actionFeedCatsFind, actionFeedClear, actionFeedGoodsFind, actionPromiseClear } from "../reducers";
 
-export const actionAdminGoodsSearchPage =
+export const actionGoodsSearchPage =
     ({ orderBy = "_id", text }) =>
     async (dispatch, getState) => {
         dispatch(actionFeedClear());

@@ -1,6 +1,6 @@
 import { CAdminGoodPage } from "../../AdminGoodPage";
-import { actionAdminGoodPage } from "../../../../actions/actionAdminGoodPage";
-import { actionAdminGoodPageClear } from "../../../../actions/actionAdminGoodPageClear";
+import { actionGoodPage } from "../../../../actions/actionGoodPage";
+import { actionGoodPageClear } from "../../../../actions/actionGoodPageClear";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { connect } from "react-redux";
@@ -19,6 +19,6 @@ const AdminGoodPageContainer = ({ onUnmount, onLoad }) => {
 };
 
 export const CAdminGoodPageContainer = connect(null, {
-    onUnmount: () => actionAdminGoodPageClear(),
-    onLoad: (_id) => actionAdminGoodPage({ _id }),
+    onUnmount: () => actionGoodPageClear({ promiseName: "adminGoodById" }),
+    onLoad: (_id) => actionGoodPage({ _id, promiseName: "adminGoodById" }),
 })(AdminGoodPageContainer);

@@ -1,7 +1,7 @@
 import { actionFeedClear, actionFeedUsersFind, actionPromiseClear } from "../reducers";
 
-export const actionAdminUsersSearchPage =
-    ({ orderBy = "_id", text }) =>
+export const actionUsersSearchPage =
+    ({ orderBy = "_id", text = "" } = {}) =>
     async (dispatch, getState) => {
         dispatch(actionFeedClear());
         dispatch(actionPromiseClear("feedUsersFind"));

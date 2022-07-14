@@ -2,8 +2,8 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { actionAdminCategoriesPage } from "../../../../actions/actionAdminCategoriesPage";
-import { actionAdminCategoriesPageClear } from "../../../../actions/actionAdminCategoriesPageClear";
+import { actionCategoriesPage } from "../../../../actions/actionCategoriesPage";
+import { actionCategoriesPageClear } from "../../../../actions/actionCategoriesPageClear";
 import { actionFeedAdd, actionFeedCats } from "../../../../reducers";
 import { AdminCategoriesPage } from "../../AdminCategoriesPage";
 
@@ -46,8 +46,8 @@ export const CAdminCategoriesPageContainer = connect(
         promiseStatus: state.promise?.feedCatAll?.status || null,
     }),
     {
-        onUnmount: () => actionAdminCategoriesPageClear(),
-        onLoad: ({ orderBy }) => actionAdminCategoriesPage({ orderBy }),
+        onUnmount: () => actionCategoriesPageClear(),
+        onLoad: ({ orderBy }) => actionCategoriesPage({ orderBy }),
         onScroll: ({ feed, orderBy }) => actionFeedCats({ skip: feed?.length || 0, orderBy }),
     }
 )(AdminCategoriesPageContainer);

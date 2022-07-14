@@ -1,5 +1,5 @@
-import { actionAdminGoodsPageClear } from "../../../../actions/actionAdminGoodsPageClear";
-import { actionAdminGoodsPage } from "../../../../actions/actionAdminGoodsPage";
+import { actionGoodsPageClear } from "../../../../actions/actionGoodsPageClear";
+import { actionGoodsPage } from "../../../../actions/actionGoodsPage";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { InfScroll } from "../../../common/InfScroll";
@@ -36,8 +36,8 @@ export const CAdminGoodsPageContainer = connect(
         promiseStatus: state.promise?.feedGoodsAll?.status || null,
     }),
     {
-        onUnmount: () => actionAdminGoodsPageClear(),
-        onLoad: ({ orderBy }) => actionAdminGoodsPage({ orderBy }),
+        onUnmount: () => actionGoodsPageClear(),
+        onLoad: ({ orderBy }) => actionGoodsPage({ orderBy }),
         onScroll: ({ feed, orderBy }) => actionFeedGoods({ skip: feed?.length || 0, orderBy }),
     }
 )(AdminGoodsPageContainer);

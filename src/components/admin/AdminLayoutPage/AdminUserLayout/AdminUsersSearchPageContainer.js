@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { actionAdminUsersSearchPage } from "../../../../actions/actionAdminUsersSearchPage";
-import { actionAdminUsersSearchPageClear } from "../../../../actions/actionAdminUsersSearchPageClear";
+import { actionUsersSearchPage } from "../../../../actions/actionUsersSearchPage";
+import { actionUsersSearchPageClear } from "../../../../actions/actionUsersSearchPageClear";
 import { actionFeedUsersFind } from "../../../../reducers";
 import { InfScroll } from "../../../common/InfScroll";
 import { AdminUsersPage } from "../../AdminUsersPage";
@@ -37,8 +37,8 @@ export const CAdminUsersSearchPageContainer = connect(
         promiseStatus: state.promise?.feedUsersFind?.status || null,
     }),
     {
-        onUnmount: () => actionAdminUsersSearchPageClear(),
-        onLoad: ({ orderBy, text }) => actionAdminUsersSearchPage({ orderBy, text }),
+        onUnmount: () => actionUsersSearchPageClear(),
+        onLoad: ({ orderBy, text }) => actionUsersSearchPage({ orderBy, text }),
         onScroll: ({ feed, orderBy, text }) => actionFeedUsersFind({ text, skip: feed?.length || 0, orderBy }),
     }
 )(AdminUsersSearchPageContainer);

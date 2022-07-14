@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { actionAdminOrdersSearchPageClear } from "../../../../actions/actionAdminOrdersSearchPageClear";
+import { actionOrdersSearchPageClear } from "../../../../actions/actionOrdersSearchPageClear";
 import { actionFeedOrdersFind } from "../../../../reducers";
 import { InfScroll } from "../../../common/InfScroll";
 import { AdminOrdersPage } from "../../AdminOrdersPage";
@@ -37,8 +37,8 @@ export const CAdminOrdersSearchPageContainer = connect(
         promiseStatus: state.promise?.feedOrdersFind?.status || null,
     }),
     {
-        onUnmount: () => actionAdminOrdersSearchPageClear(),
-        onLoad: ({ orderBy, text, status }) => actionAdminOrdersSearchPageClear({ orderBy, text, status }),
+        onUnmount: () => actionOrdersSearchPageClear(),
+        onLoad: ({ orderBy, text, status }) => actionOrdersSearchPageClear({ orderBy, text, status }),
         onScroll: ({ feed, orderBy, text, status }) => actionFeedOrdersFind({ text, skip: feed?.length || 0, orderBy, status }),
     }
 )(AdminOrdersSearchPageContainer);

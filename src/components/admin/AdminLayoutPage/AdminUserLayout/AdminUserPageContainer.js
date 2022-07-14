@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { actionAdminUserPage } from "../../../../actions/actionAdminUserPage";
-import { actionAdminUserPageClear } from "../../../../actions/actionAdminUserPageClear";
+import { actionUserPage } from "../../../../actions/actionUserPage";
+import { actionUserPageClear } from "../../../../actions/actionUserPageClear";
 import { CAdminUserPage } from "../../AdminUserPage.js";
 
 const AdminUserPageContainer = ({ onLoad, onUnmount }) => {
@@ -21,6 +21,6 @@ const AdminUserPageContainer = ({ onLoad, onUnmount }) => {
 };
 
 export const CAdminUserPageContainer = connect(null, {
-    onUnmount: () => actionAdminUserPageClear(),
-    onLoad: (_id) => actionAdminUserPage({ _id }),
+    onUnmount: () => actionUserPageClear({ promiseName: "adminUserById" }),
+    onLoad: (_id) => actionUserPage({ _id, promiseName: "adminUserById" }),
 })(AdminUserPageContainer);

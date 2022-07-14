@@ -1,7 +1,7 @@
-import { actionFeedCats, actionFeedClear, actionFeedUsers, actionPromiseClear } from "../reducers";
+import { actionFeedClear, actionFeedUsers, actionPromiseClear } from "../reducers";
 
-export const actionAdminUsersPage =
-    ({ orderBy = "_id" }) =>
+export const actionUsersPage =
+    ({ orderBy = "_id" } = {}) =>
     async (dispatch, getState) => {
         dispatch(actionFeedClear());
         dispatch(actionPromiseClear("feedUsersAll"));

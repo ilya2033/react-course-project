@@ -3,15 +3,15 @@ import { actionGoodsAll } from "./actionGoodsAll";
 import { actionOrderById } from "./actionOrderById";
 import { actionUsersAll } from "./actionUsersAll";
 
-export const actionAdminOrderPage =
-    ({ _id }) =>
+export const actionOrderPage =
+    ({ _id, promiseName = "orderById" } = {}) =>
     async (dispatch, getState) => {
         dispatch(actionUsersAll());
         dispatch(actionGoodsAll());
 
         if (_id) {
-            dispatch(actionOrderById({ _id, promiseName: "adminOrderById" }));
+            dispatch(actionOrderById({ _id, promiseName }));
         } else {
-            dispatch(actionPromiseClear("adminOrderById"));
+            dispatch(actionPromiseClear(promiseName));
         }
     };
