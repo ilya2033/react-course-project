@@ -1,8 +1,17 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { all, put, takeEvery, takeLatest, takeLeading, select } from "redux-saga/effects";
 import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
 import { authReducer, actionAuthLogin, actionAuthLogout } from "./authReducer";
-import { promiseReducer, actionPending, actionFulfilled, actionRejected, actionPromise, actionPromiseClear } from "./promiseReducer";
+import {
+    promiseReducer,
+    actionPending,
+    actionFulfilled,
+    actionRejected,
+    actionPromise,
+    actionPromiseClear,
+    promiseWatcher,
+} from "./promiseReducer";
 import { cartReducer, actionCartAdd, actionCartChange, actionCartDelete, actionCartClear } from "./cartReducer";
 import {
     actionFeedCats,
@@ -34,6 +43,8 @@ export {
     actionFeedUsersFind,
     feedReducer,
 };
+
+const sagaMiddleware = createSagaMiddleware();
 export const store = createStore(
     combineReducers({
         auth: authReducer,
@@ -41,5 +52,11 @@ export const store = createStore(
         cart: cartReducer,
         feed: feedReducer,
     }),
-    composeWithDevTools(applyMiddleware(thunk))
+    applyMiddleware(sagaMiddleware)
 );
+
+function* rootSaga() {
+    yield all([promiseWatcher()]);
+}
+
+sagaMiddleware.run(rootSaga);

@@ -3,18 +3,22 @@ import { actionCatAll } from "./actionCatAll";
 import { actionGoodsPopular } from "./actionGoodsPopular";
 import { actionOrders } from "./actionOrders";
 import { actionRootCats } from "./actionRootCats";
+import { put, select, call } from "redux-saga/effects";
+import { promiseWorker } from "../reducers/promiseReducer";
 
-export const actionPageStart = () => async (dispatch, getState) => {
-    dispatch(actionRootCats());
-    dispatch(actionCatAll());
-    dispatch(actionGoodsPopular());
+export const actionPageStart = () => ({ type: "PAGE_START" });
+
+export function* pageStartWorker() {
+    yield put(actionRootCats());
+    yield put(actionCatAll());
+    yield put(actionGoodsPopular());
 
     const {
         auth: { token },
-    } = getState();
+    } = yield select();
 
     if (token) {
-        dispatch(actionAboutMe());
-        dispatch(actionOrders());
+        yield put(actionAboutMe());
+        yield put(actionOrders());
     }
-};
+}

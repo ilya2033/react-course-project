@@ -2,12 +2,11 @@ import { gql } from "../helpers";
 
 import { actionPromise } from "../reducers";
 
-export const actionGoodsPopular = () => async (dispatch, getState) => {
-    dispatch(
-        actionPromise(
-            "goodsPopular",
-            gql(
-                `query GoodsPopular($query:String){
+export const actionGoodsPopular = () =>
+    actionPromise(
+        "goodsPopular",
+        gql(
+            `query GoodsPopular($query:String){
                     GoodFind(query: $query){
                         _id name price amount
                         images{
@@ -15,16 +14,14 @@ export const actionGoodsPopular = () => async (dispatch, getState) => {
                         }
                     }
                 }`,
-                {
-                    query: JSON.stringify([
-                        {},
-                        {
-                            limit: 15,
-                            orderBy: "popular",
-                        },
-                    ]),
-                }
-            )
+            {
+                query: JSON.stringify([
+                    {},
+                    {
+                        limit: 15,
+                        orderBy: "popular",
+                    },
+                ]),
+            }
         )
     );
-};
