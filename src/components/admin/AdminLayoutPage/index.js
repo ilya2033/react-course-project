@@ -14,7 +14,6 @@ import { actionCatAll } from "../../../actions/actionCatAll";
 import { CAdminCategoryTree } from "../AdminCategoryTree";
 import { AdminUsersPage } from "../AdminUsersPage";
 import { CAdminUserPage } from "../AdminUserPage.js";
-import { actionUserById } from "../../../actions/actionUserById";
 import { actionAdminCategoryPage } from "../../../actions/actionAdminCategoryPage";
 import { actionAdminCategoryPageClear } from "../../../actions/actionAdminCategoryPageClear";
 import { actionAdminCategoriesPage } from "../../../actions/actionAdminCategoriesPage";
@@ -38,6 +37,7 @@ import { actionAdminUsersPageClear } from "../../../actions/actionAdminUsersPage
 import { actionAdminUsersPage } from "../../../actions/actionAdminUsersPage";
 import { actionAdminUserPageClear } from "../../../actions/actionAdminUserPageClear";
 import { actionAdminUserPage } from "../../../actions/actionAdminUserPage";
+import { InfScroll } from "../../common/InfScroll";
 
 const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
     useEffect(() => {
@@ -171,14 +171,11 @@ const AdminGoodPageContainer = ({ onUnmount, onLoad }) => {
     const params = useParams();
 
     useEffect(() => {
+        onLoad(params._id);
         return () => {
             onUnmount();
         };
     }, []);
-
-    useEffect(() => {
-        onLoad(params._id);
-    }, [params._id]);
 
     return <CAdminGoodPage />;
 };
@@ -189,7 +186,6 @@ const CAdminGoodPageContainer = connect(null, {
 })(AdminGoodPageContainer);
 
 const AdminGoodsPageContainer = ({ feed, goods, promiseStatus, onLoad, onUnmount, onScroll }) => {
-    const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
 
@@ -200,23 +196,15 @@ const AdminGoodsPageContainer = ({ feed, goods, promiseStatus, onLoad, onUnmount
         };
     }, [orderBy]);
 
-    useEffect(() => {
-        window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                if (promiseStatus !== "PENDING") {
-                    onScroll({ feed, orderBy });
-                }
-            }
-        };
-        return () => {
-            window.onscroll = null;
-        };
-    }, [promiseStatus, feed]);
-
-    useEffect(() => {
-        if (goods?.length) dispatch(actionFeedAdd(goods));
-    }, [goods]);
-    return <AdminGoodsPage orderBy={orderBy} />;
+    return (
+        <InfScroll
+            items={goods}
+            component={AdminGoodsPage}
+            promiseStatus={promiseStatus}
+            onScroll={() => onScroll({ feed, orderBy })}
+            orderBy={orderBy}
+        />
+    );
 };
 
 const CAdminGoodsPageContainer = connect(
