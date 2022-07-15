@@ -3,8 +3,7 @@ import { actionCatAll } from "./actionCatAll";
 import { actionGoodsPopular } from "./actionGoodsPopular";
 import { actionOrders } from "./actionOrders";
 import { actionRootCats } from "./actionRootCats";
-import { put, select, call } from "redux-saga/effects";
-import { promiseWorker } from "../reducers/promiseReducer";
+import { put, select } from "redux-saga/effects";
 
 export const actionPageStart = () => ({ type: "PAGE_START" });
 

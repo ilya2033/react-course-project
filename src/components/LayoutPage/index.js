@@ -46,19 +46,19 @@ const CDashboardPageContainer = connect(null, {
 
 const CGoodsList = connect((state) => ({ goods: state.promise?.pageGoodsFind?.payload || [] }))(GoodList);
 
-const GoodsListContainer = ({ onLoad }) => {
-    const params = useParams();
+// const GoodsListContainer = ({ onLoad }) => {
+//     const params = useParams();
 
-    useEffect(() => {
-        onLoad({ text: params.searchData, promiseName: "pageGoodsFind" });
-    }, [params.searchData]);
+//     useEffect(() => {
+//         onLoad({ text: params.searchData, promiseName: "pageGoodsFind" });
+//     }, [params.searchData]);
 
-    return <CGoodsList />;
-};
+//     return <CGoodsList />;
+// };
 
-const CGoodsListContainer = connect(null, {
-    onLoad: ({ text, promiseName }) => actionOrders({ text, promiseName }),
-})(GoodsListContainer);
+// const CGoodsListContainer = connect(null, {
+//     onLoad: ({ text, promiseName }) => actionOrders({ text, promiseName }),
+// })(GoodsListContainer);
 
 const MainPageContainer = ({ onLoad, goods }) => {
     useEffect(() => {

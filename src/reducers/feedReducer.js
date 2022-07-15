@@ -7,6 +7,7 @@ import { actionOrdersFind } from "../actions/actionOrdersFind";
 import { actionCategoryGoods } from "../actions/actionCategoryGoods";
 import { actionUsersFind } from "../actions/actionUsersFind";
 import { actionUsersAll } from "../actions/actionUsersAll";
+import { put, takeLatest } from "redux-saga/effects";
 
 function feedReducer(state = { payload: [] }, { type, payload = [] }) {
     if (type === "FEED_ADD") {
@@ -30,11 +31,16 @@ const actionFeedGoods =
         await dispatch(actionGoodsAll({ skip, limit: 1, promiseName: "feedGoodsAll", orderBy }));
     };
 
-const actionFeedCategoryGoods =
-    ({ skip = 0, orderBy = "_id", category }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionCategoryGoods({ skip, limit: 1, promiseName: "feedCategoryGoods", orderBy, category }));
-    };
+const actionFeedCategoryGoods = ({ skip = 0, orderBy = "_id", category } = {}) => ({
+    type: "FEED_CATEGORY_GOODS",
+    payload: { skip, orderBy, category },
+});
+
+function* feedCategoryGoodsWorker(action) {
+    const { skip = 0, orderBy = "_id", category } = action.payload || {};
+
+    yield put(actionCategoryGoods({ skip, limit: 1, promiseName: "feedCategoryGoods", orderBy, category }));
+}
 
 const actionFeedGoodsFind =
     ({ skip = 0, text = "", orderBy = "_id" }) =>
@@ -92,3 +98,7 @@ export {
     actionFeedUsers,
     actionFeedUsersFind,
 };
+
+export function* feedWatcher() {
+    yield takeLatest("FEED_CATEGORY_GOODS", feedCategoryGoodsWorker);
+}

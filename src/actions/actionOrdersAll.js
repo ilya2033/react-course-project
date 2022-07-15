@@ -1,14 +1,11 @@
 import { actionPromise } from "../reducers";
 import { gql } from "../helpers";
 
-export const actionOrdersAll =
-    ({ limit = 0, skip = 0, promiseName = "adminOrdersAll", orderBy = "_id", status = 0 } = {}) =>
-    async (dispatch, getState) => {
-        dispatch(
-            actionPromise(
-                promiseName,
-                gql(
-                    `query OrdersAll($query:String){
+export const actionOrdersAll = ({ limit = 0, skip = 0, promiseName = "adminOrdersAll", orderBy = "_id", status = 0 } = {}) =>
+    actionPromise(
+        promiseName,
+        gql(
+            `query OrdersAll($query:String){
                         OrderFind(query: $query){
                             _id status price 
                             owner{
@@ -21,19 +18,17 @@ export const actionOrdersAll =
                             }
                         }
                     }`,
+            {
+                query: JSON.stringify([
                     {
-                        query: JSON.stringify([
-                            {
-                                status,
-                            },
-                            {
-                                limit: !!limit ? limit : 100,
-                                skip: skip,
-                                orderBy,
-                            },
-                        ]),
-                    }
-                )
-            )
-        );
-    };
+                        status,
+                    },
+                    {
+                        limit: !!limit ? limit : 100,
+                        skip: skip,
+                        orderBy,
+                    },
+                ]),
+            }
+        )
+    );

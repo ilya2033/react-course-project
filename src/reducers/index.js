@@ -25,6 +25,7 @@ import {
     feedReducer,
     actionFeedUsers,
     actionFeedUsersFind,
+    feedWatcher,
 } from "./feedReducer";
 
 export { cartReducer, actionCartAdd, actionCartChange, actionCartDelete, actionCartClear };
@@ -56,7 +57,7 @@ export const store = createStore(
 );
 
 function* rootSaga() {
-    yield all([promiseWatcher()]);
+    yield all([promiseWatcher(), feedWatcher()]);
 }
 
 sagaMiddleware.run(rootSaga);

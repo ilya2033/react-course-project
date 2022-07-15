@@ -1,5 +1,8 @@
-import { put, takeEvery } from "redux-saga/effects";
+import { put, takeEvery, takeLatest } from "redux-saga/effects";
 import { aboutMeWorker } from "../actions/actionAboutMe";
+import { catByIdFullWorker } from "../actions/actionCatByIdFull";
+import { categoryGoodsWorker } from "../actions/actionCategoryGoods";
+import { orderUpdateWorker } from "../actions/actionOrderUpdate";
 import { pageStartWorker } from "../actions/actionPageStart";
 
 export function promiseReducer(state = {}, { type, name, status, payload, error }) {
@@ -37,6 +40,9 @@ export function* promiseWorker(action) {
 
 export function* promiseWatcher() {
     yield takeEvery("PROMISE_START", promiseWorker);
-    yield takeEvery("PAGE_START", pageStartWorker);
-    yield takeEvery("ABOUT_ME", aboutMeWorker);
+    yield takeLatest("PAGE_START", pageStartWorker);
+    yield takeLatest("ABOUT_ME", aboutMeWorker);
+    yield takeLatest("CAT_BY_ID_FULL", catByIdFullWorker);
+    yield takeLatest("CATEGORY_GOODS", categoryGoodsWorker);
+    yield takeLatest("ORDER_UPDATE", orderUpdateWorker);
 }

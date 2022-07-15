@@ -36,6 +36,7 @@ export const GoodForm = ({
     onSave,
     onClose,
     onDelete,
+
     promiseStatus,
     deletePromiseStatus,
     catList = [],
@@ -120,7 +121,7 @@ export const GoodForm = ({
             });
         }
         return () => {
-            dispatch(actionPromiseClear("goodDelete"));
+            
         };
     }, [deletePromiseStatus]);
 
