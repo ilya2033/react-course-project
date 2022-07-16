@@ -1,7 +1,12 @@
 import { put, takeEvery, takeLatest } from "redux-saga/effects";
 import { aboutMeWorker } from "../actions/actionAboutMe";
 import { catByIdFullWorker } from "../actions/actionCatByIdFull";
+import { categoriesPageWorker } from "../actions/actionCategoriesPage";
 import { categoryGoodsWorker } from "../actions/actionCategoryGoods";
+import { goodPageWorker } from "../actions/actionGoodPage";
+import { goodsFindWorker } from "../actions/actionGoodsFind";
+import { goodsPageWorker } from "../actions/actionGoodsPage";
+import { goodsSearchPageWorker } from "../actions/actionGoodsSearchPage";
 import { orderUpdateWorker } from "../actions/actionOrderUpdate";
 import { pageStartWorker } from "../actions/actionPageStart";
 
@@ -45,4 +50,9 @@ export function* promiseWatcher() {
     yield takeLatest("CAT_BY_ID_FULL", catByIdFullWorker);
     yield takeLatest("CATEGORY_GOODS", categoryGoodsWorker);
     yield takeLatest("ORDER_UPDATE", orderUpdateWorker);
+    yield takeLatest("GOODS_FIND", goodsFindWorker);
+    yield takeLatest("GOOD_PAGE", goodPageWorker);
+    yield takeLatest("GOODS_SEARCH_PAGE", goodsSearchPageWorker);
+    yield takeLatest("CATEGORIES_PAGE", categoriesPageWorker);
+    yield takeLatest("GOODS_PAGE", goodsPageWorker);
 }

@@ -1,4 +1,3 @@
-import { actionGoodsPageClear } from "../../../../actions/actionGoodsPageClear";
 import { actionGoodsPage } from "../../../../actions/actionGoodsPage";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -36,7 +35,7 @@ export const CAdminGoodsPageContainer = connect(
         promiseStatus: state.promise?.feedGoodsAll?.status || null,
     }),
     {
-        onUnmount: () => actionGoodsPageClear(),
+        onUnmount: () => ({ type: "GOODS_PAGE_CLEAR" }),
         onLoad: ({ orderBy }) => actionGoodsPage({ orderBy }),
         onScroll: ({ feed, orderBy }) => actionFeedGoods({ skip: feed?.length || 0, orderBy }),
     }

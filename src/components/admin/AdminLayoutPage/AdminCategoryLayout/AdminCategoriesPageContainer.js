@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { actionCategoriesPage } from "../../../../actions/actionCategoriesPage";
-import { actionCategoriesPageClear } from "../../../../actions/actionCategoriesPageClear";
 import { actionFeedAdd, actionFeedCats } from "../../../../reducers";
 import { AdminCategoriesPage } from "../../AdminCategoriesPage";
 
@@ -46,7 +45,7 @@ export const CAdminCategoriesPageContainer = connect(
         promiseStatus: state.promise?.feedCatAll?.status || null,
     }),
     {
-        onUnmount: () => actionCategoriesPageClear(),
+        onUnmount: () => ({ type: "CATEGORIES_PAGE_CLEAR" }),
         onLoad: ({ orderBy }) => actionCategoriesPage({ orderBy }),
         onScroll: ({ feed, orderBy }) => actionFeedCats({ skip: feed?.length || 0, orderBy }),
     }

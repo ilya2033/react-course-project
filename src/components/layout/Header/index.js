@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ReactComponent as ShoppingLogo } from "../../../images/shopping-logo.svg";
 import { AuthModal } from "../../common/AuthModal";
@@ -16,7 +16,6 @@ const Header = () => {
     const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const token = useSelector((state) => state?.auth?.token || null);
 

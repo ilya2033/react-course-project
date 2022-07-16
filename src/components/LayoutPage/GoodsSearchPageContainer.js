@@ -37,7 +37,7 @@ export const CAdminGoodsSearchPageContainer = connect(
         promiseStatus: state.promise?.feedGoodsFind?.status || null,
     }),
     {
-        onUnmount: () => actionGoodsSearchPageClear(),
+        onUnmount: () => ({ type: "GOOD_SEARCH_PAGE_CLEAR" }),
         onLoad: ({ orderBy, text }) => actionGoodsSearchPage({ orderBy, text }),
         onScroll: ({ feed, orderBy, text }) => actionFeedGoodsFind({ text, skip: feed?.length || 0, orderBy }),
     }

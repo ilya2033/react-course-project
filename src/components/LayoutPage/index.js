@@ -19,10 +19,13 @@ import { MainPage } from "../MainPage";
 import { CAdminGoodsPageContainer } from "./GoodsPageContainer";
 import { CAdminGoodsSearchPageContainer } from "./GoodsSearchPageContainer";
 
-const GoodPageContainer = ({ onLoad }) => {
+const GoodPageContainer = ({ onLoad, onUnmount }) => {
     const params = useParams();
     useEffect(() => {
         onLoad({ _id: params._id });
+        return () => {
+            onUnmount && onUnmount();
+        };
     }, []);
 
     return <GoodPage />;
@@ -44,7 +47,7 @@ const CDashboardPageContainer = connect(null, {
     onLoad: () => actionOrders(),
 })(DashboardPageContainer);
 
-const CGoodsList = connect((state) => ({ goods: state.promise?.pageGoodsFind?.payload || [] }))(GoodList);
+// const CGoodsList = connect((state) => ({ goods: state.promise?.pageGoodsFind?.payload || [] }))(GoodList);
 
 // const GoodsListContainer = ({ onLoad }) => {
 //     const params = useParams();

@@ -1,6 +1,6 @@
 import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
-import { promiseWatcher, promiseWorker } from "../reducers/promiseReducer";
+import { promiseWorker } from "../reducers/promiseReducer";
 import { call, select } from "redux-saga/effects";
 
 export const actionAboutMe = () => ({ type: "ABOUT_ME" });

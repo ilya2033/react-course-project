@@ -7,7 +7,7 @@ import { actionOrdersFind } from "../actions/actionOrdersFind";
 import { actionCategoryGoods } from "../actions/actionCategoryGoods";
 import { actionUsersFind } from "../actions/actionUsersFind";
 import { actionUsersAll } from "../actions/actionUsersAll";
-import { put, takeLatest } from "redux-saga/effects";
+import { put, takeLatest, takeLeading } from "redux-saga/effects";
 
 function feedReducer(state = { payload: [] }, { type, payload = [] }) {
     if (type === "FEED_ADD") {
@@ -25,11 +25,16 @@ function feedReducer(state = { payload: [] }, { type, payload = [] }) {
 
 const actionFeedAdd = (payload) => ({ type: "FEED_ADD", payload });
 const actionFeedClear = () => ({ type: "FEED_CLEAR" });
-const actionFeedGoods =
-    ({ skip = 0, orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionGoodsAll({ skip, limit: 1, promiseName: "feedGoodsAll", orderBy }));
-    };
+
+const actionFeedGoods = ({ skip = 0, orderBy = "_id" } = {}) => ({
+    type: "FEED_GOODS",
+    payload: { skip, orderBy },
+});
+
+function* feedGoodsWorker(action) {
+    const { skip = 0, orderBy = "_id" } = action.payload || {};
+    yield put(actionGoodsAll({ skip, limit: 1, promiseName: "feedGoodsAll", orderBy }));
+}
 
 const actionFeedCategoryGoods = ({ skip = 0, orderBy = "_id", category } = {}) => ({
     type: "FEED_CATEGORY_GOODS",
@@ -42,11 +47,15 @@ function* feedCategoryGoodsWorker(action) {
     yield put(actionCategoryGoods({ skip, limit: 1, promiseName: "feedCategoryGoods", orderBy, category }));
 }
 
-const actionFeedGoodsFind =
-    ({ skip = 0, text = "", orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionGoodsFind({ skip, limit: 1, promiseName: "feedGoodsFind", text, orderBy }));
-    };
+const actionFeedGoodsFind = ({ skip = 0, text = "", orderBy = "_id" } = {}) => ({
+    type: "FEED_GOODS_FIND",
+    payload: { skip, text, orderBy },
+});
+
+function* feedGoodsFindWorker(action) {
+    const { skip = 0, text = "", orderBy = "_id" } = action.payload || {};
+    yield put(actionGoodsFind({ skip, limit: 1, promiseName: "feedGoodsFind", text, orderBy }));
+}
 
 const actionFeedCatsFind =
     ({ skip = 0, text = "", orderBy = "_id" }) =>
@@ -54,11 +63,15 @@ const actionFeedCatsFind =
         await dispatch(actionCatsFind({ skip, promiseName: "feedCatsFind", text, limit: 1, orderBy }));
     };
 
-const actionFeedCats =
-    ({ skip = 0, orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionCatAll({ promiseName: "feedCatAll", skip, limit: 1, orderBy }));
-    };
+const actionFeedCats = ({ skip = 0, orderBy = "_id" } = {}) => ({
+    type: "FEED_CATS",
+    payload: { skip, orderBy },
+});
+
+function* feedCatsWorker(action) {
+    const { skip = 0, orderBy = "_id" } = action.payload || {};
+    yield put(actionCatAll({ promiseName: "feedCatAll", skip, limit: 1, orderBy }));
+}
 
 const actionFeedOrders =
     ({ skip = 0, orderBy = "_id", status = 0 }) =>
@@ -100,5 +113,8 @@ export {
 };
 
 export function* feedWatcher() {
-    yield takeLatest("FEED_CATEGORY_GOODS", feedCategoryGoodsWorker);
+    yield takeLeading("FEED_CATEGORY_GOODS", feedCategoryGoodsWorker);
+    yield takeLeading("FEED_GOODS_FIND", feedGoodsFindWorker);
+    yield takeLeading("FEED_GOODS", feedGoodsWorker);
+    yield takeLeading("FEED_CATS", feedCatsWorker);
 }

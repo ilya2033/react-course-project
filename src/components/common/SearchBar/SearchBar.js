@@ -20,7 +20,6 @@ export const SearchBar = ({
     const [searchParams] = useSearchParams();
     const [inputValue, setInputValue] = useState("");
     const [isChildrenOpen, setIsChildrenOpen] = useState(false);
-    const [inputTimeout, setInputTimeout] = useState(null);
     const [touched, setTouched] = useState(false);
     const R = render;
 
@@ -46,10 +45,6 @@ export const SearchBar = ({
     }, [searchParams]);
 
     useEffect(() => {
-        if (inputTimeout) {
-            clearTimeout(inputTimeout);
-        }
-
         const checkClickOutsideHeaderSearchBar = (e) => {
             if (ref.current && !ref.current.contains(e.target)) {
                 setIsChildrenOpen(false);
@@ -57,15 +52,8 @@ export const SearchBar = ({
                 inputValue.length && setIsChildrenOpen(true);
             }
         };
-        if (inputTimeout) {
-            clearTimeout(inputTimeout);
-            setInputTimeout(null);
-        }
-        setInputTimeout(
-            setTimeout(() => {
-                inputValue && onSearch(inputValue);
-            }, 700)
-        );
+
+        inputValue && onSearch(inputValue);
 
         touched && setIsChildrenOpen(!!inputValue?.length);
         document.addEventListener("mousedown", checkClickOutsideHeaderSearchBar);
@@ -121,6 +109,6 @@ export const SearchBar = ({
 };
 
 export const CSearchBar = connect(null, {
-    onSearch: (text) => actionGoodsFind({ text, limit: 5 }),
+    onSearch: (text) => actionGoodsFind({ text, limit: 5, delay: 1500 }),
     onSearchEnd: () => actionPromiseClear("goodsFind"),
 })(SearchBar);
