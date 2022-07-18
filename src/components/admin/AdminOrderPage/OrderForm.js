@@ -1,6 +1,5 @@
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useState, useEffect, useContext } from "react";
-import { actionPromiseClear } from "../../../reducers";
 import Select from "react-select";
 import { actionOrderUpdate } from "../../../actions/actionOrderUpdate";
 import { UIContext } from "../../UIContext";
@@ -73,7 +72,7 @@ export const OrderForm = ({
             });
         }
         if (promiseStatus === "REJECTED") {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            const errorMessage = (serverErrors ? [].concat(serverErrors) : []).reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);

@@ -12,5 +12,6 @@ export function* goodsPageWorker(action) {
     yield take("GOODS_PAGE_CLEAR");
 
     yield put(actionFeedClear());
+
     yield put(actionPromisesClear(["goodUpsert", "feedGoodsAll"]));
 }

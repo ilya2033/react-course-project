@@ -24,7 +24,7 @@ const AdminOrdersSearchPageContainer = ({ feed, orders, promiseStatus, onLoad, o
             items={orders}
             component={AdminOrdersPage}
             promiseStatus={promiseStatus}
-            onScroll={() => onScroll({ feed, orderBy })}
+            onScroll={() => onScroll({ feed, orderBy, status, text })}
             orderBy={orderBy}
         />
     );

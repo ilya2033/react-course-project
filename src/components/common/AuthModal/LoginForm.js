@@ -58,7 +58,7 @@ export const LoginForm = ({
             });
         }
         if (promiseStatus === "REJECTED") {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            const errorMessage = (serverErrors || []).reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);

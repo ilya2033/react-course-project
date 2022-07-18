@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { Box } from "@mui/material";
 import { actionPageStart } from "../../actions/actionPageStart";
-
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { AuthPage } from "../AuthPage";
 import { LayoutPage } from "../LayoutPage";
 import { CProtectedRoute } from "../common/ProtectedRoute";

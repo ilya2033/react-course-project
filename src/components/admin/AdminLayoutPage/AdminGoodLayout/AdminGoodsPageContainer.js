@@ -12,8 +12,9 @@ const AdminGoodsPageContainer = ({ feed, goods, promiseStatus, onLoad, onUnmount
 
     useEffect(() => {
         onLoad({ orderBy });
+
         return () => {
-            onUnmount();
+            onUnmount && onUnmount();
         };
     }, [orderBy]);
 
