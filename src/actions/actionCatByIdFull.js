@@ -3,6 +3,7 @@ import { actionFeedClear, actionPromiseClear } from "../reducers";
 import { actionFeedCategoryGoods } from "../reducers/feedReducer";
 import { promiseWorker } from "../reducers/promiseReducer";
 import { actionCatById } from "./actionCatById";
+import { actionPromisesClear } from "./actionPromisesClear";
 
 export const actionCatByIdFull = ({ _id, orderBy }) => ({ type: "CAT_BY_ID_FULL", payload: { _id, orderBy } });
 
@@ -13,12 +14,10 @@ export function* catByIdFullWorker(action) {
 
     yield put(actionFeedClear());
     yield put(actionPromiseClear("feedCategoryGoods"));
-    console.log(category);
     yield put(actionFeedCategoryGoods({ category, orderBy, skip: 0 }));
 
     yield take("CAT_BY_ID_FULL_CLEAR");
 
-    yield put(actionPromiseClear("catById"));
+    yield put(actionPromisesClear(["catById", "feedCategoryGoods"]));
     yield put(actionFeedClear());
-    yield put(actionPromiseClear("feedCategoryGoods"));
 }

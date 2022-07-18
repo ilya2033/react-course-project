@@ -22,7 +22,7 @@ const GoodsPage = ({ category = {}, goods = [] }) => {
             <Stack>
                 <Box className="sortOptionsWrapper">
                     <SortOptions
-                        defaultOption={searchParams.get("orderBy", null)}
+                        defaultOption={searchParams.get("orderBy", "createdAt")}
                         onClick={(option) => {
                             searchParams.set("orderBy", option.value);
                             setSearchParams(searchParams);

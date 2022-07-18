@@ -3,12 +3,25 @@ import { aboutMeWorker } from "../actions/actionAboutMe";
 import { catByIdFullWorker } from "../actions/actionCatByIdFull";
 import { categoriesPageWorker } from "../actions/actionCategoriesPage";
 import { categoryGoodsWorker } from "../actions/actionCategoryGoods";
+import { categoryPageWorker } from "../actions/actionCategoryPage";
+import { categoryUpdateWorker } from "../actions/actionCategoryUpdate";
 import { goodPageWorker } from "../actions/actionGoodPage";
 import { goodsFindWorker } from "../actions/actionGoodsFind";
 import { goodsPageWorker } from "../actions/actionGoodsPage";
 import { goodsSearchPageWorker } from "../actions/actionGoodsSearchPage";
+import { goodUpdateWorker } from "../actions/actionGoodUpdate";
+import { orderPageWorker } from "../actions/actionOrderPage";
+import { ordersPageWorker } from "../actions/actionOrdersPage";
+import { ordersSearchPageWorker } from "../actions/actionOrdersSearchPage";
 import { orderUpdateWorker } from "../actions/actionOrderUpdate";
 import { pageStartWorker } from "../actions/actionPageStart";
+import { promisesClearWorker } from "../actions/actionPromisesClear";
+import { updateAvatarWorker } from "../actions/actionUpdateAvatar";
+import { uploadFilesWorker } from "../actions/actionUploadFiles";
+import { userPageWorker } from "../actions/actionUserPage";
+import { usersPageWorker } from "../actions/actionUsersPage";
+import { usersSearchPageWorker } from "../actions/actionUsersSearchPage";
+import { userUpdateWorker } from "../actions/actionUserUpdate";
 
 export function promiseReducer(state = {}, { type, name, status, payload, error }) {
     if (type === "PROMISE") {
@@ -55,4 +68,17 @@ export function* promiseWatcher() {
     yield takeLatest("GOODS_SEARCH_PAGE", goodsSearchPageWorker);
     yield takeLatest("CATEGORIES_PAGE", categoriesPageWorker);
     yield takeLatest("GOODS_PAGE", goodsPageWorker);
+    yield takeLatest("CATEGORY_PAGE", categoryPageWorker);
+    yield takeLatest("CATEGORY_UPDATE", categoryUpdateWorker);
+    yield takeLatest("GOOD_UPDATE", goodUpdateWorker);
+    yield takeLatest("ORDER_PAGE", orderPageWorker);
+    yield takeLatest("ORDERS_PAGE", ordersPageWorker);
+    yield takeLatest("ORDERS_SEARCH_PAGE", ordersSearchPageWorker);
+    yield takeLatest("UPDATE_AVATAR", updateAvatarWorker);
+    yield takeLatest("UPLOAD_FILES", uploadFilesWorker);
+    yield takeLatest("USER_PAGE", userPageWorker);
+    yield takeLatest("USERS_PAGE", usersPageWorker);
+    yield takeLatest("USERS_SEARCH_PAGE", usersSearchPageWorker);
+    yield takeLatest("USER_UPDATE", userUpdateWorker);
+    yield takeEvery("PROMISES_CLEAR", promisesClearWorker);
 }

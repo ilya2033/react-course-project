@@ -1,12 +1,11 @@
 import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
 
-export const actionCategoryUpsert = (category) => async (dispatch) => {
-    dispatch(
-        actionPromise(
-            "categoryUpsert",
-            gql(
-                `mutation CatUpsert($category:CategoryInput!){
+export const actionCategoryUpsert = (category) =>
+    actionPromise(
+        "categoryUpsert",
+        gql(
+            `mutation CatUpsert($category:CategoryInput!){
                     CategoryUpsert(category:$category){
                         _id name
                         parent{
@@ -20,8 +19,6 @@ export const actionCategoryUpsert = (category) => async (dispatch) => {
                         }
                     }
                 }`,
-                { category }
-            )
+            { category }
         )
     );
-};

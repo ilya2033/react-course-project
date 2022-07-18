@@ -1,7 +1,7 @@
 import "./App.css";
 import { Box } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
-import { Root } from "./components/Root";
+import { CRoot, Root } from "./components/Root";
 import { Provider } from "react-redux";
 import { store } from "./reducers";
 import { UIContextProvider } from "./components/UIContext";
@@ -12,7 +12,7 @@ function App() {
             <BrowserRouter>
                 <UIContextProvider>
                     <Box className="App">
-                        <Root />
+                        <CRoot />
                     </Box>
                 </UIContextProvider>
             </BrowserRouter>

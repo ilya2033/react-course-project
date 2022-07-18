@@ -4,12 +4,12 @@ import { useSelector } from "react-redux";
 import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ReactComponent as ShoppingLogo } from "../../../images/shopping-logo.svg";
 import { AuthModal } from "../../common/AuthModal";
-import { DrawerCart } from "../../common/DrawerCart/DrawerCart";
+import { CDrawerCart } from "../../common/DrawerCart/DrawerCart";
 import { CSearchBar } from "../../common/SearchBar";
 import { CSearchResults } from "../../common/SearchBar/SearchResults";
 import { AvatarButton } from "./AvatarButton";
 import { CCartIcon } from "./CartIcon";
-import { LogoutIcon } from "./LogoutIcon";
+import { CLogoutIcon } from "./LogoutIcon";
 
 const Header = () => {
     const rootCats = useSelector((state) => state?.promise?.rootCats?.payload || []);
@@ -53,7 +53,7 @@ const Header = () => {
                     <Stack direction="row" spacing={3}>
                         {token ? (
                             <Stack direction="row" spacing={3}>
-                                <LogoutIcon />
+                                <CLogoutIcon />
                                 <AvatarButton onClick={() => navigate("/dashboard/")} />
                             </Stack>
                         ) : (
@@ -71,7 +71,7 @@ const Header = () => {
                     </Stack>
                 </Toolbar>
             </AppBar>
-            <DrawerCart isOpen={isCartDrawerOpen} onClose={() => setIsCartDrawerOpen(false)} />
+            <CDrawerCart isOpen={isCartDrawerOpen} onClose={() => setIsCartDrawerOpen(false)} />
             <AuthModal open={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
         </Box>
     );

@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { actionUsersPage } from "../../../../actions/actionUsersPage";
-import { actionUsersPageClear } from "../../../../actions/actionUsersPageClear";
 import { actionFeedUsers } from "../../../../reducers";
 import { InfScroll } from "../../../common/InfScroll";
 import { AdminUsersPage } from "../../AdminUsersPage";
@@ -36,7 +35,7 @@ export const CAdminUsersPageContainer = connect(
         promiseStatus: state.promise?.feedUsersAll?.status || null,
     }),
     {
-        onUnmount: () => actionUsersPageClear(),
+        onUnmount: () => ({ type: "USERS_PAGE_CLEAN" }),
         onLoad: ({ orderBy }) => actionUsersPage({ orderBy }),
         onScroll: ({ feed, orderBy }) => actionFeedUsers({ skip: feed?.length || 0, orderBy }),
     }

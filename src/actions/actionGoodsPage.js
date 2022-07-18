@@ -1,5 +1,6 @@
 import { put, take } from "redux-saga/effects";
 import { actionFeedClear, actionFeedGoods, actionPromiseClear } from "../reducers";
+import { actionPromisesClear } from "./actionPromisesClear";
 
 export const actionGoodsPage = ({ orderBy }) => ({ type: "GOODS_PAGE", payload: { orderBy } });
 export function* goodsPageWorker(action) {
@@ -11,6 +12,5 @@ export function* goodsPageWorker(action) {
     yield take("GOODS_PAGE_CLEAR");
 
     yield put(actionFeedClear());
-    yield put(actionPromiseClear("feedGoodsAll"));
-    yield put(actionPromiseClear("goodUpsert"));
+    yield put(actionPromisesClear(["goodUpsert", "feedGoodsAll"]));
 }

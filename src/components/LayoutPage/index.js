@@ -7,7 +7,6 @@ import { actionGoodsPopular } from "../../actions/actionGoodsPopular";
 import { actionOrders } from "../../actions/actionOrders";
 import { AdminLayoutPage } from "../admin/AdminLayoutPage";
 import { CCartPage } from "../CartPage";
-import { GoodList } from "../common/GoodList";
 import { CProtectedRoute } from "../common/ProtectedRoute";
 import { CDashboardPage } from "../DashboardPage";
 import { GoodPage } from "../GoodPage";

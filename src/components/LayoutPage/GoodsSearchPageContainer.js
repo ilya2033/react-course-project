@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { connect } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { actionGoodsSearchPage } from "../../actions/actionGoodsSearchPage";
-import { actionGoodsSearchPageClear } from "../../actions/actionGoodsSearchPageClear";
 import { actionFeedGoodsFind } from "../../reducers";
 import { InfScroll } from "../common/InfScroll";
 import { CGoodsPage } from "../GoodsPage";

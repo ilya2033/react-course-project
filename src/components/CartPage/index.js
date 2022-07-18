@@ -1,12 +1,12 @@
 import { Box, Button, Stack, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useContext, useEffect, useState } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { actionOrderUpdate } from "../../actions/actionOrderUpdate";
 import { actionCartDelete } from "../../reducers";
 import { UIContext } from "../UIContext";
-import { CartItem } from "./CartItem";
+import { CCartItem } from "./CartItem";
 
 export const CartPage = ({ onConfirm, promiseStatus, serverErrors, onDeleteClick }) => {
     const cart = useSelector((state) => state.cart || {});
@@ -67,7 +67,7 @@ export const CartPage = ({ onConfirm, promiseStatus, serverErrors, onDeleteClick
                 <Table className="table">
                     <TableBody>
                         {Object.entries(cart).map(([_id, order]) => (
-                            <CartItem order={order} onDeleteClick={(good) => onDeleteClick(good)} key={_id} />
+                            <CCartItem order={order} onDeleteClick={(good) => onDeleteClick(good)} key={_id} />
                         ))}
 
                         <TableRow>

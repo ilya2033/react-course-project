@@ -2,6 +2,7 @@ import { put, take } from "redux-saga/effects";
 import { actionPromiseClear } from "../reducers";
 import { actionCatAll } from "./actionCatAll";
 import { actionGoodById } from "./actionGoodById";
+import { actionPromisesClear } from "./actionPromisesClear";
 
 export const actionGoodPage = ({ _id, promiseName } = {}) => ({
     type: "GOOD_PAGE",
@@ -20,7 +21,5 @@ export function* goodPageWorker(action) {
 
     yield take("GOOD_PAGE_CLEAR");
 
-    yield put(actionPromiseClear(promiseName));
-    yield put(actionPromiseClear("goodsAll"));
-    yield put(actionPromiseClear("goodUpsert"));
+    yield put(actionPromisesClear([promiseName, "goodUpsert", "goodsAll"]));
 }

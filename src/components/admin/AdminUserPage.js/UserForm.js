@@ -1,6 +1,5 @@
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useState, useEffect, useContext } from "react";
-import { actionPromiseClear } from "../../../reducers";
 import { actionUserUpdate } from "../../../actions/actionUserUpdate";
 import { UIContext } from "../../UIContext";
 import Select from "react-select";
@@ -12,6 +11,7 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { aclList } from "../../../helpers";
 import { actionUploadFile } from "../../../actions/actionUploadFile";
 import { ProfileImageEditor } from "../../common/ProfileImageEditor";
+import { actionPromisesClear } from "../../../actions/actionPromisesClear";
 
 const CProfileImageEditor = connect(null, {
     onFileDrop: (acceptedFiles) => actionUploadFile(acceptedFiles[0]),
@@ -29,7 +29,7 @@ export const UserForm = ({
     onSaveClick,
     onSave,
     onClose,
-    onDelete,
+    onUnmount,
     promiseStatus,
     deletePromiseStatus,
     avatar = null,
@@ -41,7 +41,6 @@ export const UserForm = ({
 
     const [acl, setAcl] = useState([]);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -58,7 +57,6 @@ export const UserForm = ({
             user?._id && (userToSave._id = user._id);
             userToSave.acl = acl;
             avatar ? (userToSave.avatar = avatar) : delete userToSave.avatar;
-            console.log(userToSave);
             onSaveClick && onSaveClick();
             onSave(userToSave);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
@@ -112,7 +110,7 @@ export const UserForm = ({
             });
         }
         return () => {
-            dispatch(actionPromiseClear("userDelete"));
+            onUnmount && onUnmount();
         };
     }, [deletePromiseStatus]);
 
@@ -241,6 +239,6 @@ export const CUserForm = connect(
     }),
     {
         onSave: (user) => actionUserUpdate(user),
-        onClose: () => actionPromiseClear("userUpsert"),
+        onClose: () => actionPromisesClear(["userUpsert", "userDelete"]),
     }
 )(UserForm);

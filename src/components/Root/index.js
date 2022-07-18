@@ -1,18 +1,19 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import { Box } from "@mui/material";
-import styles from "react-responsive-carousel/lib/styles/carousel.min.css";
 import { actionPageStart } from "../../actions/actionPageStart";
-import { useDispatch } from "react-redux";
 
 import { AuthPage } from "../AuthPage";
 import { LayoutPage } from "../LayoutPage";
 import { CProtectedRoute } from "../common/ProtectedRoute";
 import { Error404 } from "../common/Error404";
+import { useEffect } from "react";
+import { connect } from "react-redux";
 
-const Root = () => {
-    const dispatch = useDispatch();
-    dispatch(actionPageStart());
+const Root = ({ onLoad }) => {
+    useEffect(() => {
+        onLoad();
+    }, []);
 
     return (
         <Box className="Root">
@@ -32,5 +33,7 @@ const Root = () => {
         </Box>
     );
 };
+
+export const CRoot = connect(null, { onLoad: () => actionPageStart() })(Root);
 
 export { Root };

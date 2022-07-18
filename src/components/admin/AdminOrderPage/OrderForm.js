@@ -11,6 +11,7 @@ import { OrderGoodsEditor } from "./OrderGoodsEditor";
 import { useNavigate } from "react-router-dom";
 import { actionOrderDelete } from "../../../actions/actionOrderDelete";
 import { ConfirmModal } from "../../common/ConfirmModal";
+import { actionPromisesClear } from "../../../actions/actionPromisesClear";
 
 export const OrderForm = ({
     serverErrors = [],
@@ -31,7 +32,6 @@ export const OrderForm = ({
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {},
@@ -104,9 +104,6 @@ export const OrderForm = ({
                 message: "Помилка",
             });
         }
-        return () => {
-            dispatch(actionPromiseClear("orderDelete"));
-        };
     }, [deletePromiseStatus]);
 
     useEffect(() => {
@@ -189,7 +186,7 @@ export const COrderForm = connect(
     }),
     {
         onSave: (order) => actionOrderUpdate(order),
-        onClose: () => actionPromiseClear("orderUpsert"),
+        onClose: () => actionPromisesClear(["orderUpsert", "orderDelete"]),
         onDelete: (order) => actionOrderDelete({ order }),
     }
 )(OrderForm);

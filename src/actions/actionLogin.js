@@ -3,10 +3,15 @@ import { gql } from "../helpers";
 import { actionAuthLogin } from "../reducers";
 import { actionAboutMe } from "./actionAboutMe";
 import { actionLogout } from "./actionLogout";
+import { promiseWorker } from "../reducers/promiseReducer";
+import { call, put } from "redux-saga/effects";
 
-export const actionLogin = (username, password) => async (dispatch, getState) => {
-    await dispatch(actionLogout());
-    const token = await dispatch(
+export const actionLogin = (username, password) => ({ type: "LOGIN", payload: { username, password } });
+export function* loginWorker(action) {
+    const { username, password } = action.payload || {};
+    yield call(promiseWorker, actionLogout());
+    const token = yield call(
+        promiseWorker,
         actionPromise(
             "login",
             gql(
@@ -19,11 +24,12 @@ export const actionLogin = (username, password) => async (dispatch, getState) =>
             )
         )
     );
+
     if (typeof token === "string") {
-        await dispatch(actionAuthLogin(token));
+        yield put(actionAuthLogin(token));
     } else {
-        await dispatch(actionAuthLogin(token.token));
+        yield put(actionAuthLogin(token.token));
     }
 
-    await dispatch(actionAboutMe());
-};
+    yield put(actionAboutMe());
+}

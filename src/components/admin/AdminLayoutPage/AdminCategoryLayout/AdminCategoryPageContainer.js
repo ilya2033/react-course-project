@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { actionCategoryPage } from "../../../../actions/actionCategoryPage";
-import { actionCategoryPageClear } from "../../../../actions/actionCategoryPageClear";
 import { CAdminCategoryPage } from "../../AdminCategoryPage";
 
 const AdminCategoryPageContainer = ({ onUnmount, onLoad }) => {
@@ -19,6 +18,6 @@ const AdminCategoryPageContainer = ({ onUnmount, onLoad }) => {
 };
 
 export const CAdminCategoryPageContainer = connect(null, {
-    onUnmount: () => actionCategoryPageClear({ promiseName: "adminCatById" }),
+    onUnmount: () => ({ type: "CATEGORY_PAGE_CLEAR" }),
     onLoad: (_id) => actionCategoryPage({ _id, promiseName: "adminCatById" }),
 })(AdminCategoryPageContainer);
