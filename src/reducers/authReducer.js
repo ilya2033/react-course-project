@@ -1,3 +1,7 @@
+import { takeLatest } from "redux-saga/effects";
+import { loginWorker } from "../actions/actionLogin";
+import { logoutWorker } from "../actions/actionLogout";
+import { registerWorker } from "../actions/actionRegister";
 import { jwtDecode } from "../helpers";
 
 export function authReducer(state, { type, token }) {
@@ -30,5 +34,11 @@ export const actionAuthLogin = (token) => ({
     type: "AUTH_LOGIN",
     token: token,
 });
+
+export function* authWatcher() {
+    yield takeLatest("LOGIN", loginWorker);
+    yield takeLatest("LOGOUT", logoutWorker);
+    yield takeLatest("REGISTER", registerWorker);
+}
 
 export const actionAuthLogout = () => ({ type: "AUTH_LOGOUT" });

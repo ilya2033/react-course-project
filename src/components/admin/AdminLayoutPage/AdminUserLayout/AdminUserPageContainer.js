@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { actionUserPage } from "../../../../actions/actionUserPage";
-import { actionUserPageClear } from "../../../../actions/actionUserPageClear";
 import { CAdminUserPage } from "../../AdminUserPage.js";
 
 const AdminUserPageContainer = ({ onLoad, onUnmount }) => {
@@ -21,6 +20,6 @@ const AdminUserPageContainer = ({ onLoad, onUnmount }) => {
 };
 
 export const CAdminUserPageContainer = connect(null, {
-    onUnmount: () => actionUserPageClear({ promiseName: "adminUserById" }),
+    onUnmount: () => ({ type: "USER_PAGE_CLEAN" }),
     onLoad: (_id) => actionUserPage({ _id, promiseName: "adminUserById" }),
 })(AdminUserPageContainer);

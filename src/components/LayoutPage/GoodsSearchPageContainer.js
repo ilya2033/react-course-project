@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { connect } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { actionGoodsSearchPage } from "../../actions/actionGoodsSearchPage";
-import { actionGoodsSearchPageClear } from "../../actions/actionGoodsSearchPageClear";
 import { actionFeedGoodsFind } from "../../reducers";
 import { InfScroll } from "../common/InfScroll";
 import { CGoodsPage } from "../GoodsPage";
@@ -37,7 +36,7 @@ export const CAdminGoodsSearchPageContainer = connect(
         promiseStatus: state.promise?.feedGoodsFind?.status || null,
     }),
     {
-        onUnmount: () => actionGoodsSearchPageClear(),
+        onUnmount: () => ({ type: "GOOD_SEARCH_PAGE_CLEAR" }),
         onLoad: ({ orderBy, text }) => actionGoodsSearchPage({ orderBy, text }),
         onScroll: ({ feed, orderBy, text }) => actionFeedGoodsFind({ text, skip: feed?.length || 0, orderBy }),
     }

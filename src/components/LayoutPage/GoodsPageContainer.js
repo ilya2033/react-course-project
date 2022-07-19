@@ -1,9 +1,7 @@
 import { connect } from "react-redux";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { actionCatByIdFull } from "../../actions/actionCatByIdFull";
-import { actionCatByIdFullClear } from "../../actions/actionCatByIdFullClear";
 import { actionFeedCategoryGoods } from "../../reducers/feedReducer";
 import { InfScroll } from "../common/InfScroll";
 import { CGoodsPage } from "../GoodsPage";
@@ -17,7 +15,7 @@ const GoodsPageContainer = ({ feed, goods, promiseStatus, onLoad, onUnmount, onS
         onLoad({ orderBy, _id: params._id });
 
         return () => {
-            onUnmount();
+            onUnmount && onUnmount();
         };
     }, [params._id, orderBy]);
 
@@ -40,7 +38,7 @@ export const CAdminGoodsPageContainer = connect(
         promiseStatus: state.promise?.feedCategoryGoods?.status || null,
     }),
     {
-        onUnmount: () => actionCatByIdFullClear(),
+        onUnmount: () => ({ type: "CAT_BY_ID_FULL_CLEAR" }),
         onLoad: ({ orderBy, _id }) => actionCatByIdFull({ orderBy, _id }),
         onScroll: ({ feed, orderBy, category }) => actionFeedCategoryGoods({ skip: feed.length || 0, orderBy, category }),
     }

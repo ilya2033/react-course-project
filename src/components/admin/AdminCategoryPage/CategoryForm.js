@@ -1,8 +1,7 @@
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useState, useEffect, useContext } from "react";
 import Select from "react-select";
 import { actionCategoryUpdate } from "../../../actions/actionCategoryUpdate";
-import { actionPromiseClear } from "../../../reducers";
 import { Box, Button, InputLabel, Stack, TextField } from "@mui/material";
 import { UIContext } from "../../UIContext";
 import { useFormik } from "formik";
@@ -10,6 +9,7 @@ import * as Yup from "yup";
 import { ConfirmModal } from "../../common/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { actionCategoryDelete } from "../../../actions/actionCategoryDelete";
+import { actionPromisesClear } from "../../../actions/actionPromisesClear";
 
 const categorySchema = Yup.object().shape({
     name: Yup.string().required("Обов'язкове"),
@@ -36,7 +36,6 @@ const CategoryForm = ({
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -86,7 +85,7 @@ const CategoryForm = ({
             });
         }
         if (promiseStatus === "REJECTED") {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            const errorMessage = (serverErrors ? [].concat(serverErrors) : []).reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
@@ -113,9 +112,6 @@ const CategoryForm = ({
                 message: "Помилка",
             });
         }
-        return () => {
-            dispatch(actionPromiseClear("categoryDelete"));
-        };
     }, [deletePromiseStatus]);
 
     useEffect(() => {
@@ -229,7 +225,7 @@ export const CCategoryForm = connect(
     }),
     {
         onSave: (cat) => actionCategoryUpdate(cat),
-        onClose: () => actionPromiseClear("categoryUpsert"),
+        onClose: () => actionPromisesClear(["categoryUpsert", "categoryDelete"]),
         onDelete: (category) => actionCategoryDelete({ category }),
     }
 )(CategoryForm);

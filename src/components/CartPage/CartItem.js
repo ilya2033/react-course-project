@@ -4,16 +4,15 @@ import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { actionCartChange } from "../../reducers";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { backendURL, mediaURL } from "../../helpers";
 
-const { Typography, Stack, IconButton, TextField, ButtonGroup, Button, TableCell, TableRow, Input } = require("@mui/material");
+import { Typography, Stack, IconButton, TableCell, TableRow } from "@mui/material";
+import { connect } from "react-redux";
 
-export const CartItem = ({ order, onDeleteClick }) => {
+export const CartItem = ({ order, onDeleteClick, onChange }) => {
     const { good, count = 1 } = order || {};
     const { _id, images = [], name = "", price = 0, amount = 1 } = good;
 
-    const dispatch = useDispatch();
     const [countInput, setCountInput] = useState(count || 1);
 
     useEffect(() => {
@@ -21,7 +20,7 @@ export const CartItem = ({ order, onDeleteClick }) => {
     }, [count]);
 
     useEffect(() => {
-        dispatch(actionCartChange(good, +countInput));
+        onChange(good, +countInput);
     }, [countInput]);
 
     const handleChange = (count) => {
@@ -75,3 +74,5 @@ export const CartItem = ({ order, onDeleteClick }) => {
         </TableRow>
     );
 };
+
+export const CCartItem = connect(null, { onChange: (good, countInput) => actionCartChange(good, +countInput) })(CartItem);

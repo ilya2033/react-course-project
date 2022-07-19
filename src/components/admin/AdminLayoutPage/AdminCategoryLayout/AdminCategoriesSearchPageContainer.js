@@ -1,14 +1,12 @@
 import { connect } from "react-redux";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { actionCategoriesSearchPage } from "../../../../actions/actionCategoriesSearchPage";
-import { actionCategoriesSearchPageClear } from "../../../../actions/actionCategoriesSearchPageClear";
-import { actionFeedAdd, actionFeedCatsFind } from "../../../../reducers";
+import { actionFeedCatsFind } from "../../../../reducers";
 import { AdminCategoriesPage } from "../../AdminCategoriesPage";
+import { InfScroll } from "../../../common/InfScroll";
 
 const AdminCategoriesSearchPageContainer = ({ feed, cats, promiseStatus, onLoad, onUnmount, onScroll }) => {
-    const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
     const orderBy = searchParams.get("orderBy") || "_id";
     const text = searchParams.get("text") || "";
@@ -20,24 +18,15 @@ const AdminCategoriesSearchPageContainer = ({ feed, cats, promiseStatus, onLoad,
         };
     }, [orderBy, text]);
 
-    useEffect(() => {
-        window.onscroll = (e) => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                if (promiseStatus !== "PENDING") {
-                    onScroll({ feed, orderBy, text });
-                }
-            }
-        };
-        return () => {
-            window.onscroll = null;
-        };
-    }, [promiseStatus, feed, text]);
-
-    useEffect(() => {
-        if (cats?.length) dispatch(actionFeedAdd(cats));
-    }, [cats]);
-
-    return <AdminCategoriesPage orderBy={orderBy} />;
+    return (
+        <InfScroll
+            items={cats}
+            component={AdminCategoriesPage}
+            promiseStatus={promiseStatus}
+            onScroll={() => onScroll({ feed, orderBy, text })}
+            orderBy={orderBy}
+        />
+    );
 };
 
 export const CAdminCategoriesSearchPageContainer = connect(
@@ -47,7 +36,7 @@ export const CAdminCategoriesSearchPageContainer = connect(
         promiseStatus: state.promise?.feedCatsFind?.status || null,
     }),
     {
-        onUnmount: () => actionCategoriesSearchPageClear(),
+        onUnmount: () => ({ type: "CATEGORIES_SEARCH_PAGE_CLEAR" }),
         onLoad: ({ orderBy, text }) => actionCategoriesSearchPage({ orderBy, text }),
         onScroll: ({ feed, orderBy, text }) => actionFeedCatsFind({ text, skip: feed?.length || 0, orderBy }),
     }

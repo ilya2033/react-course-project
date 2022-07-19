@@ -1,6 +1,5 @@
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useState, useEffect, useContext } from "react";
-import { actionPromiseClear } from "../../../reducers";
 import Select from "react-select";
 import { actionOrderUpdate } from "../../../actions/actionOrderUpdate";
 import { UIContext } from "../../UIContext";
@@ -11,6 +10,7 @@ import { OrderGoodsEditor } from "./OrderGoodsEditor";
 import { useNavigate } from "react-router-dom";
 import { actionOrderDelete } from "../../../actions/actionOrderDelete";
 import { ConfirmModal } from "../../common/ConfirmModal";
+import { actionPromisesClear } from "../../../actions/actionPromisesClear";
 
 export const OrderForm = ({
     serverErrors = [],
@@ -31,7 +31,6 @@ export const OrderForm = ({
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {},
@@ -73,7 +72,7 @@ export const OrderForm = ({
             });
         }
         if (promiseStatus === "REJECTED") {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            const errorMessage = (serverErrors ? [].concat(serverErrors) : []).reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
@@ -104,9 +103,6 @@ export const OrderForm = ({
                 message: "Помилка",
             });
         }
-        return () => {
-            dispatch(actionPromiseClear("orderDelete"));
-        };
     }, [deletePromiseStatus]);
 
     useEffect(() => {
@@ -189,7 +185,7 @@ export const COrderForm = connect(
     }),
     {
         onSave: (order) => actionOrderUpdate(order),
-        onClose: () => actionPromiseClear("orderUpsert"),
+        onClose: () => actionPromisesClear(["orderUpsert", "orderDelete"]),
         onDelete: (order) => actionOrderDelete({ order }),
     }
 )(OrderForm);

@@ -1,4 +1,4 @@
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useState, useEffect, useContext } from "react";
 import { actionPromiseClear } from "../../../reducers";
 import Select from "react-select";
@@ -36,6 +36,7 @@ export const GoodForm = ({
     onSave,
     onClose,
     onDelete,
+
     promiseStatus,
     deletePromiseStatus,
     catList = [],
@@ -47,7 +48,6 @@ export const GoodForm = ({
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const formik = useFormik({
         initialValues: {
@@ -92,7 +92,8 @@ export const GoodForm = ({
             });
         }
         if (promiseStatus === "REJECTED") {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            console.log(serverErrors);
+            const errorMessage = (serverErrors ? [].concat(serverErrors) : []).reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
@@ -119,9 +120,7 @@ export const GoodForm = ({
                 message: "Помилка",
             });
         }
-        return () => {
-            dispatch(actionPromiseClear("goodDelete"));
-        };
+        return () => {};
     }, [deletePromiseStatus]);
 
     useEffect(() => {

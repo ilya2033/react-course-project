@@ -1,6 +1,5 @@
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useState, useEffect, useContext } from "react";
-import { actionPromiseClear } from "../../../reducers";
 import { actionUserUpdate } from "../../../actions/actionUserUpdate";
 import { UIContext } from "../../UIContext";
 import Select from "react-select";
@@ -12,6 +11,19 @@ import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { aclList } from "../../../helpers";
 import { actionUploadFile } from "../../../actions/actionUploadFile";
 import { ProfileImageEditor } from "../../common/ProfileImageEditor";
+import { actionPromisesClear } from "../../../actions/actionPromisesClear";
+
+const styles = {
+    multiValue: (base, state) => {
+        return state.data.isFixed ? { ...base, backgroundColor: "gray" } : base;
+    },
+    multiValueLabel: (base, state) => {
+        return state.data.isFixed ? { ...base, fontWeight: "bold", color: "white", paddingRight: 6 } : base;
+    },
+    multiValueRemove: (base, state) => {
+        return state.data.isFixed ? { ...base, display: "none" } : base;
+    },
+};
 
 const CProfileImageEditor = connect(null, {
     onFileDrop: (acceptedFiles) => actionUploadFile(acceptedFiles[0]),
@@ -29,7 +41,7 @@ export const UserForm = ({
     onSaveClick,
     onSave,
     onClose,
-    onDelete,
+    onUnmount,
     promiseStatus,
     deletePromiseStatus,
     avatar = null,
@@ -41,7 +53,10 @@ export const UserForm = ({
 
     const [acl, setAcl] = useState([]);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+
+    useEffect(() => {
+        console.log(promiseStatus);
+    }, [promiseStatus]);
 
     const formik = useFormik({
         initialValues: {
@@ -56,14 +71,34 @@ export const UserForm = ({
             let userToSave = {};
             userToSave = formik.values;
             user?._id && (userToSave._id = user._id);
-            userToSave.acl = acl;
+            userToSave.acl = acl.map(({ value }) => value);
             avatar ? (userToSave.avatar = avatar) : delete userToSave.avatar;
-            console.log(userToSave);
             onSaveClick && onSaveClick();
             onSave(userToSave);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
     });
+
+    const orderOptions = (values) => {
+        return values.filter((v) => v.isFixed).concat(values.filter((v) => !v.isFixed));
+    };
+
+    const onChange = (values, actionMeta) => {
+        switch (actionMeta.action) {
+            case "remove-value":
+            case "pop-value":
+                if (actionMeta.removedValue.isFixed) {
+                    return;
+                }
+                break;
+            case "clear":
+                values = aclList.filter((acl) => acl.isFixed);
+                break;
+        }
+
+        values = orderOptions(values);
+        setAcl(values);
+    };
 
     useEffect(() => {
         return () => {
@@ -77,6 +112,7 @@ export const UserForm = ({
             formik.setSubmitting(false);
             promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
+
             setAlert({
                 show: true,
                 severity: "success",
@@ -84,7 +120,7 @@ export const UserForm = ({
             });
         }
         if (promiseStatus === "REJECTED") {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            const errorMessage = (serverErrors ? [].concat(serverErrors) : []).reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
             promiseTimeOut && clearTimeout(promiseTimeOut);
             setPromiseTimeOut(null);
@@ -112,12 +148,12 @@ export const UserForm = ({
             });
         }
         return () => {
-            dispatch(actionPromiseClear("userDelete"));
+            onUnmount && onUnmount();
         };
     }, [deletePromiseStatus]);
 
     useEffect(() => {
-        setAcl(user?.acl || []);
+        setAcl(orderOptions(aclList.filter((item) => user?.acl?.includes(item.value)) || []));
         formik.setFieldValue("name", user.name || "");
         formik.setFieldValue("username", user.username || "");
         formik.setFieldValue("nick", user.nick || "");
@@ -133,7 +169,7 @@ export const UserForm = ({
 
     return (
         <Box className="UserForm" component="form" onSubmit={formik.handleSubmit}>
-            <Grid container>
+            <Grid container spacing={2}>
                 <Grid item xs={5}>
                     <CProfileImageEditor avatar={avatar} />
                 </Grid>
@@ -212,11 +248,13 @@ export const UserForm = ({
                         <InputLabel>Permissions</InputLabel>
                         <Select
                             placeholder="Обрати категорії"
-                            value={acl.map((value) => ({ value, label: value }))}
+                            value={acl}
                             closeMenuOnSelect={false}
-                            onChange={(e) => setAcl(e.map(({ value }) => value))}
+                            onChange={onChange}
                             options={aclList}
+                            isClearable={acl?.some((acl) => !acl.isFixed)}
                             isMulti={true}
+                            styles={styles}
                         />
                     </Box>
                 </Grid>
@@ -241,6 +279,6 @@ export const CUserForm = connect(
     }),
     {
         onSave: (user) => actionUserUpdate(user),
-        onClose: () => actionPromiseClear("userUpsert"),
+        onClose: () => actionPromisesClear(["userUpsert", "userDelete"]),
     }
 )(UserForm);

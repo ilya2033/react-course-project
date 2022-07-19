@@ -14,7 +14,7 @@ export const GoodPage = () => {
             <Grid container spacing={4} className="images">
                 <Grid item xs={12} md={4}>
                     <Carousel showIndicators={false} showStatus={false} showArrows={true}>
-                        {(good.images || [{ _id: 0, url: defaultGoodImage }]).map((image) => (
+                        {(!!good?.images?.length ? good?.images : [{ _id: 0, url: defaultGoodImage }]).map((image) => (
                             <img
                                 key={image?._id}
                                 src={image?.url ? `${backendURL}${mediaURL}${image?.url}` : defaultGoodImage}

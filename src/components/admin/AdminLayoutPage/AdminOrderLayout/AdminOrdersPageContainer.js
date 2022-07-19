@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { actionOrdersPage } from "../../../../actions/actionOrdersPage";
-import { actionOrdersPageClear } from "../../../../actions/actionOrdersPageClear";
 import { actionFeedOrders } from "../../../../reducers";
 import { InfScroll } from "../../../common/InfScroll";
 import { AdminOrdersPage } from "../../AdminOrdersPage";
@@ -24,7 +23,7 @@ const AdminOrdersPageContainer = ({ feed, orders, promiseStatus, onLoad, onUnmou
             items={orders}
             component={AdminOrdersPage}
             promiseStatus={promiseStatus}
-            onScroll={() => onScroll({ feed, orderBy })}
+            onScroll={() => onScroll({ feed, orderBy, status })}
             orderBy={orderBy}
         />
     );
@@ -37,7 +36,7 @@ export const CAdminOrdersPageContainer = connect(
         promiseStatus: state.promise?.feedOrdersAll?.status || null,
     }),
     {
-        onUnmount: () => actionOrdersPageClear(),
+        onUnmount: () => ({ type: "ORDERS_PAGE_CLEAR" }),
         onLoad: ({ orderBy, status }) => actionOrdersPage({ orderBy, status }),
         onScroll: ({ feed, orderBy, status }) => actionFeedOrders({ skip: feed?.length || 0, orderBy, status }),
     }

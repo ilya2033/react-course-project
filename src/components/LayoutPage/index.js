@@ -7,7 +7,6 @@ import { actionGoodsPopular } from "../../actions/actionGoodsPopular";
 import { actionOrders } from "../../actions/actionOrders";
 import { AdminLayoutPage } from "../admin/AdminLayoutPage";
 import { CCartPage } from "../CartPage";
-import { GoodList } from "../common/GoodList";
 import { CProtectedRoute } from "../common/ProtectedRoute";
 import { CDashboardPage } from "../DashboardPage";
 import { GoodPage } from "../GoodPage";
@@ -19,10 +18,13 @@ import { MainPage } from "../MainPage";
 import { CAdminGoodsPageContainer } from "./GoodsPageContainer";
 import { CAdminGoodsSearchPageContainer } from "./GoodsSearchPageContainer";
 
-const GoodPageContainer = ({ onLoad }) => {
+const GoodPageContainer = ({ onLoad, onUnmount }) => {
     const params = useParams();
     useEffect(() => {
         onLoad({ _id: params._id });
+        return () => {
+            onUnmount && onUnmount();
+        };
     }, []);
 
     return <GoodPage />;
@@ -44,21 +46,21 @@ const CDashboardPageContainer = connect(null, {
     onLoad: () => actionOrders(),
 })(DashboardPageContainer);
 
-const CGoodsList = connect((state) => ({ goods: state.promise?.pageGoodsFind?.payload || [] }))(GoodList);
+// const CGoodsList = connect((state) => ({ goods: state.promise?.pageGoodsFind?.payload || [] }))(GoodList);
 
-const GoodsListContainer = ({ onLoad }) => {
-    const params = useParams();
+// const GoodsListContainer = ({ onLoad }) => {
+//     const params = useParams();
 
-    useEffect(() => {
-        onLoad({ text: params.searchData, promiseName: "pageGoodsFind" });
-    }, [params.searchData]);
+//     useEffect(() => {
+//         onLoad({ text: params.searchData, promiseName: "pageGoodsFind" });
+//     }, [params.searchData]);
 
-    return <CGoodsList />;
-};
+//     return <CGoodsList />;
+// };
 
-const CGoodsListContainer = connect(null, {
-    onLoad: ({ text, promiseName }) => actionOrders({ text, promiseName }),
-})(GoodsListContainer);
+// const CGoodsListContainer = connect(null, {
+//     onLoad: ({ text, promiseName }) => actionOrders({ text, promiseName }),
+// })(GoodsListContainer);
 
 const MainPageContainer = ({ onLoad, goods }) => {
     useEffect(() => {

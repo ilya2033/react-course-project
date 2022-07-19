@@ -1,23 +1,24 @@
 import { Box, Button, Stack, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useContext, useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useContext, useEffect, useState } from "react";
+import { connect, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { actionOrderUpdate } from "../../actions/actionOrderUpdate";
 import { actionCartDelete } from "../../reducers";
 import { UIContext } from "../UIContext";
-import { CartItem } from "./CartItem";
+import { CCartItem } from "./CartItem";
 
-export const CartPage = ({ onConfirm, promiseStatus, serverErrors }) => {
+export const CartPage = ({ onConfirm, promiseStatus, serverErrors, onDeleteClick }) => {
     const cart = useSelector((state) => state.cart || {});
     const { setAlert } = useContext(UIContext);
     const sum = Object.entries(cart).reduce((prev, [_id, order]) => prev + order.count * order.good.price, 0);
-    const dispatch = useDispatch();
+    const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {},
         onSubmit: () => {
+            setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
             onConfirm && Object.keys(cart).length && onConfirm({ orderGoods: Object.values(cart) });
         },
     });
@@ -26,6 +27,9 @@ export const CartPage = ({ onConfirm, promiseStatus, serverErrors }) => {
         if (!Object.entries(cart).length) {
             navigate("/");
         }
+        return () => {
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+        };
     }, []);
 
     useEffect(() => {
@@ -35,6 +39,8 @@ export const CartPage = ({ onConfirm, promiseStatus, serverErrors }) => {
     useEffect(() => {
         if (promiseStatus === "FULFILLED") {
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "success",
@@ -42,8 +48,10 @@ export const CartPage = ({ onConfirm, promiseStatus, serverErrors }) => {
             });
         }
         if (promiseStatus === "REJECTED") {
-            const errorMessage = serverErrors.reduce((prev, curr) => prev + "\n" + curr.message, "");
+            const errorMessage = (serverErrors ? [].concat(serverErrors) : []).reduce((prev, curr) => prev + "\n" + curr.message, "");
             formik.setSubmitting(false);
+            promiseTimeOut && clearTimeout(promiseTimeOut);
+            setPromiseTimeOut(null);
             setAlert({
                 show: true,
                 severity: "error",
@@ -59,7 +67,7 @@ export const CartPage = ({ onConfirm, promiseStatus, serverErrors }) => {
                 <Table className="table">
                     <TableBody>
                         {Object.entries(cart).map(([_id, order]) => (
-                            <CartItem order={order} onDeleteClick={(good) => dispatch(actionCartDelete(good))} key={_id} />
+                            <CCartItem order={order} onDeleteClick={(good) => onDeleteClick(good)} key={_id} />
                         ))}
 
                         <TableRow>
@@ -96,5 +104,6 @@ export const CCartPage = connect(
     }),
     {
         onConfirm: (order) => actionOrderUpdate(order),
+        onDeleteClick: (good) => actionCartDelete(good),
     }
 )(CartPage);

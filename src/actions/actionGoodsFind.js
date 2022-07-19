@@ -1,14 +1,20 @@
+import { call, delay, put } from "redux-saga/effects";
 import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
-
-export const actionGoodsFind =
-    ({ text = "", limit = 7, skip = 0, promiseName = "goodsFind", orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        dispatch(
-            actionPromise(
-                promiseName,
-                gql(
-                    `query GoodsFind($query:String){
+import { promiseWorker } from "../reducers/promiseReducer";
+export const actionGoodsFind = ({ text, limit, skip, promiseName, orderBy, delay }) => ({
+    type: "GOODS_FIND",
+    payload: { text, limit, skip, promiseName, orderBy, delay },
+});
+export function* goodsFindWorker(action) {
+    const { text = "", limit = 7, skip = 0, promiseName = "goodsFind", orderBy = "_id", timeout = 0 } = action.payload || {};
+    yield delay(timeout);
+    yield call(
+        promiseWorker,
+        actionPromise(
+            promiseName,
+            gql(
+                `query GoodsFind($query:String){
                         GoodFind(query: $query){
                             _id name price images{
                                 _id url
@@ -19,20 +25,20 @@ export const actionGoodsFind =
                             amount
                         }
                     }`,
-                    {
-                        query: JSON.stringify([
-                            {
-                                name__contains: text,
-                                description__contains: text,
-                            },
-                            {
-                                limit: !!limit ? limit : 5,
-                                skip,
-                                orderBy,
-                            },
-                        ]),
-                    }
-                )
+                {
+                    query: JSON.stringify([
+                        {
+                            name__contains: text,
+                            description__contains: text,
+                        },
+                        {
+                            limit: !!limit ? limit : 5,
+                            skip,
+                            orderBy,
+                        },
+                    ]),
+                }
             )
-        );
-    };
+        )
+    );
+}

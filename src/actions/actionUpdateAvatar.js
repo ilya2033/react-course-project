@@ -1,10 +1,15 @@
+import { call, put, select } from "redux-saga/effects";
 import { actionPromiseClear } from "../reducers";
+import { promiseWorker } from "../reducers/promiseReducer";
 import { actionAboutMe } from "./actionAboutMe";
 import { actionUploadFile } from "./actionUploadFile";
 import { actionUserUpsert } from "./actionUserUpsert";
 
-export const actionUpdateAvatar = (file) => async (dispatch, getState) => {
-    await dispatch(actionUploadFile(file));
+export const actionUpdateAvatar = (file) => ({ type: "UPDATE_AVATAR", payload: file });
+
+export function* updateAvatarWorker(action) {
+    const file = action.payload;
+    yield call(promiseWorker, actionUploadFile(file));
 
     const {
         promise: {
@@ -13,13 +18,13 @@ export const actionUpdateAvatar = (file) => async (dispatch, getState) => {
                 status,
             },
         },
-    } = getState();
+    } = yield select();
 
-    await dispatch(actionUserUpsert({ avatar: { _id } }));
+    yield call(promiseWorker, actionUserUpsert({ avatar: { _id } }));
 
     if (status === "FULFILLED") {
-        await dispatch(actionAboutMe());
+        yield put(actionAboutMe());
     }
 
-    await dispatch(actionPromiseClear("uploadFile"));
-};
+    yield put(actionPromiseClear("uploadFile"));
+}

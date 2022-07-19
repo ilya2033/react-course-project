@@ -1,14 +1,11 @@
 import { actionPromise } from "../reducers";
 import { gql } from "../helpers";
 
-export const actionCatAll =
-    ({ limit = 20, skip = 0, promiseName = "catAll", orderBy = "_id" } = {}) =>
-    async (dispatch, getState) => {
-        dispatch(
-            actionPromise(
-                promiseName,
-                gql(
-                    `query CatAll($query:String){
+export const actionCatAll = ({ limit = 20, skip = 0, promiseName = "catAll", orderBy = "_id" } = {}) =>
+    actionPromise(
+        promiseName,
+        gql(
+            `query CatAll($query:String){
                         CategoryFind(query: $query){
                             _id name
                             parent{
@@ -22,17 +19,15 @@ export const actionCatAll =
                             }
                         }
                     }`,
+            {
+                query: JSON.stringify([
+                    {},
                     {
-                        query: JSON.stringify([
-                            {},
-                            {
-                                limit: !!limit ? limit : 100,
-                                skip: skip,
-                                orderBy,
-                            },
-                        ]),
-                    }
-                )
-            )
-        );
-    };
+                        limit: !!limit ? limit : 100,
+                        skip: skip,
+                        orderBy,
+                    },
+                ]),
+            }
+        )
+    );

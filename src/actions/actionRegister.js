@@ -1,9 +1,15 @@
+import { call, put, select } from "redux-saga/effects";
 import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
+import { promiseWorker } from "../reducers/promiseReducer";
 import { actionLogin } from "./actionLogin";
 
-export const actionRegister = (username, password) => async (dispatch, getState) => {
-    await dispatch(
+export const actionRegister = (username, password) => ({ type: "REGISTER", payload: { username, password } });
+
+export function* registerWorker(action) {
+    const { username, password } = action.payload || {};
+    yield call(
+        promiseWorker,
         actionPromise(
             "register",
             gql(
@@ -21,8 +27,8 @@ export const actionRegister = (username, password) => async (dispatch, getState)
     );
     const {
         promise: { register },
-    } = getState();
+    } = yield select();
     if (register.status === "FULFILLED") {
-        dispatch(actionLogin(username, password));
+        yield put(actionLogin(username, password));
     }
-};
+}

@@ -24,59 +24,29 @@ function feedReducer(state = { payload: [] }, { type, payload = [] }) {
 
 const actionFeedAdd = (payload) => ({ type: "FEED_ADD", payload });
 const actionFeedClear = () => ({ type: "FEED_CLEAR" });
-const actionFeedGoods =
-    ({ skip = 0, orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionGoodsAll({ skip, limit: 1, promiseName: "feedGoodsAll", orderBy }));
-    };
+const actionFeedGoods = ({ skip = 0, orderBy = "_id" }) => actionGoodsAll({ skip, limit: 10, promiseName: "feedGoodsAll", orderBy });
 
-const actionFeedCategoryGoods =
-    ({ skip = 0, orderBy = "_id", category }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionCategoryGoods({ skip, limit: 1, promiseName: "feedCategoryGoods", orderBy, category }));
-    };
+const actionFeedCategoryGoods = ({ skip = 0, orderBy = "_id", category }) =>
+    actionCategoryGoods({ skip, limit: 10, promiseName: "feedCategoryGoods", orderBy, category });
 
-const actionFeedGoodsFind =
-    ({ skip = 0, text = "", orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionGoodsFind({ skip, limit: 1, promiseName: "feedGoodsFind", text, orderBy }));
-    };
+const actionFeedGoodsFind = ({ skip = 0, text = "", orderBy = "_id" }) =>
+    actionGoodsFind({ skip, limit: 10, promiseName: "feedGoodsFind", text, orderBy });
 
-const actionFeedCatsFind =
-    ({ skip = 0, text = "", orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionCatsFind({ skip, promiseName: "feedCatsFind", text, limit: 1, orderBy }));
-    };
+const actionFeedCatsFind = ({ skip = 0, text = "", orderBy = "_id" }) =>
+    actionCatsFind({ skip, promiseName: "feedCatsFind", text, limit: 10, orderBy });
 
-const actionFeedCats =
-    ({ skip = 0, orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionCatAll({ promiseName: "feedCatAll", skip, limit: 1, orderBy }));
-    };
+const actionFeedCats = ({ skip = 0, orderBy = "_id" }) => actionCatAll({ promiseName: "feedCatAll", skip, limit: 10, orderBy });
 
-const actionFeedOrders =
-    ({ skip = 0, orderBy = "_id", status = 0 }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionOrdersAll({ skip, limit: 1, promiseName: "feedOrdersAll", orderBy, status }));
-    };
+const actionFeedOrders = ({ skip = 0, orderBy = "_id", status = 0 }) =>
+    actionOrdersAll({ skip, limit: 10, promiseName: "feedOrdersAll", orderBy, status });
 
-const actionFeedOrdersFind =
-    ({ skip = 0, text = "", orderBy = "_id", status = "0" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionOrdersFind({ skip, limit: 1, promiseName: "feedOrdersFind", text, orderBy, status }));
-    };
+const actionFeedOrdersFind = ({ skip = 0, text = "", orderBy = "_id", status = "0" }) =>
+    actionOrdersFind({ skip, limit: 10, promiseName: "feedOrdersFind", text, orderBy, status });
 
-const actionFeedUsersFind =
-    ({ skip = 0, text = "", orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionUsersFind({ skip, promiseName: "feedUsersFind", text, limit: 1, orderBy }));
-    };
+const actionFeedUsersFind = ({ skip = 0, text = "", orderBy = "_id" }) =>
+    actionUsersFind({ skip, promiseName: "feedUsersFind", text, limit: 10, orderBy });
 
-const actionFeedUsers =
-    ({ skip = 0, orderBy = "_id" }) =>
-    async (dispatch, getState) => {
-        await dispatch(actionUsersAll({ promiseName: "feedUsersAll", skip, limit: 1, orderBy }));
-    };
+const actionFeedUsers = ({ skip = 0, orderBy = "_id" }) => actionUsersAll({ promiseName: "feedUsersAll", skip, limit: 10, orderBy });
 
 export {
     actionFeedCats,
