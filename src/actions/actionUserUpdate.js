@@ -1,4 +1,4 @@
-import { call, put, select } from "redux-saga/effects";
+import { call, delay, put, select } from "redux-saga/effects";
 import { actionPromiseClear } from "../reducers";
 import { promiseWorker } from "../reducers/promiseReducer";
 import { actionAboutMe } from "./actionAboutMe";
@@ -24,5 +24,6 @@ export function* userUpdateWorker(action) {
         yield put(actionAboutMe());
     }
 
+    yield delay(500);
     yield put(actionPromiseClear("userUpsert"));
 }
