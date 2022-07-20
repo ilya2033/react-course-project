@@ -32,11 +32,13 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
         initialValues: {
             username: "",
             password: "",
-            repeatPassword: "",
+            name: "",
+            nick: "",
         },
         validationSchema: profileSchema,
         validateOnChange: true,
         onSubmit: () => {
+            console.log(formik.values);
             onProfileSave(formik.values);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
@@ -50,7 +52,9 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
     }, []);
 
     useEffect(() => {
-        formik.setValues(profile);
+        formik.setFieldValue("username", profile?.username || "");
+        formik.setFieldValue("nick", profile?.nick || "");
+        formik.setFieldValue("name", profile?.name || "");
 
         return () => {
             promiseTimeOut && clearTimeout(promiseTimeOut);
@@ -68,6 +72,7 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
                 severity: "success",
                 message: "Готово",
             });
+            setEditMod(false);
         }
         if (promiseStatus === "REJECTED") {
             const errorMessage = (serverErrors ? [].concat(serverErrors) : []).reduce((prev, curr) => prev + "\n" + curr.message, "");

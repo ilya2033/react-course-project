@@ -50,13 +50,9 @@ export const UserForm = ({
     const { setAlert } = useContext(UIContext);
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
-
+    const [isNew, setIsNew] = useState(false);
     const [acl, setAcl] = useState([]);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        console.log(promiseStatus);
-    }, [promiseStatus]);
 
     const formik = useFormik({
         initialValues: {
@@ -70,12 +66,13 @@ export const UserForm = ({
         onSubmit: () => {
             let userToSave = {};
             userToSave = formik.values;
-            user?._id && (userToSave._id = user._id);
+            !isNew && user?._id && (userToSave._id = user._id);
             userToSave.acl = acl.map(({ value }) => value);
             avatar ? (userToSave.avatar = avatar) : delete userToSave.avatar;
             onSaveClick && onSaveClick();
             onSave(userToSave);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
+            setIsNew(false);
         },
     });
 
@@ -261,7 +258,17 @@ export const UserForm = ({
             </Grid>
 
             <Stack direction="row" sx={{ mt: 3 }} justifyContent="flex-end" spacing={1}>
-                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit">
+                {!!user._id && (
+                    <Button
+                        variant="contained"
+                        onClick={() => setIsNew(true)}
+                        disabled={!formik.isValid || formik.isSubmitting}
+                        type="submit"
+                    >
+                        Зберегти як новий
+                    </Button>
+                )}
+                <Button variant="contained" onClick={() => setIsNew(false)} disabled={!formik.isValid || formik.isSubmitting} type="submit">
                     Зберегти
                 </Button>
             </Stack>

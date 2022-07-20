@@ -27,7 +27,7 @@ const actionFeedClear = () => ({ type: "FEED_CLEAR" });
 const actionFeedGoods = ({ skip = 0, orderBy = "_id" }) => actionGoodsAll({ skip, limit: 10, promiseName: "feedGoodsAll", orderBy });
 
 const actionFeedCategoryGoods = ({ skip = 0, orderBy = "_id", category }) =>
-    actionCategoryGoods({ skip, limit: 10, promiseName: "feedCategoryGoods", orderBy, category });
+    actionCategoryGoods({ skip, limit: 8, promiseName: "feedCategoryGoods", orderBy, category });
 
 const actionFeedGoodsFind = ({ skip = 0, text = "", orderBy = "_id" }) =>
     actionGoodsFind({ skip, limit: 10, promiseName: "feedGoodsFind", text, orderBy });

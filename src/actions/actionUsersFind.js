@@ -16,8 +16,8 @@ export const actionUsersFind = ({ text = "", limit = 0, skip = 0, promiseName = 
             {
                 query: JSON.stringify([
                     {
-                        username__contains: text,
-                        _id__contains: text,
+                        username__icontains: text,
+                        _id__icontains: text,
                     },
                     {
                         limit: !!limit ? limit : 100,

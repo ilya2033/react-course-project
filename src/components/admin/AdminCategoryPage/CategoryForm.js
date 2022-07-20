@@ -33,6 +33,7 @@ const CategoryForm = ({
     const [subCatList, setSubCatList] = useState([]);
     const [parentList, setParentList] = useState([]);
     const { setAlert } = useContext(UIContext);
+    const [isNew, setIsNew] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ const CategoryForm = ({
         validateOnChange: true,
         onSubmit: () => {
             let categoryToSave = {};
-            category?._id && (categoryToSave._id = category?._id);
+            !isNew && category?._id && (categoryToSave._id = category?._id);
             categoryToSave.name = formik.values.name;
             inputGoods && (categoryToSave.goods = inputGoods);
             inputParent && (categoryToSave.parent = inputParent._id ? inputParent : null);
@@ -191,11 +192,21 @@ const CategoryForm = ({
             </Box>
             <Stack direction="row" sx={{ mt: 3 }} justifyContent="flex-end" spacing={1}>
                 {!!category._id && (
-                    <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} color="error">
-                        Видалити
-                    </Button>
+                    <>
+                        <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} disabled={formik.isSubmitting} color="error">
+                            Видалити
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => setIsNew(true)}
+                            disabled={!formik.isValid || formik.isSubmitting}
+                            type="submit"
+                        >
+                            Зберегти як новий
+                        </Button>
+                    </>
                 )}
-                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit">
+                <Button variant="contained" onClick={() => setIsNew(false)} disabled={!formik.isValid || formik.isSubmitting} type="submit">
                     Зберегти
                 </Button>
             </Stack>

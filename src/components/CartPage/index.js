@@ -63,7 +63,7 @@ export const CartPage = ({ onConfirm, promiseStatus, serverErrors, onDeleteClick
     return (
         <Box className="CartPage" component="form" onSubmit={formik.handleSubmit}>
             <Stack spacing={2}>
-                <Typography>Оформлення замовлення</Typography>
+                <Typography variant="h4">Оформлення замовлення</Typography>
                 <Table className="table">
                     <TableBody>
                         {Object.entries(cart).map(([_id, order]) => (

@@ -28,8 +28,8 @@ export function* goodsFindWorker(action) {
                 {
                     query: JSON.stringify([
                         {
-                            name__contains: text,
-                            description__contains: text,
+                            name__icontains: text,
+                            description__icontains: text,
                         },
                         {
                             limit: !!limit ? limit : 5,

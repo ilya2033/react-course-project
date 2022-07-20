@@ -16,7 +16,7 @@ export const actionCatsFind = ({ text = "", limit = 7, skip = 0, promiseName = "
                     }`,
             {
                 query: JSON.stringify([
-                    { name__contains: text, _id__contains: text },
+                    { name__icontains: text, _id__icontains: text },
                     {
                         limit: !!limit ? limit : 5,
                         skip,

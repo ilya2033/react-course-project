@@ -6,18 +6,25 @@ import defaultGoodImage from "../../../images/default-good-image.png";
 import { actionCartAdd } from "../../../reducers";
 import { CBuyButton } from "../BuyButton";
 
+const styles = {
+    media: {
+        height: 250,
+        objectFit: "contain",
+    },
+};
+
 const GoodCard = ({ good = {} }) => {
     return (
         <Card className="GoodCard">
             <CardActionArea component={Link} to={`/good/${good._id}`}>
                 <CardMedia
                     component="img"
-                    height="200"
                     image={`${backendURL}${mediaURL}${good.images ? good.images[0]?.url : defaultGoodImage}`}
                     onError={({ currentTarget }) => {
                         currentTarget.onerror = null;
                         currentTarget.src = defaultGoodImage;
                     }}
+                    style={styles.media}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="body1" component="div" color="#1C1B1F" textAlign="left">

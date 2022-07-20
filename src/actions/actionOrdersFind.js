@@ -15,7 +15,7 @@ export const actionOrdersFind = ({ text = "", limit = 7, skip = 0, promiseName =
                     }`,
             {
                 query: JSON.stringify([
-                    { owner__username__contains: text, _id__contains: text, status__contains: text, status },
+                    { owner__username__icontains: text, _id__icontains: text, status__icontains: text, status },
                     {
                         limit: !!limit ? limit : 5,
                         skip,

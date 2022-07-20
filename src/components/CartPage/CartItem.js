@@ -53,7 +53,7 @@ export const CartItem = ({ order, onDeleteClick, onChange }) => {
                     <IconButton onClick={() => handleChange(countInput - 1)}>
                         <AiOutlineMinus />
                     </IconButton>
-                    <Typography>{countInput}</Typography>
+                    <Typography>{countInput === amount ? `${countInput}(max)` : countInput}</Typography>
                     <IconButton onClick={() => handleChange(countInput + 1)}>
                         <AiOutlinePlus />
                     </IconButton>

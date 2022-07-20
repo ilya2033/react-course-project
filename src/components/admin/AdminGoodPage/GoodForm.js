@@ -45,6 +45,7 @@ export const GoodForm = ({
     const [inputCategories, setInputCategories] = useState([]);
     const [inputImages, setInputImages] = useState([]);
     const { setAlert } = useContext(UIContext);
+    const [isNew, setIsNew] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [promiseTimeOut, setPromiseTimeOut] = useState(null);
     const navigate = useNavigate();
@@ -60,7 +61,7 @@ export const GoodForm = ({
         validateOnChange: true,
         onSubmit: () => {
             let goodToSave = {};
-            good?._id && (goodToSave._id = good._id);
+            !isNew && good?._id && (goodToSave._id = good._id);
             goodToSave.name = formik.values.name;
             goodToSave.description = formik.values.description;
             goodToSave.price = +formik.values.price;
@@ -228,11 +229,21 @@ export const GoodForm = ({
 
             <Stack direction="row" sx={{ mt: 3 }} justifyContent="flex-end" spacing={1}>
                 {!!good._id && (
-                    <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} color="error">
-                        Видалити
-                    </Button>
+                    <>
+                        <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} disabled={formik.isSubmitting} color="error">
+                            Видалити
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => setIsNew(true)}
+                            disabled={!formik.isValid || formik.isSubmitting}
+                            type="submit"
+                        >
+                            Зберегти як новий
+                        </Button>
+                    </>
                 )}
-                <Button variant="contained" disabled={!formik.isValid || formik.isSubmitting} type="submit">
+                <Button variant="contained" onClick={() => setIsNew(false)} disabled={!formik.isValid || formik.isSubmitting} type="submit">
                     Зберегти
                 </Button>
             </Stack>
