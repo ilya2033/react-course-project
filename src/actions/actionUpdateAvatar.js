@@ -14,13 +14,18 @@ export function* updateAvatarWorker(action) {
     const {
         promise: {
             uploadFile: {
-                payload: { _id },
+                payload: { _id: fileId },
                 status,
+            },
+        },
+        auth: {
+            payload: {
+                sub: { _id },
             },
         },
     } = yield select();
 
-    yield call(promiseWorker, actionUserUpsert({ avatar: { _id } }));
+    yield call(promiseWorker, actionUserUpsert({ avatar: { _id: fileId }, _id }));
 
     if (status === "FULFILLED") {
         yield put(actionAboutMe());

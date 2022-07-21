@@ -1,7 +1,7 @@
 import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
 
-export const actionCatsFind = ({ text = "", limit = 7, skip = 0, promiseName = "catsFind", orderBy = "_id" }) =>
+export const actionCatsFind = ({ text = "", limit = 7, skip = 0, promiseName = "catsFind", orderBy = "_id" } = {}) =>
     actionPromise(
         promiseName,
         gql(
@@ -16,7 +16,7 @@ export const actionCatsFind = ({ text = "", limit = 7, skip = 0, promiseName = "
                     }`,
             {
                 query: JSON.stringify([
-                    { name__icontains: text, _id__icontains: text },
+                    { or: { name__icontains: text, _id__icontains: text } },
                     {
                         limit: !!limit ? limit : 5,
                         skip,

@@ -29,7 +29,7 @@ const Aside = ({ children }) => (
 
         <Routes>
             <Route
-                path="/admin/orders"
+                path="/admin/orders*"
                 exact
                 element={
                     <Box className="body" mt={4}>

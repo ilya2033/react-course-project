@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { SearchBar, SearchResults } from "../../common/SearchBar";
 import { actionGoodsFind } from "../../../actions/actionGoodsFind";
 import { actionPromiseClear } from "../../../reducers";
-import { Box, Table, TableBody, TableHead } from "@mui/material";
+import { Box, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const CSearchBar = connect(null, {
@@ -15,9 +15,8 @@ const CSearchBar = connect(null, {
 
 const CSearchResults = connect((state) => ({ items: state.promise.adminGoodsFind?.payload || [] }))(SearchResults);
 
-const AdminGoodList = ({ goods, orderBy = "_id" }) => {
+const AdminGoodList = ({ goods, orderBy = "_id", promiseStatus = null } = {}) => {
     const navigate = useNavigate();
-    const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
 
     return (
@@ -48,12 +47,22 @@ const AdminGoodList = ({ goods, orderBy = "_id" }) => {
                     {(goods || []).map((good) => (
                         <AdminGoodItem good={good} key={good._id} />
                     ))}
+                    {promiseStatus === "PENDING" && (
+                        <TableRow>
+                            <TableCell colSpan="7">
+                                <LinearProgress />
+                            </TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
         </Box>
     );
 };
 
-const CAdminGoodList = connect((state) => ({ goods: state.feed?.payload || [] }))(AdminGoodList);
+const CAdminGoodList = connect((state) => ({
+    goods: state.feed?.payload || [],
+    promiseStatus: state?.promise?.feedGoodsAll?.status || state?.promise?.feedGoodsFind?.status || null,
+}))(AdminGoodList);
 
 export { AdminGoodList, CAdminGoodList };

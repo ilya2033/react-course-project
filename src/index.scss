@@ -14,7 +14,13 @@
         overflow: hidden;
         & .ProfileImage {
             max-width: 100%;
+            min-height: 400px;
+
+            & img {
+                object-fit: contain;
+            }
         }
+
         & .letter {
             z-index: 2;
             display: block;
@@ -94,6 +100,9 @@
         width: 100%;
         display: flex;
 
+        & img {
+            object-fit: contain;
+        }
         & .content {
             flex: 1;
         }

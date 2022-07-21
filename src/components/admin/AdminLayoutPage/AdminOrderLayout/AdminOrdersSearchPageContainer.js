@@ -13,7 +13,7 @@ const AdminOrdersSearchPageContainer = ({ feed, orders, promiseStatus, onLoad, o
     const status = searchParams.get("status") || 0;
 
     useEffect(() => {
-        onLoad({ orderBy, text });
+        onLoad({ orderBy, text, status });
         return () => {
             onUnmount();
         };

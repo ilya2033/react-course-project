@@ -2,7 +2,7 @@ import { gql } from "../helpers";
 
 import { actionPromise } from "../reducers";
 
-export const actionOrderById = ({ _id, promiseName = "orderById" }) =>
+export const actionOrderById = ({ _id, promiseName = "orderById" } = {}) =>
     actionPromise(
         promiseName,
         gql(

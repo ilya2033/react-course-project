@@ -10,7 +10,7 @@ export const actionGoodPage = ({ _id, promiseName } = {}) => ({
 });
 
 export function* goodPageWorker(action) {
-    const { _id, promiseName = "goodById" } = action.payload;
+    const { _id, promiseName = "goodById" } = action.payload || {};
     yield put(actionCatAll());
 
     if (_id) {

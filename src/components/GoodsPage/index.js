@@ -1,4 +1,4 @@
-import { Stack, Typography, Divider } from "@mui/material";
+import { Stack, Typography, Divider, LinearProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import { connect } from "react-redux";
 import { useSearchParams } from "react-router-dom";
@@ -6,7 +6,7 @@ import { GoodList } from "../common/GoodList";
 import { SubCategories } from "./SubCategories";
 import { SortOptions } from "../common/SortOptions";
 
-const GoodsPage = ({ category = {}, goods = [] }) => {
+const GoodsPage = ({ category = {}, goods = [], promiseStatus = null }) => {
     const { name = "", subcategories = [] } = category || {};
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -45,10 +45,15 @@ const GoodsPage = ({ category = {}, goods = [] }) => {
                         <GoodList goods={goods} />
                     </Box>
                 ) : null}
+                {promiseStatus === "PENDING" && <LinearProgress />}
             </Stack>
         </Box>
     );
 };
 
-const CGoodsPage = connect((state) => ({ category: state?.promise?.catById?.payload || {}, goods: state?.feed?.payload || [] }))(GoodsPage);
+const CGoodsPage = connect((state) => ({
+    category: state?.promise?.catById?.payload || {},
+    goods: state?.feed?.payload || [],
+    promiseStatus: state.promise?.feedCategoryGoods?.status || state.promise?.feedGoodsFind?.status || null,
+}))(GoodsPage);
 export { GoodsPage, CGoodsPage };

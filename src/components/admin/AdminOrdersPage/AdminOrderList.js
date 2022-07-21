@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { SearchBar, SearchResults } from "../../common/SearchBar";
 import { actionOrdersFind } from "../../../actions/actionOrdersFind";
 import { actionPromiseClear } from "../../../reducers";
-import { Box, Table, TableBody, TableHead } from "@mui/material";
+import { Box, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { AdminOrderItem } from "./AdminOrderItem";
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -15,7 +15,7 @@ const CSearchBar = connect(null, {
 
 const CSearchResults = connect((state) => ({ items: state.promise.adminOrdersFind?.payload || [] }))(SearchResults);
 
-const AdminOrderList = ({ orders, orderBy = "_id" }) => {
+const AdminOrderList = ({ orders, orderBy = "_id", promiseStatus = null }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
@@ -47,12 +47,22 @@ const AdminOrderList = ({ orders, orderBy = "_id" }) => {
                     {(orders || []).map((order) => (
                         <AdminOrderItem order={order} key={order._id} />
                     ))}
+                    {promiseStatus === "PENDING" && (
+                        <TableRow>
+                            <TableCell colSpan="6">
+                                <LinearProgress />
+                            </TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
         </Box>
     );
 };
 
-const CAdminOrderList = connect((state) => ({ orders: state.feed?.payload || [] }))(AdminOrderList);
+const CAdminOrderList = connect((state) => ({
+    promiseStatus: state?.promise?.feedOrdersAll?.status || state?.promise?.feedOrdersFind?.status || null,
+    orders: state.feed?.payload || [],
+}))(AdminOrderList);
 
 export { AdminOrderList, CAdminOrderList };

@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { actionUpdateAvatar } from "../../../actions/actionUpdateAvatar";
 import { actionUserUpdate } from "../../../actions/actionUserUpdate";
-import { DropZone } from "../../common/DropZone";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { UIContext } from "../../UIContext";
@@ -38,7 +37,6 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
         validationSchema: profileSchema,
         validateOnChange: true,
         onSubmit: () => {
-            console.log(formik.values);
             onProfileSave(formik.values);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));
         },
@@ -52,14 +50,10 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
     }, []);
 
     useEffect(() => {
+        profile._id && formik.setFieldValue("_id", profile?._id || "");
         formik.setFieldValue("username", profile?.username || "");
         formik.setFieldValue("nick", profile?.nick || "");
         formik.setFieldValue("name", profile?.name || "");
-
-        return () => {
-            promiseTimeOut && clearTimeout(promiseTimeOut);
-            setPromiseTimeOut(null);
-        };
     }, [profile]);
 
     useEffect(() => {
@@ -110,7 +104,9 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
                                             value={formik.values.username}
                                             onBlur={formik.handleBlur}
                                             onChange={formik.handleChange}
-                                            helperText={formik.touched.username && formik.errors.username}
+                                            helperText={`Після зміни username потрібно перезайти в аккаунт!!! \n ${
+                                                formik.touched.username ? formik.errors.username || "" : ""
+                                            }`}
                                         />
                                     ) : (
                                         formik.values.username
@@ -222,7 +218,7 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
 
 export const CProfileForm = connect(
     (state) => ({
-        profile: state.promise?.aboutMe?.payload,
+        profile: state.promise?.aboutMe?.payload || {},
         promiseStatus: state.promise.userUpsert?.status || null,
         serverErrors: state.promise?.userUpsert?.error || [],
     }),

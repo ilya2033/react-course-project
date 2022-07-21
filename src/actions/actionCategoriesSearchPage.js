@@ -10,6 +10,7 @@ export function* categoriesSearchPageWorker(action) {
     const { orderBy = "_id", text = "" } = action.payload || {};
     yield put(actionFeedClear());
     yield put(actionPromiseClear("feedCatsFind"));
+    console.log(1);
     yield put(actionFeedCatsFind({ text, orderBy, skip: 0 }));
 
     yield take("CATEGORIES_SEARCH_PAGE_CLEAR");

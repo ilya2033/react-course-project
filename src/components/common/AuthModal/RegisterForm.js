@@ -143,7 +143,7 @@ export const RegisterForm = ({ serverErrors, promiseStatus, onRegister, onLoginB
                 fullWidth
                 sx={{ mt: 2 }}
             >
-                Зарегистрироваться
+                Зареєструватися
             </Button>
             <Button variant="text" onClick={onLoginButtonClick}>
                 <Typography>Увійти</Typography>

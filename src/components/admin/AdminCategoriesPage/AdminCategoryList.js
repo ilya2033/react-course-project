@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { actionCatsFind } from "../../../actions/actionCatsFind";
 import { actionPromiseClear } from "../../../reducers";
 import { SearchBar, SearchResults } from "../../common/SearchBar";
-import { Box, Table, TableBody, TableHead } from "@mui/material";
+import { Box, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const CSearchBar = connect(null, {
@@ -14,9 +14,9 @@ const CSearchBar = connect(null, {
 
 const CSearchResults = connect((state) => ({ items: state.promise.adminCatsFind?.payload || [] }))(SearchResults);
 
-const AdminCategoryList = ({ categories, orderBy = "_id" } = {}) => {
+const AdminCategoryList = ({ categories, orderBy = "_id", promiseStatus = null } = {}) => {
     const navigate = useNavigate();
-    const location = useLocation();
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     return (
@@ -47,12 +47,22 @@ const AdminCategoryList = ({ categories, orderBy = "_id" } = {}) => {
                     {(categories || []).map((cat) => (
                         <AdminCategoryItem category={cat} key={cat._id} />
                     ))}
+                    {promiseStatus === "PENDING" && (
+                        <TableRow>
+                            <TableCell colSpan="4">
+                                <LinearProgress />
+                            </TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
         </Box>
     );
 };
 
-const CAdminCategoryList = connect((state) => ({ categories: state.feed?.payload || [] }))(AdminCategoryList);
+const CAdminCategoryList = connect((state) => ({
+    promiseStatus: state?.promise?.feedCatAll?.status || state?.promise?.feedCatsFind?.status || null,
+    categories: state.feed?.payload || [],
+}))(AdminCategoryList);
 
 export { AdminCategoryList, CAdminCategoryList };
