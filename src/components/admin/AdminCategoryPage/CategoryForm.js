@@ -196,17 +196,12 @@ const CategoryForm = ({
                         <Button variant="contained" onClick={() => setIsDeleteModalOpen(true)} disabled={formik.isSubmitting} color="error">
                             Видалити
                         </Button>
-                        <Button
-                            variant="contained"
-                            onClick={() => setIsNew(true)}
-                            disabled={!formik.isValid || formik.isSubmitting}
-                            type="submit"
-                        >
+                        <Button variant="contained" onClick={() => setIsNew(true)} disabled={formik.isSubmitting} type="submit">
                             Зберегти як новий
                         </Button>
                     </>
                 )}
-                <Button variant="contained" onClick={() => setIsNew(false)} disabled={!formik.isValid || formik.isSubmitting} type="submit">
+                <Button variant="contained" onClick={() => setIsNew(false)} disabled={formik.isSubmitting} type="submit">
                     Зберегти
                 </Button>
             </Stack>

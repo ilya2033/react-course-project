@@ -193,12 +193,7 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
                                             <Button variant="text" color="error" onClick={() => setEditMod(false)}>
                                                 Скасувати
                                             </Button>
-                                            <Button
-                                                variant="text"
-                                                color="primary"
-                                                type="submit"
-                                                disabled={formik.isSubmitting || !formik.isValid}
-                                            >
+                                            <Button variant="text" color="primary" type="submit" disabled={formik.isSubmitting}>
                                                 Зберегти
                                             </Button>
                                         </Box>

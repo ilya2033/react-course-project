@@ -259,16 +259,11 @@ export const UserForm = ({
 
             <Stack direction="row" sx={{ mt: 3 }} justifyContent="flex-end" spacing={1}>
                 {!!user._id && (
-                    <Button
-                        variant="contained"
-                        onClick={() => setIsNew(true)}
-                        disabled={!formik.isValid || formik.isSubmitting}
-                        type="submit"
-                    >
+                    <Button variant="contained" onClick={() => setIsNew(true)} disabled={formik.isSubmitting} type="submit">
                         Зберегти як новий
                     </Button>
                 )}
-                <Button variant="contained" onClick={() => setIsNew(false)} disabled={!formik.isValid || formik.isSubmitting} type="submit">
+                <Button variant="contained" onClick={() => setIsNew(false)} disabled={formik.isSubmitting} type="submit">
                     Зберегти
                 </Button>
             </Stack>
