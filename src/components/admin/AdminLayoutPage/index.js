@@ -22,8 +22,8 @@ const AdminCategoryTreePageContainer = ({ onLoad, onUnmount }) => {
 };
 
 const CAdminCategoryTreePageContainer = connect(null, {
-    onUnmount: () => actionCatAll(),
-    onLoad: () => actionPromiseClear("catAll"),
+    onUnmount: () => actionPromiseClear("catAll"),
+    onLoad: () => actionCatAll(),
 })(AdminCategoryTreePageContainer);
 
 const AdminLayoutPage = () => {
