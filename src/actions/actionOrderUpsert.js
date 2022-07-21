@@ -1,5 +1,5 @@
 import { gql } from "../helpers";
-import { actionCartClear, actionPromise } from "../reducers";
+import { actionPromise } from "../reducers";
 
 export const actionOrderUpsert = (order) =>
     actionPromise(

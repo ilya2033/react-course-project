@@ -1,5 +1,4 @@
 import { Box, Grid } from "@mui/material";
-import { useEffect } from "react";
 import { GoodCard } from "../GoodCard";
 
 export const GoodList = ({ goods = [] } = {}) => {

@@ -5,7 +5,7 @@ import { actionCatsFind } from "../../../actions/actionCatsFind";
 import { actionPromiseClear } from "../../../reducers";
 import { SearchBar, SearchResults } from "../../common/SearchBar";
 import { Box, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
 const CSearchBar = connect(null, {
     onSearch: (text) => actionCatsFind({ promiseName: "adminCatsFind", text, limit: 5 }),

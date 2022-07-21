@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { backendURL, mediaURL } from "../../../helpers";
 import defaultAvatarImage from "../../../images/default-avatar-image.png";
 import { AiFillPlusCircle, AiOutlineMinusCircle } from "react-icons/ai";

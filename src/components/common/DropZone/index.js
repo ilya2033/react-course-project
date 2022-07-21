@@ -12,7 +12,7 @@ export const DropZone = ({ onFileDrop, children }) => {
 
     return (
         <Box {...getRootProps({ className: "Dropzone" })}>
-            {/* <input {...getInputProps()} /> */}
+            <input {...getInputProps()} />
             {children}
         </Box>
     );

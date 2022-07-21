@@ -1,4 +1,4 @@
-import { call, cancelled, select } from "redux-saga/effects";
+import { call } from "redux-saga/effects";
 import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
 import { promiseWorker } from "../reducers/promiseReducer";

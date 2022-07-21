@@ -1,4 +1,4 @@
-import { call, delay, put } from "redux-saga/effects";
+import { call, delay } from "redux-saga/effects";
 import { gql } from "../helpers";
 import { actionPromise } from "../reducers";
 import { promiseWorker } from "../reducers/promiseReducer";

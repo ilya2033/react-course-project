@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
 import { connect } from "react-redux";
-// import { actionRegister } from 'actions';
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";

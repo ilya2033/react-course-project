@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Stack, Typography } from "@mui/material";
+
 export const SearchCategoryResultItem = ({ category, onClick, link = "" } = {}) => {
     const { _id = null, name = "" } = category || {};
 

@@ -6,7 +6,7 @@ import { SearchBar, SearchResults } from "../../common/SearchBar";
 import { actionGoodsFind } from "../../../actions/actionGoodsFind";
 import { actionPromiseClear } from "../../../reducers";
 import { Box, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
 const CSearchBar = connect(null, {
     onSearch: (text) => actionGoodsFind({ promiseName: "adminGoodsFind", text, limit: 5 }),

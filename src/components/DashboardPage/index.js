@@ -1,6 +1,5 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { connect } from "react-redux";
-import { Error } from "../common/Error";
 import { DashboardOrder } from "./DashboardOrder";
 import { CProfileForm } from "./ProfileForm";
 
