@@ -2,4 +2,4 @@
 ### ADMIN CREDENTIALS :
 ##### username: admin
 ##### password :1234
-###GIT: http://gitlab.a-level.com.ua/ilya_shyian/store-project/
+### GIT: http://gitlab.a-level.com.ua/ilya_shyian/store-project/
