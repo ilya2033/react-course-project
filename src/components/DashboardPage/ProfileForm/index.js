@@ -36,6 +36,7 @@ export const ProfileForm = ({ profile = {}, promiseStatus, onProfileSave, server
         },
         validationSchema: profileSchema,
         validateOnChange: true,
+        validateOnMount: true,
         onSubmit: () => {
             onProfileSave(formik.values);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));

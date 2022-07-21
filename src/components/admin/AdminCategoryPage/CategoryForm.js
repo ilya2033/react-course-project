@@ -44,6 +44,7 @@ const CategoryForm = ({
         },
         validationSchema: categorySchema,
         validateOnChange: true,
+        validateOnMount: true,
         onSubmit: () => {
             let categoryToSave = {};
             !isNew && category?._id && (categoryToSave._id = category?._id);
@@ -70,7 +71,6 @@ const CategoryForm = ({
         setInputParent(category?.parent || null);
         setInputGoods(category?.goods || []);
         setInputSubcategories(category?.subcategories || []);
-        formik.validateForm();
     }, [category]);
 
     useEffect(() => {

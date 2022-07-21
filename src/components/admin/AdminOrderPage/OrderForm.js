@@ -35,6 +35,7 @@ export const OrderForm = ({
 
     const formik = useFormik({
         initialValues: {},
+        validateOnMount: true,
         onSubmit: () => {
             let orderToSave = {};
             !isNew && order?._id && (orderToSave._id = order._id);
@@ -58,7 +59,6 @@ export const OrderForm = ({
         setInputStatus(order?.status || null);
         setInputUser(order?.owner || null);
         setInputOrderGoods(order.orderGoods || []);
-        formik.validateForm();
     }, [order]);
 
     useEffect(() => {

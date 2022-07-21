@@ -30,6 +30,7 @@ export const RegisterForm = ({ serverErrors, promiseStatus, onRegister, onLoginB
         },
         validationSchema: signUpSchema,
         validateOnChange: true,
+        validateOnMount: true,
         onSubmit: () => {
             onRegister(formik.values.username, formik.values.password);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));

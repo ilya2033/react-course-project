@@ -33,6 +33,7 @@ export const LoginForm = ({
         },
         validationSchema: signInSchema,
         validateOnChange: true,
+        validateOnMount: true,
         onSubmit: () => {
             onLogin(formik.values.username, formik.values.password);
             setPromiseTimeOut(setTimeout(() => formik.setSubmitting(false), 3000));

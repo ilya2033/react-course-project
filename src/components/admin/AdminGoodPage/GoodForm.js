@@ -58,6 +58,7 @@ export const GoodForm = ({
             amount: 0,
         },
         validationSchema: goodSchema,
+        validateOnMount: true,
         validateOnChange: true,
         onSubmit: () => {
             let goodToSave = {};
@@ -130,7 +131,6 @@ export const GoodForm = ({
         formik.setFieldValue("description", good.description || "");
         formik.setFieldValue("amount", good.amount || 0);
         formik.setFieldValue("price", good.price || 0);
-        formik.validateForm();
     }, [good.categories, good.name, good.description, good.amount, good.price]);
 
     useEffect(() => {

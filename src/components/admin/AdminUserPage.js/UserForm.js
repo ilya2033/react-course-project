@@ -63,6 +63,7 @@ export const UserForm = ({
         },
         validationSchema: userSchema,
         validateOnChange: true,
+        validateOnMount: true,
         onSubmit: () => {
             let userToSave = {};
             userToSave = formik.values;
@@ -155,7 +156,6 @@ export const UserForm = ({
         formik.setFieldValue("username", user.username || "");
         formik.setFieldValue("nick", user.nick || "");
         formik.setFieldValue("password", user.password || "");
-        formik.validateForm();
     }, [user]);
 
     useEffect(() => {
