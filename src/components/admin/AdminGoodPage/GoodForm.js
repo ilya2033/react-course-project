@@ -58,7 +58,7 @@ export const GoodForm = ({
             amount: 0,
         },
         validationSchema: goodSchema,
-        validateOnMount: true,
+        validateOnBlur: false,
         validateOnChange: true,
         onSubmit: () => {
             let goodToSave = {};
