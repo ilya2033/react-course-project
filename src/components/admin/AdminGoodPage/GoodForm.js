@@ -58,8 +58,7 @@ export const GoodForm = ({
             amount: 0,
         },
         validationSchema: goodSchema,
-        validateOnBlur: false,
-        validateOnChange: true,
+        validateOnSubmit: false,
         onSubmit: () => {
             let goodToSave = {};
             !isNew && good?._id && (goodToSave._id = good._id);
