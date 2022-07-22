@@ -32,6 +32,3 @@ export const GoodCardSlider = ({ goods = [] } = {}) => {
         </Box>
     );
 };
-// autoPlay={true}
-// autoPlaySpeed={1000}
-// transitionDuration={500}

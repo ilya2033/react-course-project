@@ -19,7 +19,7 @@ export const GoodPage = () => {
                                 key={image?._id}
                                 src={image?.url ? `${backendURL}${mediaURL}${image?.url}` : defaultGoodImage}
                                 onError={({ currentTarget }) => {
-                                    currentTarget.onerror = null; // prevents looping
+                                    currentTarget.onerror = null;
                                     currentTarget.src = defaultGoodImage;
                                 }}
                             />

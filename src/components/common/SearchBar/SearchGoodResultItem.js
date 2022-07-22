@@ -21,7 +21,7 @@ export const SearchGoodResultItem = ({ good, onClick, link = "" } = {}) => {
                     component="img"
                     src={images ? `${backendURL}${mediaURL}${images[0]?.url}` : defaultGoodImage}
                     onError={({ currentTarget }) => {
-                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.onerror = null;
                         currentTarget.src = defaultGoodImage;
                     }}
                 />
